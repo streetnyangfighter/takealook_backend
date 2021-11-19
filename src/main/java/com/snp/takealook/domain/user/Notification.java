@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.user;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,7 +29,8 @@ public class Notification {
     private byte type;
 
     @NonNull
-    private LocalDate time;
+    @CreatedDate
+    private LocalDate created_at;
 
     @NonNull
     private byte checked;
