@@ -56,4 +56,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Cat> catList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notificationList;
 }
