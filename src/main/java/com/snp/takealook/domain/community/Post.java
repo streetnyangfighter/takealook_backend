@@ -19,11 +19,11 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
-    private Board board;
-
-    @NonNull
-    private User writer;
+//    @NonNull
+//    private Board board;
+//
+//    @NonNull
+//    private User writer;
 
     @NonNull
     private String title;

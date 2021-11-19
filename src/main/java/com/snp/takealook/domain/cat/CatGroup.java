@@ -1,40 +1,39 @@
-package com.snp.takealook.domain.community;
+package com.snp.takealook.domain.cat;
 
-import com.snp.takealook.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class Comment {
+@Data
+public class CatGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NonNull
-//    private Post post;
-//
-//    @NonNull
-//    private User writer;
-
-    @Lob
     @NonNull
-    private String content;
+    @ManyToOne
+    private CatGroup matchedGroup;
+
+    @NonNull
+    private byte status;
 
     @NonNull
     @CreatedDate
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @NonNull
     @LastModifiedDate
-    @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
+
+    @NonNull
+    @OneToMany(mappedBy = "matchedGroup", cascade = CascadeType.ALL)
+    private List<CatGroup> groupList;
+
 }

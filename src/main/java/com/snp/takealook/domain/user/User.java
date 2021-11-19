@@ -4,16 +4,15 @@ import com.snp.takealook.domain.cat.Cat;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class User {
 
     @Id
@@ -21,11 +20,9 @@ public class User {
     private Long id;
 
     @NonNull
-    @Column(name="login_id")
     private String loginId;
 
     @NonNull
-    @Column(name="login_pw")
     private String loginPw;
 
     @NonNull
@@ -41,22 +38,22 @@ public class User {
     private byte type;
 
     @NonNull
-    @Column(name="d_flag")
     private byte dFlag;
 
     @NonNull
-    @Column(name="created_at")
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @NonNull
-    @Column(name="modified_at")
     @LastModifiedDate
-    private LocalDate modifiedAt;
+    private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "user")
+    @NonNull
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cat> catList;
 
-    @OneToMany(mappedBy = "user")
+    @NonNull
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notificationList;
+
 }

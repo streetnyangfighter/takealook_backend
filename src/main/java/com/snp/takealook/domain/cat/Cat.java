@@ -6,13 +6,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Cat {
   
     @Id
@@ -21,10 +20,10 @@ public class Cat {
 
     @NonNull
     @ManyToOne
-    @JoinColumn
     private User user;
 
-//    private Group group
+    @OneToOne
+    private CatGroup catGroup;
 
     @NonNull
     private String name;
@@ -36,17 +35,23 @@ public class Cat {
     private byte status;
 
     @NonNull
-    @Column(name="created_at")
-    @CreatedDate
-    private LocalDate createdAt;
-
-    @NonNull
-    @Column(name="modifiend_at")
-    @LastModifiedDate
-    private LocalDate modifiedAt;
-
-    @NonNull
-    @Column(name="d_flag")
     private byte dFlag;
+
+    @NonNull
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @NonNull
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    private List<CatCare> catCareList;
+
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    private List<CatLocation> catLocationList;
+
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    private List<CatImage> catImageList;
   
 }
