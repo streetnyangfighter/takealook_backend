@@ -22,6 +22,7 @@ public class Cat {
     @ManyToOne
     private User user;
 
+    @NonNull
     @OneToOne
     private CatGroup catGroup;
 

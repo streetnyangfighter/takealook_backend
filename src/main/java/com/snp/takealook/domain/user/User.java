@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.user;
 
 import com.snp.takealook.domain.cat.Cat;
+import com.snp.takealook.domain.cat.CatImage;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -48,12 +49,12 @@ public class User {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @NonNull
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cat> catList;
 
-    @NonNull
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notificationList;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CatImage> catImageList;
 }
