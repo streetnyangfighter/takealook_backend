@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class Cat {
-
+  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,4 +48,5 @@ public class Cat {
     @NonNull
     @Column(name="d_flag")
     private byte dFlag;
+  
 }
