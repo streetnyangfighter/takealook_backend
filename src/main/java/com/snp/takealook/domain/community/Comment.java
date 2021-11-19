@@ -13,22 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
-    private Board board;
+    private Post post;
 
     @NonNull
     private User writer;
 
+    @Lob
     @NonNull
-    private String title;
-
-    @Lob @NonNull
     private String content;
 
     @NonNull
@@ -39,5 +37,4 @@ public class Post {
     @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
-
 }
