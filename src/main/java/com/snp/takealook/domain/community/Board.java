@@ -1,21 +1,24 @@
 package com.snp.takealook.domain.community;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
-
-@Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
+@Entity
 public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     private String name;
+
+    @OneToMany(mappedBy = "board")
+    private List<Post> postList;
 }

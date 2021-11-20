@@ -1,6 +1,10 @@
 package com.snp.takealook.domain.user;
 
 import com.snp.takealook.domain.cat.Cat;
+import com.snp.takealook.domain.community.Comment;
+import com.snp.takealook.domain.community.CommentLike;
+import com.snp.takealook.domain.community.Post;
+import com.snp.takealook.domain.community.PostLike;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -59,4 +63,16 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Notification> notificationList;
+
+    @OneToMany(mappedBy = "writer")
+    private List<Post> postList;
+
+    @OneToMany(mappedBy = "writer")
+    private List<Comment> commentListList;
+
+    @OneToMany(mappedBy = "user")
+    private List<CommentLike> commentLikeListList;
+
+    @OneToMany(mappedBy = "user")
+    private List<PostLike> postLikeListList;
 }
