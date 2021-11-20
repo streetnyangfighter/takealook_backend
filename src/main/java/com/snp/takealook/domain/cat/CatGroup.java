@@ -1,16 +1,18 @@
-package com.snp.takealook.domain.user;
+package com.snp.takealook.domain.cat;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
-public class Notification {
+public class CatGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,18 +20,21 @@ public class Notification {
 
     @NotNull
     @ManyToOne
-    private User user;
+    private CatGroup matchedGroup;
 
     @NotNull
-    private String message;
-
-    @NotNull
-    private byte type;
+    private byte status;
 
     @NotNull
     @CreatedDate
     private LocalDateTime createdAt;
 
     @NotNull
-    private byte checked;
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
+    @NotNull
+    @OneToMany(mappedBy = "matchedGroup", cascade = CascadeType.ALL)
+    private List<CatGroup> groupList;
+
 }

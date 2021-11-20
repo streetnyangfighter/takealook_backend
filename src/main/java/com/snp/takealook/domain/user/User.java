@@ -1,67 +1,63 @@
 package com.snp.takealook.domain.user;
 
 import com.snp.takealook.domain.cat.Cat;
+
 import com.snp.takealook.domain.community.Comment;
 import com.snp.takealook.domain.community.CommentLike;
 import com.snp.takealook.domain.community.Post;
 import com.snp.takealook.domain.community.PostLike;
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
-    @Column(name="login_id")
+    @NotNull
     private String loginId;
 
-    @NonNull
-    @Column(name="login_pw")
+    @NotNull
     private String loginPw;
 
-    @NonNull
+    @NotNull
     private String nickname;
 
-    @NonNull
+    @NotNull
     private String phone;
 
-    @NonNull
+    @NotNull
     private byte[] image;
 
-    @NonNull
+    @NotNull
     private byte type;
 
-    @NonNull
-    @Column(name="d_flag")
-    private byte dFlag;
+    @NotNull
+    private boolean dFlag;
 
-    @NonNull
-    @Column(name="created_at")
+    @NotNull
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    @NonNull
-    @Column(name="modified_at")
+    @NotNull
     @LastModifiedDate
-    private LocalDate modifiedAt;
+    private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cat> catList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notificationList;
 
     @OneToMany(mappedBy = "writer")
@@ -75,4 +71,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<PostLike> postLikeListList;
+
 }

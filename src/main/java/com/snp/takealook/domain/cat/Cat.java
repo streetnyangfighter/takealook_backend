@@ -6,47 +6,54 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 public class Cat {
   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
-    @JoinColumn
     private User user;
 
-//    private Group group
+    @NotNull
+    @OneToOne
+    private CatGroup catGroup;
 
-    @NonNull
+    @NotNull
     private String name;
 
-    @NonNull
+    @NotNull
     private byte neutered;
 
-    @NonNull
+    @NotNull
     private byte status;
 
-    @NonNull
-    @Column(name="created_at")
+    @NotNull
+    private boolean dFlag;
+
+    @NotNull
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    @NonNull
-    @Column(name="modifiend_at")
+    @NotNull
     @LastModifiedDate
-    private LocalDate modifiedAt;
+    private LocalDateTime modifiedAt;
 
-    @NonNull
-    @Column(name="d_flag")
-    private byte dFlag;
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    private List<CatCare> catCareList;
+
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    private List<CatLocation> catLocationList;
+
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    private List<CatImage> catImageList;
   
 }
