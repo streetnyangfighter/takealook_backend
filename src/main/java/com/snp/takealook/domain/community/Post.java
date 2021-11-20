@@ -1,43 +1,53 @@
 package com.snp.takealook.domain.community;
 
 import com.snp.takealook.domain.user.User;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
+@Entity
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NonNull
-//    private Board board;
-//
-//    @NonNull
-//    private User writer;
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
 
-    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User writer;
+
+    @NotNull
     private String title;
 
-    @Lob @NonNull
+    @Lob @NotNull
     private String content;
 
-    @NonNull
+    @NotNull
     @CreatedDate
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> postLikeList;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostImage> postImageList;
 
 }
