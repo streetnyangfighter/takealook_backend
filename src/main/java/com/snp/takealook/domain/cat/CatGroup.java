@@ -5,34 +5,35 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class CatGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private CatGroup matchedGroup;
 
-    @NonNull
+    @NotNull
     private byte status;
 
-    @NonNull
+    @NotNull
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @NonNull
+    @NotNull
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @NonNull
+    @NotNull
     @OneToMany(mappedBy = "matchedGroup", cascade = CascadeType.ALL)
     private List<CatGroup> groupList;
 

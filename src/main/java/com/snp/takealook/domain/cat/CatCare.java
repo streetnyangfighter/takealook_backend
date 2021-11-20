@@ -5,35 +5,36 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class CatCare {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private Cat cat;
 
-    @NonNull
+    @NotNull
     private LocalDateTime datetime;
 
-    @NonNull
+    @NotNull
     private byte type;
 
-    @NonNull
+    @NotNull
     private String message;
 
-    @NonNull
+    @NotNull
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @NonNull
+    @NotNull
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 }

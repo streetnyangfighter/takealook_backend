@@ -2,35 +2,36 @@ package com.snp.takealook.domain.cat;
 
 import com.snp.takealook.domain.user.User;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class CatImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private Cat cat;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private User user;
 
-    @NonNull
+    @NotNull
     private byte[] image;
 
-    @NonNull
+    @NotNull
     private String fileName;
 
-    @NonNull
+    @NotNull
     private LocalDateTime createdAt;
 }

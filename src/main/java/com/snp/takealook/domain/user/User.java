@@ -5,47 +5,47 @@ import com.snp.takealook.domain.cat.CatImage;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     private String loginId;
 
-    @NonNull
+    @NotNull
     private String loginPw;
 
-    @NonNull
+    @NotNull
     private String nickname;
 
-    @NonNull
+    @NotNull
     private String phone;
 
-    @NonNull
+    @NotNull
     private byte[] image;
 
-    @NonNull
+    @NotNull
     private byte type;
 
-    @NonNull
-    private byte dFlag;
+    @NotNull
+    private boolean dFlag;
 
-    @NonNull
+    @NotNull
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @NonNull
+    @NotNull
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 

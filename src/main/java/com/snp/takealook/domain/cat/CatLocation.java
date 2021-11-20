@@ -1,31 +1,32 @@
 package com.snp.takealook.domain.cat;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class CatLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private Cat cat;
 
-    @NonNull
+    @NotNull
     private double latitude;
 
-    @NonNull
+    @NotNull
     private double longitude;
 
-    @NonNull
+    @NotNull
     private LocalDateTime created_at;
 }

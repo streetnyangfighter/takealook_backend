@@ -4,31 +4,32 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private User user;
 
-    @NonNull
+    @NotNull
     private String message;
 
-    @NonNull
+    @NotNull
     private byte type;
 
-    @NonNull
+    @NotNull
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @NonNull
+    @NotNull
     private byte checked;
 }

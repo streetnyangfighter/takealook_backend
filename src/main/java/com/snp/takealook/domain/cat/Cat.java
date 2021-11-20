@@ -6,43 +6,44 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class Cat {
   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     private User user;
 
-    @NonNull
+    @NotNull
     @OneToOne
     private CatGroup catGroup;
 
-    @NonNull
+    @NotNull
     private String name;
 
-    @NonNull
+    @NotNull
     private byte neutered;
 
-    @NonNull
+    @NotNull
     private byte status;
 
-    @NonNull
-    private byte dFlag;
+    @NotNull
+    private boolean dFlag;
 
-    @NonNull
+    @NotNull
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @NonNull
+    @NotNull
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
