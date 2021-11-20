@@ -23,10 +23,6 @@ public class CatImage {
     private Cat cat;
 
     @NotNull
-    @ManyToOne
-    private User user;
-
-    @NotNull
     private byte[] image;
 
     @NotNull
