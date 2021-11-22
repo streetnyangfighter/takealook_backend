@@ -23,6 +23,7 @@ public class CatImage {
     private Cat cat;
 
     @NotNull
+    @Lob
     private byte[] image;
 
     @NotNull
