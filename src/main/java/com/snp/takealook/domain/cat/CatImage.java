@@ -1,7 +1,9 @@
-package com.snp.takealook.domain.user;
+package com.snp.takealook.domain.cat;
 
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import com.snp.takealook.domain.user.User;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Notification {
+public class CatImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,18 +20,14 @@ public class Notification {
 
     @NotNull
     @ManyToOne
-    private User user;
+    private Cat cat;
 
     @NotNull
-    private String message;
+    private byte[] image;
 
     @NotNull
-    private byte type;
+    private String fileName;
 
     @NotNull
-    @CreatedDate
     private LocalDateTime createdAt;
-
-    @NotNull
-    private byte checked;
 }

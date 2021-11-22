@@ -1,37 +1,32 @@
-package com.snp.takealook.domain.community;
+package com.snp.takealook.domain.cat;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
+@Entity
 @NoArgsConstructor
 @Getter
-@Entity
-public class PostImage {
+public class CatLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn
-    private Post post;
+    private Cat cat;
 
     @NotNull
-    private String origName;
+    private double latitude;
 
     @NotNull
-    private String name;
+    private double longitude;
 
     @NotNull
-    private String path;
-
-    @NotNull
-    private Integer size;
-
-    @NotNull
-    private byte[] image;
-
+    private LocalDateTime created_at;
 }

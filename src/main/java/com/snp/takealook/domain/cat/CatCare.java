@@ -1,7 +1,8 @@
-package com.snp.takealook.domain.user;
+package com.snp.takealook.domain.cat;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Notification {
+public class CatCare {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,18 +19,22 @@ public class Notification {
 
     @NotNull
     @ManyToOne
-    private User user;
+    private Cat cat;
 
     @NotNull
-    private String message;
+    private LocalDateTime datetime;
 
     @NotNull
     private byte type;
 
     @NotNull
-    @CreatedDate
+    private String message;
+
+    @NotNull
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @NotNull
-    private byte checked;
+    @UpdateTimestamp
+    private LocalDateTime modifiedAt;
 }
