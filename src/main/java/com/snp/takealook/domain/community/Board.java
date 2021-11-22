@@ -19,6 +19,6 @@ public class Board {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Post> postList;
 }
