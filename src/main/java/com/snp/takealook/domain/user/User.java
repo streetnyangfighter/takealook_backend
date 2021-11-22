@@ -38,6 +38,7 @@ public class User {
     private String phone;
 
     @NotNull
+    @Lob
     private byte[] image;
 
     @NotNull
