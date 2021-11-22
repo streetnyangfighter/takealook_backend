@@ -20,10 +20,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn
     private Post post;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;

@@ -15,8 +15,8 @@ public class PostImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn
     private Post post;
 
     @NotNull
@@ -32,6 +32,7 @@ public class PostImage {
     private Integer size;
 
     @NotNull
+    @Lob
     private byte[] image;
 
 }

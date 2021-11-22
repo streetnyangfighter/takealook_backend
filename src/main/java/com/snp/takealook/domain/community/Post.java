@@ -20,10 +20,11 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "board_id")
     private Board board;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
