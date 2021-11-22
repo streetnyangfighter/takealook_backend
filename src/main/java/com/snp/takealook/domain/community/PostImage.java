@@ -2,9 +2,11 @@ package com.snp.takealook.domain.community;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -20,19 +22,14 @@ public class PostImage {
     private Post post;
 
     @NotNull
-    private String origName;
-
-    @NotNull
-    private String name;
-
-    @NotNull
-    private String path;
-
-    @NotNull
-    private Integer size;
-
-    @NotNull
     @Lob
     private byte[] image;
+
+    @NotNull
+    private String fileName;
+
+    @NotNull
+    @CreatedDate
+    private LocalDateTime createdAt;
 
 }
