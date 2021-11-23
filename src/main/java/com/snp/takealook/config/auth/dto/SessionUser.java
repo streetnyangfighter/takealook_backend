@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class SessionUser implements Serializable {
     private String loginId;
     private String nickname;
-    private byte[] image;
+    private String image;
 
     public SessionUser(User user) {
         this.loginId = user.getLoginId();
