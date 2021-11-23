@@ -27,6 +27,9 @@ public class OAuthAttributes {
 
     // OAuth2User에서 반환하는 Map 사용자 정보를 받아 각 attribute로 변환
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+        if("kakao".equals(registrationId)){
+            return ofKakao("id", attributes);
+        }
         return ofGoogle(userNameAttributeName, attributes);
     }
 
@@ -35,6 +38,18 @@ public class OAuthAttributes {
                 .nickname((String) attributes.get("name"))
                 .loginId((String) attributes.get("email"))
                 .image((String) attributes.get("picture"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String,Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
+        Map<String,Object> profile = (Map<String, Object>)kakaoAccount.get("profile");
+        return OAuthAttributes.builder()
+                .nickname((String)profile.get("nickname"))
+                .loginId((String)kakaoAccount.get("email"))
+                .image((String)profile.get("profile_image_url"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
