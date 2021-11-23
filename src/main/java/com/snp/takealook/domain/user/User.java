@@ -28,30 +28,34 @@ public class User {
     @NotNull
     private String loginId;
 
-    @NotNull
-    private String loginPw;
+//    @NotNull
+//    private String loginPw;
 
     @NotNull
     private String nickname;
 
-    @NotNull
-    private String phone;
+//    @NotNull
+//    private String phone;
 
     @NotNull
     @Lob
-    private byte[] image;
+    private String image;
 
-    @NotNull
-    private byte type;
+//    @NotNull
+//    private byte type;
 
     @NotNull
     private boolean dFlag;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
+    private Role role;
+
+//    @NotNull
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @NotNull
+//    @NotNull
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
@@ -72,5 +76,25 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostLike> postLikeListList;
+
+    @Builder
+    public User(String loginId, String nickname, String image, boolean dFlag, Role role) {
+        this.loginId = loginId;
+        this.nickname = nickname;
+        this.image = image;
+        this.dFlag = true;
+        this.role = role;
+    }
+
+    public User update(String nickname, String image) {
+        this.nickname = nickname;
+        this.image = image;
+
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 
 }
