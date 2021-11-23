@@ -39,7 +39,7 @@ public class User {
 
     @NotNull
     @Lob
-    private byte[] image;
+    private String image;
 
 //    @NotNull
 //    private byte type;
@@ -78,7 +78,7 @@ public class User {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, byte[] image, boolean dFlag, Role role) {
+    public User(String loginId, String nickname, String image, boolean dFlag, Role role) {
         this.loginId = loginId;
         this.nickname = nickname;
         this.image = image;
@@ -86,7 +86,7 @@ public class User {
         this.role = role;
     }
 
-    public User update(String nickname, byte[] image) {
+    public User update(String nickname, String image) {
         this.nickname = nickname;
         this.image = image;
 

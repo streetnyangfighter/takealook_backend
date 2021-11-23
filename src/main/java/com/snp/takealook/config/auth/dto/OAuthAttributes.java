@@ -14,10 +14,10 @@ public class OAuthAttributes {
     private String nameAttributeKey;
     private String nickname;
     private String loginId;
-    private byte[] image;
+    private String image;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String nickname, String loginId, byte[] image) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String nickname, String loginId, String image) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.nickname = nickname;
@@ -32,9 +32,9 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .nickname((String) attributes.get("nickname"))
-                .loginId((String) attributes.get("loginId"))
-                .image((byte[]) attributes.get("image"))
+                .nickname((String) attributes.get("name"))
+                .loginId((String) attributes.get("email"))
+                .image((String) attributes.get("picture"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();

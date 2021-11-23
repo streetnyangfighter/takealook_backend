@@ -53,6 +53,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     // 동일한 email이 있는지 확인 뒤, 없다면 새로 추가/있다면 정보변경 -> 네이버/카카오 아이디 겹치면...?
     private User saveOrUpdate(OAuthAttributes attributes) {
         System.out.println(attributes.getLoginId());
+        System.out.println(attributes.getNickname());
         User user = userRepository.findByLoginId(attributes.getLoginId())
                     .map(entity -> entity.update(attributes.getNickname(), attributes.getImage()))
                     .orElse(attributes.toEntity());
