@@ -1,6 +1,8 @@
 package com.snp.takealook.domain.cat;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -26,11 +28,11 @@ public class CatGroup {
     private byte status;
 
     @NotNull
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @NotNull
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
     @NotNull

@@ -3,6 +3,8 @@ package com.snp.takealook.domain.community;
 import com.snp.takealook.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -36,10 +38,10 @@ public class Post {
     private String content;
 
     @NotNull
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
