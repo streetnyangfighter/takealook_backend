@@ -69,13 +69,14 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public User toEntity() {
+    public User toEntity(String registrationId) {
         return User.builder()
                 .nickname(nickname)
                 .loginId(loginId)
                 .image(image)
+                .loginType(registrationId)
                 .dFlag(false)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
     }
 }
