@@ -3,6 +3,8 @@ package com.snp.takealook.domain.cat;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,5 +30,6 @@ public class CatLocation {
     private double longitude;
 
     @NotNull
+    @CreationTimestamp
     private LocalDateTime created_at;
 }

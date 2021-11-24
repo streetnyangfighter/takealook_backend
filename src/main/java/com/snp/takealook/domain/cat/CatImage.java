@@ -4,6 +4,7 @@ import com.snp.takealook.domain.user.User;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,5 +31,6 @@ public class CatImage {
     private String fileName;
 
     @NotNull
+    @CreationTimestamp
     private LocalDateTime createdAt;
 }

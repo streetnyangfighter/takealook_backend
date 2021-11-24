@@ -2,6 +2,7 @@ package com.snp.takealook.domain.community;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -29,7 +30,7 @@ public class PostImage {
     private String fileName;
 
     @NotNull
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
 }

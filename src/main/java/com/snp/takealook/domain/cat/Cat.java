@@ -2,6 +2,8 @@ package com.snp.takealook.domain.cat;
 
 import com.snp.takealook.domain.user.User;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -40,11 +42,11 @@ public class Cat {
     private boolean dFlag;
 
     @NotNull
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @NotNull
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
