@@ -1,4 +1,4 @@
-package com.snp.takealook.repository;
+package com.snp.takealook.repository.user;
 
 import com.snp.takealook.domain.user.User;
 import org.springframework.data.domain.Example;
