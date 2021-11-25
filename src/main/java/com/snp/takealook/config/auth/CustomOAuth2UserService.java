@@ -3,7 +3,7 @@ package com.snp.takealook.config.auth;
 import com.snp.takealook.config.auth.dto.OAuthAttributes;
 import com.snp.takealook.config.auth.dto.SessionUser;
 import com.snp.takealook.domain.user.User;
-import com.snp.takealook.repository.UserRepository;
+import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

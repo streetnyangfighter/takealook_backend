@@ -1,18 +1,17 @@
-package com.snp.takealook.domain.cat;
+package com.snp.takealook.domain.user;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CatImage {
+public class UserLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,16 +19,22 @@ public class CatImage {
 
     @NotNull
     @ManyToOne
-    private Cat cat;
+    private User user;
 
     @NotNull
-    @Lob
-    private byte[] image;
+    private String sido;
 
     @NotNull
-    private String fileName;
+    String gugun;
 
     @NotNull
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    String dong;
+
+    @Builder
+    public UserLocation(User user, String sido, String gugun, String dong) {
+        this.user = user;
+        this.sido = sido;
+        this.gugun = gugun;
+        this.dong = dong;
+    }
 }

@@ -75,7 +75,7 @@ public class OAuthAttributes {
                 .loginId(loginId)
                 .image(image)
                 .dFlag(false)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
     }
 }
