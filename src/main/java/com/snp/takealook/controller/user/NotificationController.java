@@ -21,7 +21,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/notification")
-    public ResponseDTO.NotificationListResponse getNotificationListByUserId(@RequestBody NotificationDTO.Get dto) {
+    public ResponseDTO.NotificationListResponse getNotificationListByUserId(NotificationDTO.Get dto) {
         System.out.println("--- 회원 알림 리스트 조회 시도 ---");
 
         boolean success = false;
