@@ -1,19 +1,31 @@
 package com.snp.takealook.service.user;
 
 import com.snp.takealook.domain.user.User;
+import com.snp.takealook.dto.RequestDTO;
 import com.snp.takealook.dto.user.UserDTO;
 import com.snp.takealook.repository.user.UserRepository;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public User getUser(UserDTO.Get dto) throws NotFoundException {
         return userRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getId() + " is not valid"));
+    }
+
+    @Transactional
+    public Long updateLoginDetail(Long id, RequestDTO.UserUpdate userUpdate) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+
+        user.updateDetail(userUpdate.getNickname(), userUpdate.getPhone(), userUpdate.getImage());
+
+        return id;
     }
 }

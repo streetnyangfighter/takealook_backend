@@ -29,21 +29,17 @@ public class User {
     @NotNull
     private String loginId;
 
-//    @NotNull
-//    private String loginPw;
-
     @NotNull
     private String nickname;
 
-//    @NotNull
-//    private String phone;
+    private String phone;
 
     @NotNull
     @Lob
     private String image;
 
-//    @NotNull
-//    private byte type;
+    @NotNull
+    private String loginType;
 
     @NotNull
     private boolean dFlag;
@@ -52,11 +48,9 @@ public class User {
     @NotNull
     private Role role;
 
-//    @NotNull
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-//    @NotNull
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
@@ -89,16 +83,26 @@ public class User {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String image, boolean dFlag, Role role) {
+    public User(String loginId, String nickname, String phone, String image, String loginType, boolean dFlag, Role role) {
         this.loginId = loginId;
         this.nickname = nickname;
+        this.phone = phone;
         this.image = image;
+        this.loginType = loginType;
         this.dFlag = false;
         this.role = role;
     }
 
     public User update(String nickname, String image) {
         this.nickname = nickname;
+        this.image = image;
+
+        return this;
+    }
+
+    public User updateDetail(String nickname, String phone, String image) {
+        this.nickname = nickname;
+        this.phone = phone;
         this.image = image;
 
         return this;

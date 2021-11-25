@@ -39,7 +39,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담을 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        User user = saveOrUpdate(attributes);
+        User user = saveOrUpdate(attributes, registrationId);
         // 세션에 사용자 정보를 저장하기 위한 DTO 클래스 -> SessionUser
         httpSession.setAttribute("user", new SessionUser(user));
 
@@ -50,13 +50,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         );
     }
 
-    // 동일한 email이 있는지 확인 뒤, 없다면 새로 추가/있다면 정보변경 -> 네이버/카카오 아이디 겹치면...?
-    private User saveOrUpdate(OAuthAttributes attributes) {
-        System.out.println(attributes.getLoginId());
-        System.out.println(attributes.getNickname());
-        User user = userRepository.findByLoginId(attributes.getLoginId())
-                    .map(entity -> entity.update(attributes.getNickname(), attributes.getImage()))
-                    .orElse(attributes.toEntity());
+    // 동일한 email & registrationId가 있는지 확인 뒤, 없다면 새로 추가/있다면 정보변경
+    private User saveOrUpdate(OAuthAttributes attributes, String registrationId) {
+        User user = userRepository.findByLoginIdAndLoginType(attributes.getLoginId(), registrationId)
+                    .map(entity -> entity.update(attributes.getNickname() ,attributes.getImage()))
+                    .orElse(attributes.toEntity(registrationId));
 
         return userRepository.save(user);
     }
