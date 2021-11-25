@@ -50,10 +50,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         );
     }
 
-    // 동일한 email이 있는지 확인 뒤, 없다면 새로 추가/있다면 정보변경
+    // 동일한 email & registrationId가 있는지 확인 뒤, 없다면 새로 추가/있다면 정보변경
     private User saveOrUpdate(OAuthAttributes attributes, String registrationId) {
         User user = userRepository.findByLoginIdAndLoginType(attributes.getLoginId(), registrationId)
-                    .map(entity -> entity.update(attributes.getNickname(), attributes.getImage()))
+                    .map(entity -> entity.update(attributes.getNickname() ,attributes.getImage()))
                     .orElse(attributes.toEntity(registrationId));
 
         return userRepository.save(user);

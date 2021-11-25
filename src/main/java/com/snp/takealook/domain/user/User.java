@@ -74,9 +74,10 @@ public class User {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String image, String loginType, boolean dFlag, Role role) {
+    public User(String loginId, String nickname, String phone, String image, String loginType, boolean dFlag, Role role) {
         this.loginId = loginId;
         this.nickname = nickname;
+        this.phone = phone;
         this.image = image;
         this.loginType = loginType;
         this.dFlag = false;
@@ -85,6 +86,14 @@ public class User {
 
     public User update(String nickname, String image) {
         this.nickname = nickname;
+        this.image = image;
+
+        return this;
+    }
+
+    public User updateDetail(String nickname, String phone, String image) {
+        this.nickname = nickname;
+        this.phone = phone;
         this.image = image;
 
         return this;

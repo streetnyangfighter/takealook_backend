@@ -14,10 +14,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.csrf().disable();
         // 권한 설정 옵션 시작점
         http.authorizeRequests()
                 // 권한 관리 대상 지정, URL, HTTP 메소드별로 관리 가능
-                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
                 //.antMatchers("/cctv/**", "/parkinglot/**", "/parkinglot/**").hasRole(Role.USER.name())
 
                 // 설정된 값들 이외 나머지 URL들은 로그인한 사용자들에게만 노출되도록 설정
