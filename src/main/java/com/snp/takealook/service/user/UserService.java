@@ -2,6 +2,7 @@ package com.snp.takealook.service.user;
 
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.dto.RequestDTO;
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.user.UserDTO;
 import com.snp.takealook.repository.user.UserRepository;
 import javassist.NotFoundException;
@@ -15,8 +16,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User getUser(UserDTO.Get dto) throws NotFoundException {
-        return userRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getId() + " is not valid"));
+    @Transactional(readOnly = true)
+    public ResponseDTO.UserResponse findById(UserDTO.Get dto) throws NotFoundException {
+        User entity = userRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getId() + " is not valid"));
+
+        return new ResponseDTO.UserResponse(entity);
     }
 
     @Transactional

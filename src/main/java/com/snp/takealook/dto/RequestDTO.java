@@ -1,10 +1,7 @@
 package com.snp.takealook.dto;
 
-import com.snp.takealook.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Data
 public class RequestDTO {

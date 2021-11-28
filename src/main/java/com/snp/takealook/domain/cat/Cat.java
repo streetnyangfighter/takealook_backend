@@ -11,9 +11,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Cat {
   
     @Id
@@ -59,5 +59,15 @@ public class Cat {
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatImage> catImageList;
+
+    @Builder
+    public Cat(User user, CatGroup catGroup, String name, byte neutered, byte status, boolean dFlag) {
+        this.user = user;
+        this.catGroup = catGroup;
+        this.name = name;
+        this.neutered = neutered;
+        this.status = status;
+        this.dFlag = false;
+    }
   
 }

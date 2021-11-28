@@ -37,4 +37,5 @@ public class UserLocation {
         this.gugun = gugun;
         this.dong = dong;
     }
+
 }

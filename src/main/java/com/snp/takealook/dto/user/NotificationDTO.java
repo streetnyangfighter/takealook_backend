@@ -1,10 +1,10 @@
 package com.snp.takealook.dto.user;
 
-import lombok.Data;
+import lombok.Getter;
 
 public class NotificationDTO {
 
-    @Data
+    @Getter
     public static class Get {
         private Long userId;
     }

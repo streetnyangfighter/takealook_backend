@@ -2,14 +2,17 @@ package com.snp.takealook.service.user;
 
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.domain.user.UserLocation;
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.user.UserLocationDTO;
 import com.snp.takealook.repository.user.UserLocationRepository;
 import com.snp.takealook.repository.user.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -18,27 +21,24 @@ public class UserLocationService {
     private final UserLocationRepository userLocationRepository;
     private final UserRepository userRepository;
 
-    public long saveUserLocation(UserLocationDTO.Create dto) throws NotFoundException {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getUserId() + " is not valid"));
-        UserLocation save = userLocationRepository.save(UserLocation.builder()
-                .user(user)
-                .sido(dto.getSido())
-                .gugun(dto.getGugun())
-                .dong(dto.getDong())
-                .build()
-        );
-
-        return save.getId();
+    @Transactional
+    public Long save(UserLocationDTO.Create dto) {
+        return userLocationRepository.save(dto.toEntity()).getId();
     }
 
-    public void deleteUserLocation(UserLocationDTO.Delete dto) throws NotFoundException {
+    @Transactional
+    public void delete(UserLocationDTO.Delete dto) throws NotFoundException {
         UserLocation userLocation = userLocationRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("UserLocation with id: " + dto.getId() + " is not valid"));
-        userLocationRepository.deleteById(userLocation.getId());
+        userLocationRepository.delete(userLocation);
     }
 
-    public List<UserLocation> getUserLocationListByUserId(UserLocationDTO.Get dto) throws NotFoundException {
+    @Transactional
+    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(UserLocationDTO.Get dto) throws NotFoundException {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getUserId() + " is not valid"));
 
-        return userLocationRepository.findUserLocationsByUser(user);
+        return userLocationRepository.findUserLocationsByUser(user).stream()
+                .map(ResponseDTO.UserLocationListResponse::new)
+                .collect(Collectors.toList());
     }
+
 }

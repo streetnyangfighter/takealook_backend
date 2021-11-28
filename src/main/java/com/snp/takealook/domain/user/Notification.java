@@ -7,9 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Notification {
 
     @Id
@@ -32,4 +32,12 @@ public class Notification {
 
     @NotNull
     private byte checked;
+
+    @Builder
+    public Notification(User user, String message, byte type, byte checked) {
+        this.user = user;
+        this.message = message;
+        this.type = type;
+        this.checked = checked;
+    }
 }
