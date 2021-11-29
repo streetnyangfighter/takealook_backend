@@ -1,19 +1,18 @@
 package com.snp.takealook.domain.cat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class CatGroup {
 
     @Id
@@ -37,6 +36,7 @@ public class CatGroup {
 
     @NotNull
     @OneToMany(mappedBy = "matchedGroup", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<CatGroup> groupList;
 
 }

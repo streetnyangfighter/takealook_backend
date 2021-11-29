@@ -13,7 +13,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.csrf().disable();
         // 권한 설정 옵션 시작점
         http.authorizeRequests()

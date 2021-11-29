@@ -28,6 +28,10 @@ public class UserDTO {
         public Delete(boolean dFlag) {
             this.dFlag = dFlag;
         }
-
+    }
+  
+   @Getter
+    public static class Get {
+        private Long id;
     }
 }

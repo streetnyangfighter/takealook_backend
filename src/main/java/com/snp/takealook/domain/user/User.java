@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.domain.cat.Cat;
 
 import com.snp.takealook.domain.community.Comment;
@@ -10,17 +11,15 @@ import com.snp.takealook.domain.community.PostLike;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class User {
 
     @Id
@@ -56,21 +55,31 @@ public class User {
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Cat> catList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<UserLocation> userLocationList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Notification> notificationList;
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Post> postList;
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Comment> commentListList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<CommentLike> commentLikeListList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<PostLike> postLikeListList;
 
     @Builder
