@@ -24,12 +24,20 @@ public class UserService {
     }
 
     @Transactional
-    public Long updateLoginDetail(Long id, RequestDTO.UserUpdate userUpdate) {
+    public Long updateLoginDetail(Long id, UserDTO.InitialUpdate dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
-        user.updateDetail(userUpdate.getNickname(), userUpdate.getPhone(), userUpdate.getImage());
+        user.updateDetail(dto.getNickname(), dto.getPhone(), dto.getImage());
 
         return id;
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+
+        user.delete(true);
     }
 }

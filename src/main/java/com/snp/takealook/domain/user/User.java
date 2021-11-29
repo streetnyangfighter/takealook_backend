@@ -108,6 +108,12 @@ public class User {
         return this;
     }
 
+    public User delete(boolean dFlag) {
+        this.dFlag = dFlag;
+
+        return this;
+    }
+
     public String getRoleKey() {
         return this.role.getKey();
     }
