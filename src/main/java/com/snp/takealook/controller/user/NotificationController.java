@@ -3,10 +3,7 @@ package com.snp.takealook.controller.user;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +13,11 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+
+    @PatchMapping("/notification/check/{id}")
+    public Long check(@PathVariable Long id) {
+        return notificationService.check(id);
+    }
 
     @GetMapping("/notification/{userId}")
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(@PathVariable Long userId) {

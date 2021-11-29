@@ -39,7 +39,8 @@ public class ResponseDTO {
         private String message;
         private byte type;
         private LocalDateTime createdAt;
-        private byte checked;
+        private LocalDateTime modifiedAt;
+        private boolean checked;
 
         public NotificationListResponse(Notification entity) {
             this.id = entity.getId();
@@ -47,7 +48,8 @@ public class ResponseDTO {
             this.message = entity.getMessage();
             this.type = entity.getType();
             this.createdAt = entity.getCreatedAt();
-            this.checked = entity.getChecked();
+            this.modifiedAt = entity.getModifiedAt();
+            this.checked = entity.isChecked();
         }
     }
 
