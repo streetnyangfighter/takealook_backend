@@ -2,6 +2,7 @@ package com.snp.takealook.dto.user;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 public class UserDTO {
 
@@ -25,5 +26,12 @@ public class UserDTO {
         public Delete(boolean dFlag) {
             this.dFlag = dFlag;
         }
+    }
+
+    @Getter
+    public static class LocationList {
+        private String sido;
+        private String gugun;
+        private String dong;
     }
 }
