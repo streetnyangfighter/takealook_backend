@@ -30,11 +30,11 @@ public class CatCare {
     @NotNull
     private String message;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @NotNull
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 }

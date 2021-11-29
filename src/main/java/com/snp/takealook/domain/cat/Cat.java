@@ -33,6 +33,7 @@ public class Cat {
 
     @NotNull
     private byte neutered;
+    // 0: 중성화 X, 1: 중성화 O, 2: 확인 불가
 
     @NotNull
     private byte status;
@@ -40,12 +41,12 @@ public class Cat {
     @NotNull
     private boolean dFlag;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @NotNull
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
@@ -61,13 +62,39 @@ public class Cat {
     private List<CatImage> catImageList;
 
     @Builder
-    public Cat(User user, CatGroup catGroup, String name, byte neutered, byte status, boolean dFlag) {
+    public Cat(User user, CatGroup catGroup, String name, byte neutered, byte status) {
         this.user = user;
         this.catGroup = catGroup;
         this.name = name;
         this.neutered = neutered;
         this.status = status;
         this.dFlag = false;
+    }
+
+    public Cat updateInfo(String name, byte neutered, byte status) {
+        this.name = name;
+        this.neutered = neutered;
+        this.status = status;
+
+        return this;
+    }
+
+    public Cat updateStatus(byte status) {
+        this.status = status;
+
+        return this;
+    }
+
+    public Cat delete() {
+        this.dFlag = true;
+
+        return this;
+    }
+
+    public Cat restore() {
+        this.dFlag = false;
+
+        return this;
     }
   
 }

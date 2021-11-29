@@ -28,7 +28,7 @@ public class CatLocation {
     @NotNull
     private double longitude;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 }

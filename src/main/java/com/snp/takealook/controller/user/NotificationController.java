@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/notification/userid/{userId}")
+    @GetMapping("/notification/{userId}")
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(@PathVariable Long userId) {
         List<ResponseDTO.NotificationListResponse> list = null;
         try{

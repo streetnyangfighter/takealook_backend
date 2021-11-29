@@ -49,9 +49,11 @@ public class User {
     private Role role;
 
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

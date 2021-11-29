@@ -26,8 +26,8 @@ public class Notification {
     @NotNull
     private byte type;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @NotNull

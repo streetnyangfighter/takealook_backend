@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class CatGroup {
 
@@ -19,24 +19,26 @@ public class CatGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private CatGroup matchedGroup;
 
-    @NotNull
     private byte status;
+    // 0: 거절, 1: 수락, 2: 수락 이전(보류)
 
-    @NotNull
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @NotNull
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    @NotNull
     @OneToMany(mappedBy = "matchedGroup", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatGroup> groupList;
+
+    @Builder
+    public CatGroup() {
+    }
 
 }

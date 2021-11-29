@@ -1,5 +1,7 @@
 package com.snp.takealook.dto;
 
+import com.snp.takealook.domain.cat.Cat;
+import com.snp.takealook.domain.cat.CatGroup;
 import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.domain.user.UserLocation;
@@ -65,6 +67,111 @@ public class ResponseDTO {
             this.dong = entity.getDong();
         }
     }
+
+    @Getter
+    public static class CatListResponse {
+        private Long id;
+        private User user;
+        private CatGroup catGroup;
+        private String name;
+        private byte neutered;
+        private byte status;
+        private boolean dFlag;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+
+        public CatListResponse(Cat entity) {
+            this.id = entity.getId();
+            this.user = entity.getUser();
+            this.catGroup = entity.getCatGroup();
+            this.name = entity.getName();
+            this.neutered = entity.getNeutered();
+            this.status = entity.getStatus();
+            this.dFlag = entity.isDFlag();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Data
     @AllArgsConstructor
