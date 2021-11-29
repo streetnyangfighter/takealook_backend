@@ -29,9 +29,4 @@ public class UserDTO {
             this.dFlag = dFlag;
         }
     }
-  
-   @Getter
-    public static class Get {
-        private Long id;
-    }
 }

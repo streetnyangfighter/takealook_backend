@@ -27,14 +27,14 @@ public class UserLocationService {
     }
 
     @Transactional
-    public void delete(UserLocationDTO.Delete dto) {
-        UserLocation userLocation = userLocationRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("UserLocation with id: " + dto.getId() + " is not valid"));
+    public void delete(Long id) {
+        UserLocation userLocation = userLocationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("UserLocation with id: " + id + " is not valid"));
         userLocationRepository.delete(userLocation);
     }
 
     @Transactional
-    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(UserLocationDTO.Get dto) {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getUserId() + " is not valid"));
+    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
         return userLocationRepository.findUserLocationsByUser(user).stream()
                 .map(ResponseDTO.UserLocationListResponse::new)

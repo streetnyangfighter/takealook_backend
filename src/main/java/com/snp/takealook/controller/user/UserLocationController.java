@@ -1,5 +1,6 @@
 package com.snp.takealook.controller.user;
 
+import com.snp.takealook.dto.RequestDTO;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.user.UserLocationDTO;
 import com.snp.takealook.service.user.UserLocationService;
@@ -16,9 +17,9 @@ public class UserLocationController {
 
     private final UserLocationService userLocationService;
 
-    @PostMapping("/userlocation")
-    public Long save(UserLocationDTO.Create dto) {
-        List<ResponseDTO.UserLocationListResponse> list = findAllByUserId(new UserLocationDTO.Get(dto.getUser().getId()));
+    @PostMapping("/userlocation/{userId}")
+    public Long save(@PathVariable Long userId, UserLocationDTO.Create dto) {
+        List<ResponseDTO.UserLocationListResponse> list = findAllByUserId(userId);
         if (list.size() < 3) {
             return userLocationService.save(dto);
         }
@@ -26,21 +27,21 @@ public class UserLocationController {
         return null;
     }
 
-    @DeleteMapping("/userlocation")
-    public Long delete(UserLocationDTO.Delete dto) {
+    @DeleteMapping("/userlocation/{id}")
+    public Long delete(@PathVariable Long id) {
         try{
-            userLocationService.delete(dto);
+            userLocationService.delete(id);
         }catch(IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
-        return dto.getId();
+        return id;
     }
 
-    @GetMapping("/userlocation")
-    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(UserLocationDTO.Get dto) {
+    @GetMapping("/userlocation/{userId}")
+    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(@PathVariable Long userId) {
         List<ResponseDTO.UserLocationListResponse> list = null;
         try {
-            list = userLocationService.findAllByUserId(dto);
+            list = userLocationService.findAllByUserId(userId);
         }catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

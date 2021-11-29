@@ -36,14 +36,4 @@ public class UserLocationDTO {
         }
     }
 
-    @Getter
-    public static class Delete {
-        private Long id;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class Get {
-        private Long userId;
-    }
 }
