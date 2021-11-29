@@ -21,8 +21,8 @@ public class NotificationService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<ResponseDTO.NotificationListResponse> findAllByUserId(NotificationDTO.Get dto) throws NotFoundException {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getUserId() + " is not valid"));
+    public List<ResponseDTO.NotificationListResponse> findAllByUserId(NotificationDTO.Get dto) {
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getUserId() + " is not valid"));
 
         return notificationRepository.findNotificationsByUser(user).stream()
                 .map(ResponseDTO.NotificationListResponse::new)

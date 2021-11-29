@@ -30,18 +30,18 @@ public class UserLocationController {
     public Long delete(UserLocationDTO.Delete dto) {
         try{
             userLocationService.delete(dto);
-        }catch(NotFoundException e) {
+        }catch(IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         return dto.getId();
     }
 
-    @GetMapping("/userlocation/userid")
+    @GetMapping("/userlocation")
     public List<ResponseDTO.UserLocationListResponse> findAllByUserId(UserLocationDTO.Get dto) {
         List<ResponseDTO.UserLocationListResponse> list = null;
         try {
             list = userLocationService.findAllByUserId(dto);
-        }catch (NotFoundException e) {
+        }catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 

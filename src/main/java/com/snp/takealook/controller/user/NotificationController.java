@@ -23,7 +23,7 @@ public class NotificationController {
         List<ResponseDTO.NotificationListResponse> list = null;
         try{
             list = notificationService.findAllByUserId(dto);
-        }catch (NotFoundException e) {
+        }catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 

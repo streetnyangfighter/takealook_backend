@@ -27,14 +27,14 @@ public class UserLocationService {
     }
 
     @Transactional
-    public void delete(UserLocationDTO.Delete dto) throws NotFoundException {
-        UserLocation userLocation = userLocationRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("UserLocation with id: " + dto.getId() + " is not valid"));
+    public void delete(UserLocationDTO.Delete dto) {
+        UserLocation userLocation = userLocationRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("UserLocation with id: " + dto.getId() + " is not valid"));
         userLocationRepository.delete(userLocation);
     }
 
     @Transactional
-    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(UserLocationDTO.Get dto) throws NotFoundException {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getUserId() + " is not valid"));
+    public List<ResponseDTO.UserLocationListResponse> findAllByUserId(UserLocationDTO.Get dto) {
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getUserId() + " is not valid"));
 
         return userLocationRepository.findUserLocationsByUser(user).stream()
                 .map(ResponseDTO.UserLocationListResponse::new)

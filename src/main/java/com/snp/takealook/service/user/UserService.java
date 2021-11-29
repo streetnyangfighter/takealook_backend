@@ -17,8 +17,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public ResponseDTO.UserResponse findById(UserDTO.Get dto) throws NotFoundException {
-        User entity = userRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException("User with id: " + dto.getId() + " is not valid"));
+    public ResponseDTO.UserResponse findById(UserDTO.Get dto) {
+        User entity = userRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getId() + " is not valid"));
 
         return new ResponseDTO.UserResponse(entity);
     }
