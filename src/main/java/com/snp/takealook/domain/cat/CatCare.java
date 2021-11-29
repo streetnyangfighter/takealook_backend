@@ -22,9 +22,6 @@ public class CatCare {
     private Cat cat;
 
     @NotNull
-    private LocalDateTime datetime;
-
-    @NotNull
     private byte type;
 
     @NotNull
@@ -37,4 +34,18 @@ public class CatCare {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    @Builder
+    public CatCare(Cat cat, byte type, String message) {
+        this.cat = cat;
+        this.type = type;
+        this.message = message;
+    }
+
+    public CatCare update(byte type, String message) {
+        this.type = type;
+        this.message = message;
+
+        return this;
+    }
 }
