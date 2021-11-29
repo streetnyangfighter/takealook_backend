@@ -14,6 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.csrf().disable();
         // 권한 설정 옵션 시작점
         http.authorizeRequests()
                 // 권한 관리 대상 지정, URL, HTTP 메소드별로 관리 가능
@@ -26,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그아웃 시, 메인으로 이동
                 .and()
                     .logout()
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/").permitAll()
 
                 // OAuth2 설정 진입, userInfoEndpoint() -> 로그인 성공 이후 사용자 정보 가져올 때의 설정 담당
                 // userService -> UserService 인터페이스 구현체 등록
