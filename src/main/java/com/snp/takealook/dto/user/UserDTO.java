@@ -1,10 +1,7 @@
 package com.snp.takealook.dto.user;
 
-import com.snp.takealook.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 public class UserDTO {
 
@@ -28,10 +25,5 @@ public class UserDTO {
         public Delete(boolean dFlag) {
             this.dFlag = dFlag;
         }
-    }
-  
-   @Getter
-    public static class Get {
-        private Long id;
     }
 }

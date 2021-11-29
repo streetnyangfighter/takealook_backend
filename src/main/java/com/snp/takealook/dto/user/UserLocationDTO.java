@@ -3,7 +3,6 @@ package com.snp.takealook.dto.user;
 
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.domain.user.UserLocation;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,14 +35,4 @@ public class UserLocationDTO {
         }
     }
 
-    @Getter
-    public static class Delete {
-        private Long id;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class Get {
-        private Long userId;
-    }
 }
