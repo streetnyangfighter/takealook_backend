@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.cat;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,4 +32,11 @@ public class CatLocation {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
+
+    @Builder
+    public CatLocation(Cat cat, double latitude, double longitude) {
+        this.cat = cat;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

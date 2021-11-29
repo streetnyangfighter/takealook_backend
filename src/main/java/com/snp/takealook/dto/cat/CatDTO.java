@@ -6,6 +6,8 @@ import com.snp.takealook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
+
 public class CatDTO {
 
     @Getter
@@ -39,6 +41,12 @@ public class CatDTO {
         private String name;
         private byte neutered;
         private byte status;
+    }
+
+    @Getter
+    public static class LocationList {
+        private double latitude;
+        private double longitude;
     }
 
 }

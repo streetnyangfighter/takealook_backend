@@ -96,5 +96,11 @@ public class Cat {
 
         return this;
     }
+
+    public Cat updateLocations(List<CatLocation> catLocationList) {
+        this.catLocationList = catLocationList;
+
+        return this;
+    }
   
 }
