@@ -19,26 +19,10 @@ public class CatGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private CatGroup matchedGroup;
-
-    private byte status;
-    // 0: 거절, 1: 수락, 2: 수락 이전(보류)
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
-
-    @OneToMany(mappedBy = "matchedGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "catGroup", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<CatGroup> groupList;
+    private List<Cat> catList;
 
     @Builder
-    public CatGroup() {
-    }
-
+    public CatGroup() {}
 }

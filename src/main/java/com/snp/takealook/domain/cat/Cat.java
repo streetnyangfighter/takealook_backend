@@ -25,7 +25,7 @@ public class Cat {
     private User user;
 
     @NotNull
-    @OneToOne
+    @ManyToOne
     private CatGroup catGroup;
 
     @NotNull
@@ -60,6 +60,14 @@ public class Cat {
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatImage> catImageList;
+
+    @OneToMany(mappedBy = "proposer", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<CatMatch> catProposerList;
+
+    @OneToMany(mappedBy = "accepter", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<CatMatch> catAccepterList;
 
     @Builder
     public Cat(User user, CatGroup catGroup, String name, byte neutered, byte status) {
@@ -99,6 +107,12 @@ public class Cat {
 
     public Cat updateLocations(List<CatLocation> catLocationList) {
         this.catLocationList = catLocationList;
+
+        return this;
+    }
+
+    public Cat updateCatGroup(CatGroup matchedGroup) {
+        this.catGroup = matchedGroup;
 
         return this;
     }

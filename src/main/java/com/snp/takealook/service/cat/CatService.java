@@ -38,36 +38,28 @@ public class CatService {
     public Long updateInfo(Long id, CatDTO.Update dto) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getStatus());
-
-        return id;
+        return cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getStatus()).getId();
     }
 
     @Transactional
     public Long updateStatus(Long id, CatDTO.Update dto) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        cat.updateStatus(dto.getStatus());
-
-        return id;
+        return cat.updateStatus(dto.getStatus()).getId();
     }
 
     @Transactional
     public Long delete(Long id) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        cat.delete();
-
-        return id;
+        return cat.delete().getId();
     }
 
     @Transactional
     public Long restore(Long id) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        cat.restore();
-
-        return id;
+        return cat.restore().getId();
     }
 
     @Transactional
@@ -80,7 +72,7 @@ public class CatService {
     }
 
     @Transactional
-    public void updateLocations(Long id, List<CatDTO.LocationList> dtoList) {
+    public Long updateLocations(Long id, List<CatDTO.LocationList> dtoList) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
         catLocationRepository.deleteAll(cat.getCatLocationList());
@@ -93,6 +85,6 @@ public class CatService {
                         .build())
                 .collect(Collectors.toList());
 
-        cat.updateLocations(list);
+        return cat.updateLocations(list).getId();
     }
 }

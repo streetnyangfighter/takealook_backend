@@ -54,7 +54,6 @@ public class CatController {
 
     @PutMapping("/cat/locations/{id}")
     public Long updateLocations(@PathVariable Long id, @RequestBody List<CatDTO.LocationList> dtoList) {
-        catService.updateLocations(id, dtoList);
-        return id;
+        return catService.updateLocations(id, dtoList);
     }
 }

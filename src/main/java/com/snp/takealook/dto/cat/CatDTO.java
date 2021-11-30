@@ -6,8 +6,6 @@ import com.snp.takealook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
-
 public class CatDTO {
 
     @Getter
