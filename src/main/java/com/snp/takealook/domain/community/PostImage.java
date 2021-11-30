@@ -29,8 +29,8 @@ public class PostImage {
     @NotNull
     private String fileName;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
 }

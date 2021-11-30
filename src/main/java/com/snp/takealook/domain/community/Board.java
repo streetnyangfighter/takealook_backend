@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.community;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,6 @@ public class Board {
     private String name;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Post> postList;
 }

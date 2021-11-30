@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.community;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,14 +35,16 @@ public class Comment {
     @Lob
     private String content;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<CommentLike> commentLikeList;
 
 }
