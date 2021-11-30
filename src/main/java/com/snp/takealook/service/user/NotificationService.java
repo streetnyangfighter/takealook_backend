@@ -1,5 +1,6 @@
 package com.snp.takealook.service.user;
 
+import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.repository.user.NotificationRepository;
@@ -17,6 +18,15 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+
+    @Transactional
+    public Long check(Long id) {
+        Notification notification = notificationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Notification with id: " + id + " is not valid"));
+
+        notification.check();
+
+        return id;
+    }
 
     @Transactional(readOnly = true)
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(Long userId) {

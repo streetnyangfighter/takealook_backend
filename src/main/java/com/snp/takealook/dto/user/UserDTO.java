@@ -33,4 +33,11 @@ public class UserDTO {
             this.dFlag = dFlag;
         }
     }
+
+    @Getter
+    public static class LocationList {
+        private String sido;
+        private String gugun;
+        private String dong;
+    }
 }

@@ -2,6 +2,7 @@ package com.snp.takealook.domain.user;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,18 +27,28 @@ public class Notification {
     @NotNull
     private byte type;
 
-    @NotNull
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime modifiedAt;
+
     @NotNull
-    private byte checked;
+    private boolean checked;
 
     @Builder
-    public Notification(User user, String message, byte type, byte checked) {
+    public Notification(User user, String message, byte type) {
         this.user = user;
         this.message = message;
         this.type = type;
-        this.checked = checked;
+        this.checked = false;
+    }
+
+    public Notification check() {
+        this.checked = true;
+
+        return this;
     }
 }

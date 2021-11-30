@@ -1,17 +1,22 @@
 package com.snp.takealook.domain.cat;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class CatCare {
+public class CatMatch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +24,15 @@ public class CatCare {
 
     @NotNull
     @ManyToOne
-    private Cat cat;
+    private Cat proposer;
 
     @NotNull
-    private byte type;
+    @ManyToOne
+    private Cat accepter;
 
     @NotNull
-    private String message;
+    private byte status;
+    // 0: 거절, 1: 수락, 2: 수락 이전(보류)
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -36,16 +43,22 @@ public class CatCare {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public CatCare(Cat cat, byte type, String message) {
-        this.cat = cat;
-        this.type = type;
-        this.message = message;
+    public CatMatch(Cat proposer, Cat accepter) {
+        this.proposer = proposer;
+        this.accepter = accepter;
+        this.status = 2;
     }
 
-    public CatCare update(byte type, String message) {
-        this.type = type;
-        this.message = message;
+    public CatMatch accept() {
+        this.status = 1;
 
         return this;
     }
+
+    public CatMatch reject() {
+        this.status = 0;
+
+        return this;
+    }
+
 }

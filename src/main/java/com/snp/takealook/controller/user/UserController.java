@@ -6,6 +6,8 @@ import com.snp.takealook.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
@@ -41,6 +43,12 @@ public class UserController {
     @PatchMapping("/user/{id}")
     public Long delete(@PathVariable Long id) {
         userService.delete(id);
+        return id;
+    }
+
+    @PutMapping("/user/locations/{id}")
+    public Long updateLocations(@PathVariable Long id, @RequestBody List<UserDTO.LocationList> dtoList) {
+        userService.updateLocations(id, dtoList);
         return id;
     }
 
