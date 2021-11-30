@@ -1,16 +1,16 @@
 package com.snp.takealook.dto.user;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 public class UserDTO {
 
-    @Data
+    @Getter
     public static class Check {
         private String nickname;
     }
 
-    @Data
+    @Getter
     public static class Update {
         private String nickname;
         private String phone;
@@ -24,7 +24,7 @@ public class UserDTO {
         }
     }
 
-    @Data
+    @Getter
     public static class Delete {
         private boolean dFlag;
 

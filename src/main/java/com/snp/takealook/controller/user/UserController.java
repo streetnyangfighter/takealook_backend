@@ -26,19 +26,19 @@ public class UserController {
     }
 
     // 회원정보 조회
-    @GetMapping("user/{id}")
+    @GetMapping("/user/{id}")
     public User getInfo(@PathVariable Long id) {
         return userService.getInfo(id);
     }
 
     // 회원정보 수정
-    @PutMapping("user/{id}")
+    @PutMapping("/user/{id}")
     public Long updateInfo(@PathVariable Long id, @RequestBody UserDTO.Update dto) {
         return userService.updateInfo(id, dto);
     }
 
     // 회원 삭제
-    @PatchMapping("user/{id}")
+    @PatchMapping("/user/{id}")
     public Long delete(@PathVariable Long id) {
         userService.delete(id);
         return id;
