@@ -24,7 +24,6 @@ public class Cat {
     @ManyToOne
     private User user;
 
-    @NotNull
     @ManyToOne
     private CatGroup catGroup;
 
@@ -70,9 +69,8 @@ public class Cat {
     private List<CatMatch> catAccepterList;
 
     @Builder
-    public Cat(User user, CatGroup catGroup, String name, byte neutered, byte status) {
+    public Cat(User user, String name, byte neutered, byte status) {
         this.user = user;
-        this.catGroup = catGroup;
         this.name = name;
         this.neutered = neutered;
         this.status = status;

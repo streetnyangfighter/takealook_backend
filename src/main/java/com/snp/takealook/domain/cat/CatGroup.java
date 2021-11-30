@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 public class CatGroup {
 
@@ -23,6 +23,4 @@ public class CatGroup {
     @JsonBackReference
     private List<Cat> catList;
 
-    @Builder
-    public CatGroup() {}
 }

@@ -23,15 +23,13 @@ public class CatService {
 
     private final CatRepository catRepository;
     private final UserRepository userRepository;
-    private final CatGroupRepository catGroupRepository;
     private final CatLocationRepository catLocationRepository;
 
     @Transactional
     public Long save(CatDTO.Create dto) {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getUserId() + " is not valid"));
-        CatGroup catGroup = catGroupRepository.save(CatGroup.builder().build());
 
-        return catRepository.save(dto.toEntity(user, catGroup)).getId();
+        return catRepository.save(dto.toEntity(user)).getId();
     }
 
     @Transactional

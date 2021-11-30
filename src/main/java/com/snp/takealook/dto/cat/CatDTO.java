@@ -23,10 +23,9 @@ public class CatDTO {
             this.status = status;
         }
 
-        public Cat toEntity(User user, CatGroup catGroup) {
+        public Cat toEntity(User user) {
             return Cat.builder()
                     .user(user)
-                    .catGroup(catGroup)
                     .name(name)
                     .neutered(neutered)
                     .status(status)
