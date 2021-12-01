@@ -2,6 +2,7 @@ package com.snp.takealook.dto;
 
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatGroup;
+import com.snp.takealook.domain.cat.CatMatch;
 import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.domain.user.UserLocation;
@@ -95,7 +96,24 @@ public class ResponseDTO {
         }
     }
 
+    @Getter
+    public static class CatMatchListResponse {
+        private Long id;
+        private Cat proposer;
+        private Cat accepter;
+        private Byte status;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
 
+        public CatMatchListResponse(CatMatch entity) {
+            this.id = entity.getId();
+            this.proposer = entity.getProposer();
+            this.accepter = entity.getAccepter();
+            this.status = entity.getStatus();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
 
 
 

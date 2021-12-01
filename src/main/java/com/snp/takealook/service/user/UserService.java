@@ -64,11 +64,24 @@ public class UserService {
 
     //회원 정보 수정
     @Transactional
-    public Long updateInfo(Long id, UserDTO.Update dto) {
+    public Long updateInfo(Long id, UserDTO.Update dto, List<UserDTO.LocationList> dtoList) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
         user.updateDetail(dto.getNickname(), dto.getPhone(), dto.getImage());
+
+        userLocationRepository.deleteAll(user.getUserLocationList());
+
+        List<UserLocation> list = dtoList.stream()
+                .map(v -> UserLocation.builder()
+                        .user(user)
+                        .sido(v.getSido())
+                        .gugun(v.getGugun())
+                        .dong(v.getDong())
+                        .build())
+                .collect(Collectors.toList());
+
+        user.updateLocations(list);
 
         return id;
     }

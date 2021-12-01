@@ -3,15 +3,22 @@ package com.snp.takealook.service.cat;
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatGroup;
 import com.snp.takealook.domain.cat.CatMatch;
+import com.snp.takealook.domain.user.User;
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatMatchDTO;
 import com.snp.takealook.repository.cat.CatGroupRepository;
 import com.snp.takealook.repository.cat.CatMatchRepository;
 import com.snp.takealook.repository.cat.CatRepository;
+import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +27,7 @@ public class CatMatchService {
     private final CatMatchRepository catMatchRepository;
     private final CatRepository catRepository;
     private final CatGroupRepository catGroupRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long match(CatMatchDTO.Match dto) {
@@ -71,6 +79,38 @@ public class CatMatchService {
         CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
 
         return catMatch.reject().getId();
+    }
+
+    @Transactional
+    public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        List<CatMatch> sendList = new ArrayList<>();
+        List<Cat> userCatList = user.getCatList();
+
+        for (Cat cat : userCatList) {
+            sendList.addAll(catMatchRepository.findCatMatchesByProposer_Id(cat.getId()));
+        }
+
+//        Collections.sort(sendList, (c1, c2) -> c1.getCreatedAt().compareTo(c2.getCreatedAt()));
+        return sendList.stream()
+                .map(ResponseDTO.CatMatchListResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        List<CatMatch> receiveList = new ArrayList<>();
+        List<Cat> userCatList = user.getCatList();
+
+        for (Cat cat : userCatList) {
+            receiveList.addAll(catMatchRepository.findCatMatchesByAccepter_Id(cat.getId()));
+        }
+
+//        Collections.sort(sendList, (c1, c2) -> c1.getCreatedAt().compareTo(c2.getCreatedAt()));
+        return receiveList.stream()
+                .map(ResponseDTO.CatMatchListResponse::new)
+                .collect(Collectors.toList());
     }
 
 }
