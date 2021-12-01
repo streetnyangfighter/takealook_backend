@@ -2,6 +2,7 @@ package com.snp.takealook.domain.community;
 
 import com.snp.takealook.domain.user.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,5 +25,11 @@ public class CommentLike {
     @NotNull
     @ManyToOne
     private User user;
+
+    @Builder
+    public CommentLike(Comment comment, User user) {
+        this.comment = comment;
+        this.user = user;
+    }
 
 }

@@ -18,7 +18,7 @@ public class PostLikeService {
         postLikeRepository.like(postId, dto.getUserId());
     }
 
-    // 게시글 삭제
+    // 게시글 추천 취소
     @Transactional
     public void unlike(Long postId, PostLikeDTO.Like dto) {
         postLikeRepository.unLike(postId, dto.getUserId());
