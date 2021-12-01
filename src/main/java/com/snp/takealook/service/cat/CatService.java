@@ -36,7 +36,7 @@ public class CatService {
     public Long updateInfo(Long id, CatDTO.Update dto) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        return cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getStatus()).getId();
+        return cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getGender(), dto.getStatus()).getId();
     }
 
     @Transactional

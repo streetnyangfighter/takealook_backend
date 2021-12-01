@@ -72,6 +72,13 @@ public class ResponseDTO {
     }
 
     @Getter
+    public static class CatResponse {
+        private Long id;
+        private String name;
+
+    }
+
+    @Getter
     public static class CatListResponse {
         private Long id;
         private User user;

@@ -31,6 +31,10 @@ public class Cat {
     private String name;
 
     @NotNull
+    private Byte gender;
+    // 0: 남, 1: 여, 2: 자웅동체 혹은 확인 불가
+
+    @NotNull
     private Byte neutered;
     // 0: 중성화 X, 1: 중성화 O, 2: 확인 불가
 
@@ -69,16 +73,18 @@ public class Cat {
     private List<CatMatch> catAccepterList;
 
     @Builder
-    public Cat(User user, String name, Byte neutered, Byte status) {
+    public Cat(User user, String name, Byte gender, Byte neutered, Byte status) {
         this.user = user;
         this.name = name;
+        this.gender = gender;
         this.neutered = neutered;
         this.status = status;
         this.dFlag = false;
     }
 
-    public Cat updateInfo(String name, Byte neutered, Byte status) {
+    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status) {
         this.name = name;
+        this.gender = gender;
         this.neutered = neutered;
         this.status = status;
 

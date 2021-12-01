@@ -12,13 +12,15 @@ public class CatDTO {
     public static class Create {
         private Long userId;
         private String name;
+        private Byte gender;
         private Byte neutered;
         private Byte status;
 
         @Builder
-        public Create(Long userId, String name, Byte neutered, Byte status) {
+        public Create(Long userId, String name, Byte gender, Byte neutered, Byte status) {
             this.userId = userId;
             this.name = name;
+            this.gender = gender;
             this.neutered = neutered;
             this.status = status;
         }
@@ -27,6 +29,7 @@ public class CatDTO {
             return Cat.builder()
                     .user(user)
                     .name(name)
+                    .gender(gender)
                     .neutered(neutered)
                     .status(status)
                     .build();
@@ -36,6 +39,7 @@ public class CatDTO {
     @Getter
     public static class Update {
         private String name;
+        private Byte gender;
         private Byte neutered;
         private Byte status;
     }

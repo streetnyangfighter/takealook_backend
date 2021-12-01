@@ -1,6 +1,5 @@
 package com.snp.takealook.controller.cat;
 
-import com.snp.takealook.domain.cat.CatMatch;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatMatchDTO;
 import com.snp.takealook.service.cat.CatMatchService;
