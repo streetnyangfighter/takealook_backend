@@ -24,17 +24,17 @@ public class CatLocation {
     private Cat cat;
 
     @NotNull
-    private double latitude;
+    private Double latitude;
 
     @NotNull
-    private double longitude;
+    private Double longitude;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
     @Builder
-    public CatLocation(Cat cat, double latitude, double longitude) {
+    public CatLocation(Cat cat, Double latitude, Double longitude) {
         this.cat = cat;
         this.latitude = latitude;
         this.longitude = longitude;

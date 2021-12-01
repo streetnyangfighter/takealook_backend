@@ -3,15 +3,22 @@ package com.snp.takealook.service.cat;
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatGroup;
 import com.snp.takealook.domain.cat.CatMatch;
+import com.snp.takealook.domain.user.User;
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatMatchDTO;
 import com.snp.takealook.repository.cat.CatGroupRepository;
 import com.snp.takealook.repository.cat.CatMatchRepository;
 import com.snp.takealook.repository.cat.CatRepository;
+import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +27,7 @@ public class CatMatchService {
     private final CatMatchRepository catMatchRepository;
     private final CatRepository catRepository;
     private final CatGroupRepository catGroupRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long match(CatMatchDTO.Match dto) {
@@ -51,20 +59,17 @@ public class CatMatchService {
                 List<Cat> accepterCatList = accepter.getCatGroup().getCatList();
                 if(proposerCatList.size() < accepterCatList.size()) { // Proposer 를 Accepter 의 그룹으로 updateGroup
                     CatGroup changeCatGroup = accepter.getCatGroup();
+//                    CatGroup pastCatGroup = proposer.getCatGroup();
                     proposerCatList.stream().map(v -> v.updateCatGroup(changeCatGroup));
-                } else {
+//                    catGroupRepository.delete(pastCatGroup);
+                } else { // Accepter 를 Proposer 의 그룹으로 updateGroup
                     CatGroup changeCatGroup = proposer.getCatGroup();
+//                    CatGroup pastCatGroup = accepter.getCatGroup();
                     accepterCatList.stream().map(v -> v.updateCatGroup(changeCatGroup));
+//                    catGroupRepository.delete(pastCatGroup);
                 }
             }
         }
-
-        // 이전 그룹에 소속된 고양이가 없음에도 데이터가 남음 = 메모리 낭비
-        // 배치 프로그램으로 List<Cat> catList 의 사이즈가 0이면 삭제되도록 처리?
-
-        // 혹은, 초기 고양이 생성시 기본 그룹을 할당하지 말고, 매칭이 성사되면 그룹을 만들어서 두 고양이를 포함
-        // 다대다 매칭시 위와 같은 문제가 동일하게 발생하지만, 일대일 매칭시 발생하는 메모리 낭비는 막을 수 있음
-        // 고양이 "그룹"이기 때문에 매칭 후 만드는게 말이 되는 것 같기도 함
 
         return catMatch.accept().getId();
     }
@@ -76,16 +81,36 @@ public class CatMatchService {
         return catMatch.reject().getId();
     }
 
-    // 했던 매칭 취소는 보류 상태
     @Transactional
-    public Long cancle(Long id) {
-        // 다대다 매칭 후 캔슬을 하면, 처음 신청했던 고양이 하나만 빠져나가는 문제 발생
-        // 매칭 후 캔슬은 안되고, 고양이를 빼고 싶으면 선택해서 뺄 수 있도록 하는 건 어떨까?
-        CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
-        CatGroup catGroup = catGroupRepository.save(new CatGroup());
+    public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        List<CatMatch> sendList = new ArrayList<>();
+        List<Cat> userCatList = user.getCatList();
 
-        catMatch.getProposer().updateCatGroup(catGroup);
+        for (Cat cat : userCatList) {
+            sendList.addAll(catMatchRepository.findCatMatchesByProposer_Id(cat.getId()));
+        }
 
-        return catMatch.reject().getId();
+//        Collections.sort(sendList, (c1, c2) -> c1.getCreatedAt().compareTo(c2.getCreatedAt()));
+        return sendList.stream()
+                .map(ResponseDTO.CatMatchListResponse::new)
+                .collect(Collectors.toList());
     }
+
+    @Transactional
+    public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        List<CatMatch> receiveList = new ArrayList<>();
+        List<Cat> userCatList = user.getCatList();
+
+        for (Cat cat : userCatList) {
+            receiveList.addAll(catMatchRepository.findCatMatchesByAccepter_Id(cat.getId()));
+        }
+
+//        Collections.sort(sendList, (c1, c2) -> c1.getCreatedAt().compareTo(c2.getCreatedAt()));
+        return receiveList.stream()
+                .map(ResponseDTO.CatMatchListResponse::new)
+                .collect(Collectors.toList());
+    }
+
 }

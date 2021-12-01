@@ -22,7 +22,7 @@ public class CatCare {
     private Cat cat;
 
     @NotNull
-    private byte type;
+    private Byte type;
 
     @NotNull
     private String message;
@@ -36,13 +36,13 @@ public class CatCare {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public CatCare(Cat cat, byte type, String message) {
+    public CatCare(Cat cat, Byte type, String message) {
         this.cat = cat;
         this.type = type;
         this.message = message;
     }
 
-    public CatCare update(byte type, String message) {
+    public CatCare update(Byte type, String message) {
         this.type = type;
         this.message = message;
 

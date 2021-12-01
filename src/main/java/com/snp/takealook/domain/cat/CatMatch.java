@@ -1,6 +1,5 @@
 package com.snp.takealook.domain.cat;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,7 +29,7 @@ public class CatMatch {
     private Cat accepter;
 
     @NotNull
-    private byte status;
+    private Byte status;
     // 0: 거절, 1: 수락, 2: 수락 이전(보류)
 
     @CreationTimestamp

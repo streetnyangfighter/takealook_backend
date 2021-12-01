@@ -25,6 +25,11 @@ public class CatController {
         return catService.updateInfo(id, dto);
     }
 
+    @PutMapping("/cat/locations/{id}")
+    public Long updateLocations(@PathVariable Long id, @RequestBody List<CatDTO.LocationList> dtoList) {
+        return catService.updateLocations(id, dtoList);
+    }
+
     @PatchMapping("/cat/status/{id}")
     public Long updateStatus(@PathVariable Long id, @RequestBody CatDTO.Update dto) {
         return catService.updateStatus(id, dto);
@@ -40,20 +45,18 @@ public class CatController {
         return catService.restore(id);
     }
 
-    @GetMapping("/cat/{userId}")
-    public List<ResponseDTO.CatListResponse> findAllByUserId(@PathVariable Long userId) {
-        List<ResponseDTO.CatListResponse> list = null;
-        try {
-            list = catService.findAllByUserId(userId);
-        }catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return list;
+    @PatchMapping("/cat/groupout/{id}")
+    public Long removeFromGroup(@PathVariable Long id) {
+        return catService.removeFromGroup(id);
     }
 
-    @PutMapping("/cat/locations/{id}")
-    public Long updateLocations(@PathVariable Long id, @RequestBody List<CatDTO.LocationList> dtoList) {
-        return catService.updateLocations(id, dtoList);
+    @GetMapping("/cat/user/{userId}")
+    public List<ResponseDTO.CatListResponse> findAllByUserId(@PathVariable Long userId) {
+        return catService.findAllByUserId(userId);
+    }
+
+    @GetMapping("/cat/{id}")
+    public ResponseDTO.CatResponse findOne(@PathVariable Long id) {
+        return catService.findOne(id);
     }
 }

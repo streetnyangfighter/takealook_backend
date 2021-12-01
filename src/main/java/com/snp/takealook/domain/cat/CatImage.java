@@ -24,7 +24,7 @@ public class CatImage {
 
     @NotNull
     @Lob
-    private byte[] image;
+    private Byte[] image;
 
     @NotNull
     private String fileName;

@@ -2,6 +2,8 @@ package com.snp.takealook.dto;
 
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatGroup;
+import com.snp.takealook.domain.cat.CatImage;
+import com.snp.takealook.domain.cat.CatMatch;
 import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.domain.user.UserLocation;
@@ -10,6 +12,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ResponseDTO {
 
@@ -37,10 +40,10 @@ public class ResponseDTO {
         private Long id;
         private User user;
         private String message;
-        private byte type;
+        private Byte type;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private boolean checked;
+        private Boolean checked;
 
         public NotificationListResponse(Notification entity) {
             this.id = entity.getId();
@@ -49,7 +52,7 @@ public class ResponseDTO {
             this.type = entity.getType();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.checked = entity.isChecked();
+            this.checked = entity.getChecked();
         }
     }
 
@@ -71,14 +74,34 @@ public class ResponseDTO {
     }
 
     @Getter
+    public static class CatResponse {
+        private Long id;
+        private String name;
+        private Byte gender;
+        private Byte neutered;
+        private Byte status;
+        private List<User> carers;
+//        private List<CatImage> catImageList;
+
+        public CatResponse(Cat cat, List<User> carers) {
+            this.id = cat.getId();
+            this.name = cat.getName();
+            this.gender = cat.getGender();
+            this.neutered = cat.getNeutered();
+            this.status = cat.getStatus();
+            this.carers = carers;
+        }
+    }
+
+    @Getter
     public static class CatListResponse {
         private Long id;
         private User user;
         private CatGroup catGroup;
         private String name;
-        private byte neutered;
-        private byte status;
-        private boolean dFlag;
+        private Byte neutered;
+        private Byte status;
+        private Boolean dFlag;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
@@ -89,13 +112,30 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.neutered = entity.getNeutered();
             this.status = entity.getStatus();
-            this.dFlag = entity.isDFlag();
+            this.dFlag = entity.getDFlag();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
         }
     }
 
+    @Getter
+    public static class CatMatchListResponse {
+        private Long id;
+        private Cat proposer;
+        private Cat accepter;
+        private Byte status;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
 
+        public CatMatchListResponse(CatMatch entity) {
+            this.id = entity.getId();
+            this.proposer = entity.getProposer();
+            this.accepter = entity.getAccepter();
+            this.status = entity.getStatus();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
 
 
 

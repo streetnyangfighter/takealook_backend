@@ -1,9 +1,12 @@
 package com.snp.takealook.controller.cat;
 
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatMatchDTO;
 import com.snp.takealook.service.cat.CatMatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -27,12 +30,14 @@ public class CatMatchController {
         return catMatchService.reject(id);
     }
 
-    // 했던 매칭 취소는 보류 상태
-    @PatchMapping("/catmatch/cancle/{id}")
-    public Long cancle(@PathVariable Long id) {
-        return catMatchService.cancle(id);
+    @GetMapping("/catmatch/send/{userId}")
+    public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(@PathVariable Long userId) {
+        return catMatchService.findAllSendByUserId(userId);
     }
 
-    // 내 고양이 하나만 그룹에서 빠지기(나만)
+    @GetMapping("/catmatch/receive/{userId}")
+    public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(@PathVariable Long userId) {
+        return catMatchService.findAllReceiveByUserId(userId);
+    }
 
 }
