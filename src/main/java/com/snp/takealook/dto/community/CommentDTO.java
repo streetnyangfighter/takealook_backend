@@ -50,10 +50,5 @@ public class CommentDTO {
     @Getter
     public static class Update {
         private String content;
-
-        @Builder
-        public Update(String content) {
-            this.content = content;
-        }
     }
 }
