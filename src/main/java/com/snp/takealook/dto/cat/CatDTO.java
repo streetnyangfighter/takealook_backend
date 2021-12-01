@@ -1,7 +1,6 @@
 package com.snp.takealook.dto.cat;
 
 import com.snp.takealook.domain.cat.Cat;
-import com.snp.takealook.domain.cat.CatGroup;
 import com.snp.takealook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;

@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -91,5 +93,21 @@ public class CatService {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
         return cat.updateCatGroup(null).getId();
+    }
+
+    @Transactional
+    public ResponseDTO.CatResponse findOne(Long id) {
+        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+        List<User> carers = new ArrayList<>();
+        try { // 매칭이 되어있는 상태
+            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+            for (Cat c : sameGroupCatList) {
+                carers.add(c.getUser());
+            }
+        } catch(Exception e) { // 매칭 없이 단독 고양이 상태
+            carers.add(cat.getUser());
+        }
+
+        return new ResponseDTO.CatResponse(cat, carers);
     }
 }

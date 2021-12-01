@@ -2,6 +2,7 @@ package com.snp.takealook.dto;
 
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatGroup;
+import com.snp.takealook.domain.cat.CatImage;
 import com.snp.takealook.domain.cat.CatMatch;
 import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ResponseDTO {
 
@@ -75,7 +77,20 @@ public class ResponseDTO {
     public static class CatResponse {
         private Long id;
         private String name;
+        private Byte gender;
+        private Byte neutered;
+        private Byte status;
+        private List<User> carers;
+//        private List<CatImage> catImageList;
 
+        public CatResponse(Cat cat, List<User> carers) {
+            this.id = cat.getId();
+            this.name = cat.getName();
+            this.gender = cat.getGender();
+            this.neutered = cat.getNeutered();
+            this.status = cat.getStatus();
+            this.carers = carers;
+        }
     }
 
     @Getter

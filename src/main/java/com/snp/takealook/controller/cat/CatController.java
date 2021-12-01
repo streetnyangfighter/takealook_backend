@@ -50,9 +50,13 @@ public class CatController {
         return catService.removeFromGroup(id);
     }
 
-    @GetMapping("/cat/{userId}")
+    @GetMapping("/cat/user/{userId}")
     public List<ResponseDTO.CatListResponse> findAllByUserId(@PathVariable Long userId) {
         return catService.findAllByUserId(userId);
     }
 
+    @GetMapping("/cat/{id}")
+    public ResponseDTO.CatResponse findOne(@PathVariable Long id) {
+        return catService.findOne(id);
+    }
 }
