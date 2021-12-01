@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.user;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,7 +26,7 @@ public class Notification {
     private String message;
 
     @NotNull
-    private byte type;
+    private Byte type;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -36,10 +37,10 @@ public class Notification {
     private LocalDateTime modifiedAt;
 
     @NotNull
-    private boolean checked;
+    private Boolean checked;
 
     @Builder
-    public Notification(User user, String message, byte type) {
+    public Notification(User user, String message, Byte type) {
         this.user = user;
         this.message = message;
         this.type = type;

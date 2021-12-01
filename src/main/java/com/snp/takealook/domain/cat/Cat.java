@@ -31,14 +31,14 @@ public class Cat {
     private String name;
 
     @NotNull
-    private byte neutered;
+    private Byte neutered;
     // 0: 중성화 X, 1: 중성화 O, 2: 확인 불가
 
     @NotNull
-    private byte status;
+    private Byte status;
 
     @NotNull
-    private boolean dFlag;
+    private Boolean dFlag;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -69,7 +69,7 @@ public class Cat {
     private List<CatMatch> catAccepterList;
 
     @Builder
-    public Cat(User user, String name, byte neutered, byte status) {
+    public Cat(User user, String name, Byte neutered, Byte status) {
         this.user = user;
         this.name = name;
         this.neutered = neutered;
@@ -77,7 +77,7 @@ public class Cat {
         this.dFlag = false;
     }
 
-    public Cat updateInfo(String name, byte neutered, byte status) {
+    public Cat updateInfo(String name, Byte neutered, Byte status) {
         this.name = name;
         this.neutered = neutered;
         this.status = status;
@@ -85,7 +85,7 @@ public class Cat {
         return this;
     }
 
-    public Cat updateStatus(byte status) {
+    public Cat updateStatus(Byte status) {
         this.status = status;
 
         return this;

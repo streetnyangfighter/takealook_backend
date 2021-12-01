@@ -51,20 +51,17 @@ public class CatMatchService {
                 List<Cat> accepterCatList = accepter.getCatGroup().getCatList();
                 if(proposerCatList.size() < accepterCatList.size()) { // Proposer 를 Accepter 의 그룹으로 updateGroup
                     CatGroup changeCatGroup = accepter.getCatGroup();
+//                    CatGroup pastCatGroup = proposer.getCatGroup();
                     proposerCatList.stream().map(v -> v.updateCatGroup(changeCatGroup));
-                } else {
+//                    catGroupRepository.delete(pastCatGroup);
+                } else { // Accepter 를 Proposer 의 그룹으로 updateGroup
                     CatGroup changeCatGroup = proposer.getCatGroup();
+//                    CatGroup pastCatGroup = accepter.getCatGroup();
                     accepterCatList.stream().map(v -> v.updateCatGroup(changeCatGroup));
+//                    catGroupRepository.delete(pastCatGroup);
                 }
             }
         }
-
-        // 이전 그룹에 소속된 고양이가 없음에도 데이터가 남음 = 메모리 낭비
-        // 배치 프로그램으로 List<Cat> catList 의 사이즈가 0이면 삭제되도록 처리?
-
-        // 혹은, 초기 고양이 생성시 기본 그룹을 할당하지 말고, 매칭이 성사되면 그룹을 만들어서 두 고양이를 포함
-        // 다대다 매칭시 위와 같은 문제가 동일하게 발생하지만, 일대일 매칭시 발생하는 메모리 낭비는 막을 수 있음
-        // 고양이 "그룹"이기 때문에 매칭 후 만드는게 말이 되는 것 같기도 함
 
         return catMatch.accept().getId();
     }
@@ -76,16 +73,4 @@ public class CatMatchService {
         return catMatch.reject().getId();
     }
 
-    // 했던 매칭 취소는 보류 상태
-    @Transactional
-    public Long cancle(Long id) {
-        // 다대다 매칭 후 캔슬을 하면, 처음 신청했던 고양이 하나만 빠져나가는 문제 발생
-        // 매칭 후 캔슬은 안되고, 고양이를 빼고 싶으면 선택해서 뺄 수 있도록 하는 건 어떨까?
-        CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
-        CatGroup catGroup = catGroupRepository.save(new CatGroup());
-
-        catMatch.getProposer().updateCatGroup(catGroup);
-
-        return catMatch.reject().getId();
-    }
 }

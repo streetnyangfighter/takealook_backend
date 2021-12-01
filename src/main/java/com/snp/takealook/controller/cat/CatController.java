@@ -45,7 +45,7 @@ public class CatController {
         List<ResponseDTO.CatListResponse> list = null;
         try {
             list = catService.findAllByUserId(userId);
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
@@ -55,5 +55,10 @@ public class CatController {
     @PutMapping("/cat/locations/{id}")
     public Long updateLocations(@PathVariable Long id, @RequestBody List<CatDTO.LocationList> dtoList) {
         return catService.updateLocations(id, dtoList);
+    }
+
+    @PatchMapping("/cat/groupout/{id}")
+    public Long removeFromGroup(@PathVariable Long id) {
+        return catService.removeFromGroup(id);
     }
 }

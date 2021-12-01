@@ -85,4 +85,11 @@ public class CatService {
 
         return cat.updateLocations(list).getId();
     }
+
+    @Transactional
+    public Long removeFromGroup(Long id) {
+        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+
+        return cat.updateCatGroup(null).getId();
+    }
 }

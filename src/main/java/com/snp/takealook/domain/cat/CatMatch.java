@@ -31,7 +31,7 @@ public class CatMatch {
     private Cat accepter;
 
     @NotNull
-    private byte status;
+    private Byte status;
     // 0: 거절, 1: 수락, 2: 수락 이전(보류)
 
     @CreationTimestamp

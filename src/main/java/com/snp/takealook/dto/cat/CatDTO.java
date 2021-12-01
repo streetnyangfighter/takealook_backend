@@ -12,11 +12,11 @@ public class CatDTO {
     public static class Create {
         private Long userId;
         private String name;
-        private byte neutered;
-        private byte status;
+        private Byte neutered;
+        private Byte status;
 
         @Builder
-        public Create(Long userId, String name, byte neutered, byte status) {
+        public Create(Long userId, String name, Byte neutered, Byte status) {
             this.userId = userId;
             this.name = name;
             this.neutered = neutered;
@@ -36,8 +36,8 @@ public class CatDTO {
     @Getter
     public static class Update {
         private String name;
-        private byte neutered;
-        private byte status;
+        private Byte neutered;
+        private Byte status;
     }
 
     @Getter

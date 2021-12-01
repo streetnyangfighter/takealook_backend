@@ -42,7 +42,7 @@ public class User {
     private String loginType;
 
     @NotNull
-    private boolean dFlag;
+    private Boolean dFlag;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -85,7 +85,7 @@ public class User {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, String loginType, boolean dFlag, Role role) {
+    public User(String loginId, String nickname, String phone, String image, String loginType, Boolean dFlag, Role role) {
         this.loginId = loginId;
         this.nickname = nickname;
         this.phone = phone;
@@ -110,7 +110,7 @@ public class User {
         return this;
     }
 
-    public User delete(boolean dFlag) {
+    public User delete(Boolean dFlag) {
         this.dFlag = dFlag;
 
         return this;

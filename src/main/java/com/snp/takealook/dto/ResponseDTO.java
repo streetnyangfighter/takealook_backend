@@ -37,10 +37,10 @@ public class ResponseDTO {
         private Long id;
         private User user;
         private String message;
-        private byte type;
+        private Byte type;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private boolean checked;
+        private Boolean checked;
 
         public NotificationListResponse(Notification entity) {
             this.id = entity.getId();
@@ -49,7 +49,7 @@ public class ResponseDTO {
             this.type = entity.getType();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.checked = entity.isChecked();
+            this.checked = entity.getChecked();
         }
     }
 
@@ -76,9 +76,9 @@ public class ResponseDTO {
         private User user;
         private CatGroup catGroup;
         private String name;
-        private byte neutered;
-        private byte status;
-        private boolean dFlag;
+        private Byte neutered;
+        private Byte status;
+        private Boolean dFlag;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
@@ -89,7 +89,7 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.neutered = entity.getNeutered();
             this.status = entity.getStatus();
-            this.dFlag = entity.isDFlag();
+            this.dFlag = entity.getDFlag();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
         }
