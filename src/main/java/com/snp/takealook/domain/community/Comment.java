@@ -3,6 +3,7 @@ package com.snp.takealook.domain.community;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.domain.user.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,4 +48,16 @@ public class Comment {
     @JsonBackReference
     private List<CommentLike> commentLikeList;
 
+    @Builder
+    public Comment(Post post, User writer, String content) {
+        this.post = post;
+        this.writer = writer;
+        this.content = content;
+    }
+
+    public Comment update(String content) {
+        this.content = content;
+
+        return this;
+    }
 }
