@@ -100,7 +100,9 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
-        userLocationRepository.deleteAll(user.getUserLocationList());
+        if (user.getUserLocationList().size() != 0) {
+            userLocationRepository.deleteAll(user.getUserLocationList());
+        }
 
         List<UserLocation> list = dtoList.stream()
                 .map(v -> UserLocation.builder()
