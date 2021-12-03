@@ -29,10 +29,9 @@ public class CatController {
 
     @PostMapping(value = "/cat/info/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public Long updateInfo(@PathVariable Long id, @RequestPart(value = "catInfo", required = false) CatDTO.Update dto, @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> dtoList, @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-//        catService.updateInfo(id, dto);
-//        catService.updateLocations(id, dtoList);
-//        return catImageService.update(id, files);
-        return 1L;
+        catService.updateInfo(id, dto);
+        catService.updateLocations(id, dtoList);
+        return catImageService.update(id, files);
     }
 
     @PutMapping("/cat/locations/{id}")
