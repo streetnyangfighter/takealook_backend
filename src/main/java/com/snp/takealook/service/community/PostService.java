@@ -69,7 +69,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
 
-        post.update(dto.getTitle(), dto.getContent());
+        post.update(dto.getTitle());
 
         return id;
     }
