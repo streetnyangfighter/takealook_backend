@@ -3,6 +3,7 @@ package com.snp.takealook.controller.cat;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatDTO;
 import com.snp.takealook.service.cat.CatImageService;
+import com.snp.takealook.service.cat.CatLocationService;
 import com.snp.takealook.service.cat.CatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,25 +20,26 @@ import java.util.List;
 public class CatController {
 
     private final CatService catService;
+    private final CatLocationService catLocationService;
     private final CatImageService catImageService;
 
     @PostMapping(value = "/cat", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Long save(@RequestPart(value = "catInfo") CatDTO.Create dto, @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> dtoList, @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+    public Long save(@RequestPart(value = "catInfo") CatDTO.Create dto, @RequestPart(value = "catLoc") List<CatDTO.LocationList> dtoList, @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(dto);
-        catService.updateLocations(catId, dtoList);
+        catLocationService.save(catId, dtoList);
         return catImageService.save(catId, files);
     }
 
     @PostMapping(value = "/cat/info/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public Long updateInfo(@PathVariable Long id, @RequestPart(value = "catInfo", required = false) CatDTO.Update dto, @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> dtoList, @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         catService.updateInfo(id, dto);
-        catService.updateLocations(id, dtoList);
+        catLocationService.update(id, dtoList);
         return catImageService.update(id, files);
     }
 
     @PutMapping("/cat/locations/{id}")
     public Long updateLocations(@PathVariable Long id, @RequestBody List<CatDTO.LocationList> dtoList) {
-        return catService.updateLocations(id, dtoList);
+        return catLocationService.update(id, dtoList);
     }
 
     @PatchMapping("/cat/status/{id}")
@@ -72,6 +74,6 @@ public class CatController {
 
     @GetMapping("/cats/{id}/catlocations")
     public List<ResponseDTO.CatLocationListResponse> findAllLocationsById(@PathVariable Long id) {
-        return catService.findAllLocationsById(id);
+        return catLocationService.findAllByCatId(id);
     }
 }
