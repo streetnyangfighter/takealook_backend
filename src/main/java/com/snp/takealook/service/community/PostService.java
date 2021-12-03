@@ -10,6 +10,7 @@ import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,14 @@ public class PostService {
         return postRepository.save(dto.toEntity(board, user)).getId();
 
     }
+
+//    public Long save(PostDTO.Create dto, List<MultipartFile> files) throws Exception {
+//        Board board = boardRepository.findById(dto.getBoardId())
+//                .orElseThrow(() -> new IllegalArgumentException("Board with id: " + dto.getBoardId() + " is not valid"));
+//
+//        User user = userRepository.findById(dto.getWriterId())
+//                .orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getWriterId() + " is not valid"));
+//    }
 
     // 게시글 리스트 조회
     @Transactional(readOnly = true)
