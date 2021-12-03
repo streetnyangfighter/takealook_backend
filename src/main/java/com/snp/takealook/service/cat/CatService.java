@@ -1,5 +1,6 @@
 package com.snp.takealook.service.cat;
 
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatLocation;
 import com.snp.takealook.domain.user.User;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +74,9 @@ public class CatService {
     public Long updateLocations(Long id, List<CatDTO.LocationList> dtoList) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        catLocationRepository.deleteAll(cat.getCatLocationList());
+        if (cat.getCatLocationList().size() != 0) {
+            catLocationRepository.deleteAll(cat.getCatLocationList());
+        }
 
         List<CatLocation> list = dtoList.stream()
                 .map(v -> CatLocation.builder()
@@ -106,5 +110,22 @@ public class CatService {
         }
 
         return new ResponseDTO.CatResponse(cat, carers);
+    }
+
+    @Transactional
+    public List<ResponseDTO.CatLocationListResponse> findAllLocationsById(Long id) {
+        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+        List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+        List<CatLocation> catLocationList = new ArrayList<>();
+
+        for (Cat sameCat : sameGroupCatList) {
+            catLocationList.addAll(sameCat.getCatLocationList());
+        }
+
+        catLocationList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+
+        return catLocationList.stream()
+                .map(ResponseDTO.CatLocationListResponse::new)
+                .collect(Collectors.toList());
     }
 }

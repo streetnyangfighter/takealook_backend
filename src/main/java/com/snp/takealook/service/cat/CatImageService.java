@@ -88,7 +88,7 @@ public class CatImageService {
         List<CatImage> catImageList = cat.getCatImageList();
 
         for (CatImage catImage : catImageList) {
-            File file = new File(catImage.getFilePath().toString());
+            File file = new File(catImage.getFilePath());
 
             if (file.exists()) {
                 file.delete();

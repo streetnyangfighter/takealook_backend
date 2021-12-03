@@ -1,5 +1,6 @@
 package com.snp.takealook.service.cat;
 
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatGroup;
 import com.snp.takealook.domain.cat.CatMatch;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,7 +117,8 @@ public class CatMatchService {
             receiveList.addAll(catMatchRepository.findCatMatchesByAccepter_Id(cat.getId()));
         }
 
-//        Collections.sort(sendList, (c1, c2) -> c1.getCreatedAt().compareTo(c2.getCreatedAt()));
+        receiveList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+
         return receiveList.stream()
                 .map(ResponseDTO.CatMatchListResponse::new)
                 .collect(Collectors.toList());

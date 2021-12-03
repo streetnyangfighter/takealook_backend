@@ -22,8 +22,9 @@ public class CatController {
     private final CatImageService catImageService;
 
     @PostMapping(value = "/cat", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Long save(@RequestPart(value = "catInfo") CatDTO.Create dto, @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+    public Long save(@RequestPart(value = "catInfo") CatDTO.Create dto, @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> dtoList, @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(dto);
+        catService.updateLocations(catId, dtoList);
         return catImageService.save(catId, files);
     }
 
@@ -67,5 +68,10 @@ public class CatController {
     @GetMapping("/cat/{id}")
     public ResponseDTO.CatResponse findOne(@PathVariable Long id) {
         return catService.findOne(id);
+    }
+
+    @GetMapping("/cats/{id}/catlocations")
+    public List<ResponseDTO.CatLocationListResponse> findAllLocationsById(@PathVariable Long id) {
+        return catService.findAllLocationsById(id);
     }
 }
