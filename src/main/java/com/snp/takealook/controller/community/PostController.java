@@ -8,6 +8,7 @@ import com.snp.takealook.service.community.PostService;
 import com.snp.takealook.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +24,12 @@ public class PostController {
     public Long save(@RequestBody PostDTO.Create dto) {
         return postService.save(dto);
     }
+//    public Long save(
+//            @RequestPart(value="image", required = false) List<MultipartFile> files,
+//            @RequestPart(value="dto") PostDTO.Create dto
+//    ) {
+//        return postService.save(dto, files);
+//    }
 
     // 게시글 리스트 조회
     @GetMapping("/posts/{boardId}")
