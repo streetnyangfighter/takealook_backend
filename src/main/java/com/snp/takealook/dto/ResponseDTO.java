@@ -1,9 +1,6 @@
 package com.snp.takealook.dto;
 
-import com.snp.takealook.domain.cat.Cat;
-import com.snp.takealook.domain.cat.CatGroup;
-import com.snp.takealook.domain.cat.CatImage;
-import com.snp.takealook.domain.cat.CatMatch;
+import com.snp.takealook.domain.cat.*;
 import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.domain.user.UserLocation;
@@ -134,6 +131,38 @@ public class ResponseDTO {
             this.status = entity.getStatus();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+    @Getter
+    public static class CatCareListResponse {
+        private Long id;
+        private Byte type;
+        private String message;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+
+        public CatCareListResponse(CatCare entity) {
+            this.id = entity.getId();
+            this.type = entity.getType();
+            this.message = entity.getMessage();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+    @Getter
+    public static class CatLocationListResponse {
+        private Long id;
+        private Double latitude;
+        private Double longtitude;
+        private LocalDateTime createdAt;
+
+        public CatLocationListResponse(CatLocation entity) {
+            this.id = entity.getId();
+            this.latitude = entity.getLatitude();
+            this.longtitude = entity.getLongitude();
+            this.createdAt = entity.getCreatedAt();
         }
     }
 

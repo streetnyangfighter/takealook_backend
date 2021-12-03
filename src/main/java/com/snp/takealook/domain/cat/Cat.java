@@ -1,20 +1,18 @@
 package com.snp.takealook.domain.cat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.user.User;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Cat {
+public class Cat extends BaseTimeEntity {
   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,17 +38,10 @@ public class Cat {
 
     @NotNull
     private Byte status;
+    // 0: 건강함, 1: 치료 필요, 2: 입양, 3: 사망
 
     @NotNull
     private Boolean dFlag;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
     @JsonBackReference

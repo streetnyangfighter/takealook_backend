@@ -1,11 +1,9 @@
 package com.snp.takealook.service.cat;
 
 import com.snp.takealook.domain.cat.Cat;
-import com.snp.takealook.domain.cat.CatLocation;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatDTO;
-import com.snp.takealook.repository.cat.CatLocationRepository;
 import com.snp.takealook.repository.cat.CatRepository;
 import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +20,6 @@ public class CatService {
 
     private final CatRepository catRepository;
     private final UserRepository userRepository;
-    private final CatLocationRepository catLocationRepository;
 
     @Transactional
     public Long save(CatDTO.Create dto) {
@@ -69,23 +66,6 @@ public class CatService {
     }
 
     @Transactional
-    public Long updateLocations(Long id, List<CatDTO.LocationList> dtoList) {
-        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
-
-        catLocationRepository.deleteAll(cat.getCatLocationList());
-
-        List<CatLocation> list = dtoList.stream()
-                .map(v -> CatLocation.builder()
-                        .cat(cat)
-                        .latitude(v.getLatitude())
-                        .longitude(v.getLongitude())
-                        .build())
-                .collect(Collectors.toList());
-
-        return cat.updateLocations(list).getId();
-    }
-
-    @Transactional
     public Long removeFromGroup(Long id) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
@@ -107,4 +87,5 @@ public class CatService {
 
         return new ResponseDTO.CatResponse(cat, carers);
     }
+
 }
