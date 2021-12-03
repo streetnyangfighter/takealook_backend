@@ -4,7 +4,6 @@ import com.snp.takealook.domain.community.Post;
 import com.snp.takealook.domain.community.PostImage;
 import com.snp.takealook.repository.community.PostImageRepository;
 import com.snp.takealook.repository.community.PostRepository;
-import com.snp.takealook.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +28,10 @@ public class PostImageService {
         if (files.length != 0) {
             for (MultipartFile file : files) {
                 String orignalFileName = file.getOriginalFilename();
-                String fileName = new MD5Generator(orignalFileName).toString();
+//                String fileName = new MD5Generator(orignalFileName).toString();
                 String contentType = file.getContentType();
                 Long fileSize = file.getSize();
-                String savePath = System.getProperty("user.dir") + "/postImages";
+                String savePath = System.getProperty("user.dir") + "/images/postImages" + post.getId();
 
                 if (!new File(savePath).exists()) {
                     try {
@@ -41,7 +40,7 @@ public class PostImageService {
                         System.out.println(e.getMessage());
                     }
                 }
-                String filePath = savePath + "/" + fileName;
+                String filePath = savePath + "/" + orignalFileName;
                 file.transferTo(new File(filePath));
 
                 PostImage postImage = PostImage.builder()

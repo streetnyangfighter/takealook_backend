@@ -40,6 +40,7 @@ public class Cat {
 
     @NotNull
     private Byte status;
+    // 0: 건강함, 1: 치료 필요, 2: 입양, 3: 사망
 
     @NotNull
     private Boolean dFlag;

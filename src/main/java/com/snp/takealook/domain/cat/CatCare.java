@@ -23,6 +23,7 @@ public class CatCare {
 
     @NotNull
     private Byte type;
+    // 0: 밥, 1: 간식, 2: 약, 3: 병원
 
     @NotNull
     private String message;
