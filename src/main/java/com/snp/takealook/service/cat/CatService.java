@@ -1,12 +1,10 @@
 package com.snp.takealook.service.cat;
 
 import com.snp.takealook.domain.cat.Cat;
-import com.snp.takealook.domain.cat.CatGroup;
 import com.snp.takealook.domain.cat.CatLocation;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatDTO;
-import com.snp.takealook.repository.cat.CatGroupRepository;
 import com.snp.takealook.repository.cat.CatLocationRepository;
 import com.snp.takealook.repository.cat.CatRepository;
 import com.snp.takealook.repository.user.UserRepository;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
