@@ -63,6 +63,7 @@ public class CatImageService {
 
                 String fileName = current_date + "-" + originalFileName;
                 String filePath = savePath + "/" + fileName;
+
                 file.transferTo(new File(filePath));
 
                 CatImage catImage = CatImage.builder()
