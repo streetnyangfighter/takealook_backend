@@ -101,7 +101,8 @@ public class CatMatchService {
             sendList.addAll(catMatchRepository.findCatMatchesByProposer_Id(cat.getId()));
         }
 
-//        Collections.sort(sendList, (c1, c2) -> c1.getCreatedAt().compareTo(c2.getCreatedAt()));
+        sendList.sort(Comparator.comparing(BaseTimeEntity::getModifiedAt));
+
         return sendList.stream()
                 .map(ResponseDTO.CatMatchListResponse::new)
                 .collect(Collectors.toList());
