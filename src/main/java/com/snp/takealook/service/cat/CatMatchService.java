@@ -13,10 +13,8 @@ import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +38,9 @@ public class CatMatchService {
     @Transactional
     public Long accept(Long id) {
         CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
+        if(catMatch.getStatus() != 2) {
+            throw new IllegalArgumentException("CatMatch status is not valid for acceptance");
+        }
         Cat proposer = catMatch.getProposer();
         Cat accepter = catMatch.getAccepter();
 
@@ -59,14 +60,18 @@ public class CatMatchService {
                 List<Cat> accepterCatList = accepter.getCatGroup().getCatList();
                 if(proposerCatList.size() < accepterCatList.size()) { // Proposer 를 Accepter 의 그룹으로 updateGroup
                     CatGroup changeCatGroup = accepter.getCatGroup();
-//                    CatGroup pastCatGroup = proposer.getCatGroup();
-                    proposerCatList.stream().map(v -> v.updateCatGroup(changeCatGroup));
-//                    catGroupRepository.delete(pastCatGroup);
+                    CatGroup pastCatGroup = proposer.getCatGroup();
+                    for (Cat cat : proposerCatList) {
+                        cat.updateCatGroup(changeCatGroup);
+                    }
+                    catGroupRepository.delete(pastCatGroup);
                 } else { // Accepter 를 Proposer 의 그룹으로 updateGroup
                     CatGroup changeCatGroup = proposer.getCatGroup();
-//                    CatGroup pastCatGroup = accepter.getCatGroup();
-                    accepterCatList.stream().map(v -> v.updateCatGroup(changeCatGroup));
-//                    catGroupRepository.delete(pastCatGroup);
+                    CatGroup pastCatGroup = accepter.getCatGroup();
+                    for (Cat cat : accepterCatList) {
+                        cat.updateCatGroup(changeCatGroup);
+                    }
+                    catGroupRepository.delete(pastCatGroup);
                 }
             }
         }
@@ -77,6 +82,9 @@ public class CatMatchService {
     @Transactional
     public Long reject(Long id) {
         CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
+        if(catMatch.getStatus() != 2) {
+            throw new IllegalArgumentException("CatMatch status is not valid for acceptance");
+        }
 
         return catMatch.reject().getId();
     }

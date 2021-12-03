@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.cat;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,13 +24,27 @@ public class CatImage {
     private Cat cat;
 
     @NotNull
-    @Lob
-    private Byte[] image;
+    private String originFileName;
 
     @NotNull
-    private String fileName;
+    private String contentType;
+
+    @NotNull
+    private Long fileSize;
+
+    @NotNull
+    private String filePath;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Builder
+    public CatImage(Cat cat, String originFileName, String contentType, String filePath, Long fileSize) {
+        this.cat = cat;
+        this.originFileName = originFileName;
+        this.contentType = contentType;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+    }
 }

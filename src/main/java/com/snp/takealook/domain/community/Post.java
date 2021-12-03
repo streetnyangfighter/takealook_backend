@@ -66,9 +66,8 @@ public class Post {
         this.content = content;
     }
 
-    public Post update(String title, String content) {
+    public Post update(String title) {
         this.title = title;
-        this.content = content;
 
         return this;
     }
