@@ -27,6 +27,9 @@ public class CatImage {
     private String originFileName;
 
     @NotNull
+    private String fileName;
+
+    @NotNull
     private String contentType;
 
     @NotNull
@@ -40,9 +43,10 @@ public class CatImage {
     private LocalDateTime createdAt;
 
     @Builder
-    public CatImage(Cat cat, String originFileName, String contentType, String filePath, Long fileSize) {
+    public CatImage(Cat cat, String originFileName, String fileName, String contentType, String filePath, Long fileSize) {
         this.cat = cat;
         this.originFileName = originFileName;
+        this.fileName = fileName;
         this.contentType = contentType;
         this.filePath = filePath;
         this.fileSize = fileSize;

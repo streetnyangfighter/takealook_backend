@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -55,12 +57,18 @@ public class CatImageService {
                     }
                 }
 
-                String filePath = savePath + "/" + originalFileName;
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                String current_date = now.format(dateTimeFormatter);
+
+                String fileName = current_date + "-" + originalFileName;
+                String filePath = savePath + "/" + fileName;
                 file.transferTo(new File(filePath));
 
                 CatImage catImage = CatImage.builder()
                         .cat(cat)
                         .originFileName(originalFileName)
+                        .fileName(fileName)
                         .filePath(filePath)
                         .contentType(originalFileExtension)
                         .fileSize(fileSize)
