@@ -15,8 +15,8 @@ public class PostImageController {
 
     private final PostImageService postImageService;
 
-    @PostMapping("/postimage/{postId}")
-    public Long save(@PathVariable Long postId, @RequestPart(value = "files") MultipartFile[] files) throws IOException, NoSuchAlgorithmException {
-        return postImageService.save(postId, files);
+    @PostMapping("/post/{postId}/thumbnail")
+    public Long save(@PathVariable Long postId, @RequestPart(value = "files") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        return postImageService.save(postId, file);
     }
 }

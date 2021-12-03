@@ -4,7 +4,6 @@ import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatImage;
 import com.snp.takealook.repository.cat.CatImageRepository;
 import com.snp.takealook.repository.cat.CatRepository;
-import com.snp.takealook.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,6 @@ public class CatImageService {
         if (files.length != 0) {
             for (MultipartFile file : files) {
                 String originalFileName = file.getOriginalFilename();
-                String fileName = new MD5Generator(originalFileName).toString();
                 String contentType = file.getContentType();
                 Long fileSize = file.getSize();
                 String savePath = System.getProperty("user.dir") + "/catImages";
@@ -40,7 +38,7 @@ public class CatImageService {
                         System.out.println(e.getMessage());
                     }
                 }
-                String filePath = savePath + "/" + fileName;
+                String filePath = savePath + "/" + originalFileName;
                 file.transferTo(new File(filePath));
 
                 CatImage catImage = CatImage.builder()
