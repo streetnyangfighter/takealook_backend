@@ -1,6 +1,8 @@
 package com.snp.takealook.controller.community;
 
 import com.snp.takealook.dto.community.CommentDTO;
+import com.snp.takealook.dto.community.CommentLikeDTO;
+import com.snp.takealook.service.community.CommentLikeService;
 import com.snp.takealook.service.community.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,9 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
 
+    // Comment -------------------------------------------------------------------------------
     // 댓글 작성
     @PostMapping("/post/{postId}/comment")
     public Long save(@PathVariable Long postId, @RequestBody CommentDTO.Create dto) {
@@ -37,5 +41,24 @@ public class CommentController {
     public Long delete(@PathVariable Long commentId) {
         commentService.delete(commentId);
         return commentId;
+    }
+
+    // Comment Like -------------------------------------------------------------------------
+    // 댓글 추천
+    @PostMapping("/post/{postId}/comment/{commentId}/like")
+    public void like(@PathVariable Long commentId, @RequestBody CommentLikeDTO.Like dto) {
+        commentLikeService.like(commentId, dto);
+    }
+
+    // 댓글 추천 취소
+    @DeleteMapping("/post/{postId}/comment/{commentId}/like")
+    public void unlike(@PathVariable Long commentId, @RequestBody CommentLikeDTO.Like dto) {
+        commentLikeService.unlike(commentId, dto);
+    }
+
+    // 댓글별 추천 카운트
+    @GetMapping("/post/{postId}/comment/{commentId}/like")
+    public Long countLike(@PathVariable Long commentId) {
+        return commentLikeService.countLike(commentId);
     }
 }

@@ -26,6 +26,7 @@ public class PostLikeService extends BaseTimeEntity {
     }
 
     // 게시글별 추천 카운트
+    @Transactional(readOnly = true)
     public Long countLike(Long postId) {
         return postLikeRepository.findAllByPostId(postId).stream().count();
     }

@@ -25,6 +25,7 @@ public class CommentLikeService {
     }
 
     // 댓글별 추천 카운트
+    @Transactional(readOnly = true)
     public Long countLike(Long commentId) {
         return commentLikeRepository.findAllByCommentId(commentId).stream().count();
     }

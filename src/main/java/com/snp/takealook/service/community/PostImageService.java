@@ -72,4 +72,12 @@ public class PostImageService {
         }
         return post.getId();
     }
+
+    @Transactional
+    public PostImage getTumbnail(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+
+        return post.getPostImageList().get(0);
+    }
 }

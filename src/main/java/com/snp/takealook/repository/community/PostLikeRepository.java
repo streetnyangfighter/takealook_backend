@@ -11,7 +11,7 @@ import java.util.List;
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
     @Modifying
-    @Query(value = "INSERT INTO post_like(post_id, user_id) VALUES(:postId, :userId)", nativeQuery = true)
+    @Query(value = "INSERT INTO post_like(post_id, user_id, created_at, modified_at) VALUES(:postId, :userId, now(), now())", nativeQuery = true)
     void like(long postId, long userId);
 
     @Modifying
