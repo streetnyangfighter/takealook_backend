@@ -17,7 +17,7 @@ public class CatImageController {
 
     private final CatImageService catImageService;
 
-    @PostMapping(value = "/catimage/{catId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "cat/{catId}/catimage", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public Long save(@PathVariable Long catId, @RequestPart(value = "files") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         // 아니 이거 예외 다 throw 해도 되는걸까? 흠;
         return catImageService.save(catId, files);
