@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.community;
 
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class PostLike {
+public class PostLike extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

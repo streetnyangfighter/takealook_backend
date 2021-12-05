@@ -24,4 +24,10 @@ public class PostLikeController {
         postLikeService.unlike(postId, dto);
     }
 
+    // 게시글별 추천 카운트
+    @GetMapping("/post/{postId}/like")
+    public Long countLike(@PathVariable Long postId) {
+        return postLikeService.countLike(postId);
+    }
+
 }

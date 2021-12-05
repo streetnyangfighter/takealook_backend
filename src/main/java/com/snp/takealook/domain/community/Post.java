@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.community;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +38,6 @@ public class Post {
 
     @Lob @NotNull
     private String content;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -66,8 +59,9 @@ public class Post {
         this.content = content;
     }
 
-    public Post update(String title) {
+    public Post update(String title, String content) {
         this.title = title;
+        this.content = content;
 
         return this;
     }

@@ -56,10 +56,11 @@ public class PostDTO {
     @Getter
     public static class Update {
         private String title;
+        private String content;
 
-        @Builder
-        public Update(String title) {
+        public Update(String title, String content) {
             this.title = title;
+            this.content = content;
         }
     }
 

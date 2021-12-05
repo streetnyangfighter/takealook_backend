@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.cat.Cat;
 
 import com.snp.takealook.domain.community.Comment;
@@ -20,7 +21,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,14 +48,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference

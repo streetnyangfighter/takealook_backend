@@ -23,4 +23,10 @@ public class CommentLikeController {
     public void unlike(@PathVariable Long commentId, @RequestBody CommentLikeDTO.Like dto) {
         commentLikeService.unlike(commentId, dto);
     }
+
+    // 댓글별 추천 카운트
+    @GetMapping("/comment/{commentId}/like")
+    public Long countLike(@PathVariable Long commentId) {
+        return commentLikeService.countLike(commentId);
+    }
 }

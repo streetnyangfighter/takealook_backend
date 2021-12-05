@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.user;
 
+import com.snp.takealook.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserLocation {
+public class UserLocation extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +32,6 @@ public class UserLocation {
 
     @NotNull
     String dong;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime created_at;
 
     @Builder
     public UserLocation(User user, String sido, String gugun, String dong) {

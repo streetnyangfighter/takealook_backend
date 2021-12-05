@@ -24,5 +24,8 @@ public class CommentLikeService {
         commentLikeRepository.unLike(commentId, dto.getUserId());
     }
 
-
+    // 댓글별 추천 카운트
+    public Long countLike(Long commentId) {
+        return commentLikeRepository.findAllByCommentId(commentId).stream().count();
+    }
 }
