@@ -89,13 +89,21 @@ public class Cat extends BaseTimeEntity {
     }
 
     public Cat delete() {
-        this.dFlag = true;
+        if (!this.dFlag) {
+            this.dFlag = true;
+        } else {
+            throw new IllegalStateException("already deleted");
+        }
 
         return this;
     }
 
     public Cat restore() {
-        this.dFlag = false;
+        if (this.dFlag) {
+            this.dFlag = false;
+        } else {
+            throw new IllegalStateException("delete first");
+        }
 
         return this;
     }

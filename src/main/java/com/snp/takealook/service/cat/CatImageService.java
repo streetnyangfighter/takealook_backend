@@ -99,7 +99,7 @@ public class CatImageService {
         }
 
         catImageRepository.deleteAll(cat.getCatImageList());
-        cat.getCatImageList().removeAll(catImageList);
+        cat.getCatImageList().clear();
 
         return save(catId, files);
     }
