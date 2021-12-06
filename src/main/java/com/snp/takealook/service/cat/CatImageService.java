@@ -2,12 +2,14 @@ package com.snp.takealook.service.cat;
 
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatImage;
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.repository.cat.CatImageRepository;
 import com.snp.takealook.repository.cat.CatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,7 +17,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -102,6 +106,21 @@ public class CatImageService {
         cat.getCatImageList().clear();
 
         return save(catId, files);
+    }
+
+    @Transactional
+    public List<ResponseDTO.CatImageListResponse> findAllByCatId(@PathVariable Long catId) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+        List<CatImage> catImageList = new ArrayList<>();
+        List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+
+        for (Cat sameCat : sameGroupCatList) {
+            catImageList.addAll(sameCat.getCatImageList());
+        }
+
+        return catImageList.stream()
+                .map(ResponseDTO.CatImageListResponse::new)
+                .collect(Collectors.toList());
     }
 
 }
