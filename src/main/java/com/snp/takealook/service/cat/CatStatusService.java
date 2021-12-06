@@ -1,6 +1,5 @@
 package com.snp.takealook.service.cat;
 
-import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatStatus;
 import com.snp.takealook.repository.cat.CatRepository;
