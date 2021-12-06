@@ -15,22 +15,22 @@ public class CatCareController {
 
     private final CatCareService catCareService;
 
-    @PostMapping("/catcare")
+    @PostMapping("cat/{catId}/catcare")
     public Long save(@RequestBody CatCareDTO.Create dto) {
         return catCareService.save(dto);
     }
 
-    @PutMapping("/catcare/{id}")
+    @PutMapping("cat/{catId}/catcare/{id}")
     public Long update(@PathVariable Long id, @RequestBody CatCareDTO.Update dto) {
         return catCareService.update(id, dto);
     }
 
-    @DeleteMapping("/catcare/{id}")
+    @DeleteMapping("cat/{catId}/catcare/{id}")
     public Long delete(@PathVariable Long id) {
         return catCareService.delete(id);
     }
 
-    @GetMapping("cats/{catId}/catcares")
+    @GetMapping("cat/{catId}/catcare")
     public List<ResponseDTO.CatCareListResponse> findAllByCatId(@PathVariable Long catId) {
         return catCareService.findAllByCatId(catId);
     }

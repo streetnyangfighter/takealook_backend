@@ -21,7 +21,7 @@ public class CatCare extends BaseTimeEntity {
 
     @NotNull
     private Byte type;
-    // 0: 밥, 1: 간식, 2: 약, 3: 병원
+    // 0: 밥, 1: 간식, 2: 약, 3: 병원, 4: 기타
 
     @NotNull
     private String message;

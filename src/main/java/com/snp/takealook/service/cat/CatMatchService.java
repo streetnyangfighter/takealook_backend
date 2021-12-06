@@ -40,9 +40,6 @@ public class CatMatchService {
     @Transactional
     public Long accept(Long id) {
         CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
-        if(catMatch.getStatus() != 2) {
-            throw new IllegalArgumentException("CatMatch status is not valid for acceptance");
-        }
         Cat proposer = catMatch.getProposer();
         Cat accepter = catMatch.getAccepter();
 
@@ -84,9 +81,6 @@ public class CatMatchService {
     @Transactional
     public Long reject(Long id) {
         CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
-        if(catMatch.getStatus() != 2) {
-            throw new IllegalArgumentException("CatMatch status is not valid for acceptance");
-        }
 
         return catMatch.reject().getId();
     }

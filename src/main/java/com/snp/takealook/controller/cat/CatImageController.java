@@ -1,5 +1,6 @@
 package com.snp.takealook.controller.cat;
 
+import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.service.cat.CatImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,14 +18,20 @@ public class CatImageController {
 
     private final CatImageService catImageService;
 
-    @PostMapping(value = "/catimage/{catId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "cat/{catId}/catimage", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long catId, @RequestPart(value = "files") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         // 아니 이거 예외 다 throw 해도 되는걸까? 흠;
         return catImageService.save(catId, files);
     }
 
+    // 기능 테스트용
     @PutMapping("/cat/{catId}/catimage")
     public Long update(@PathVariable Long catId, @RequestBody List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         return catImageService.update(catId, files);
+    }
+
+    @GetMapping("/cat/{catId}/catimages")
+    public List<ResponseDTO.CatImageListResponse> findAllByCatId(@PathVariable Long catId) {
+        return catImageService.findAllByCatId(catId);
     }
 }

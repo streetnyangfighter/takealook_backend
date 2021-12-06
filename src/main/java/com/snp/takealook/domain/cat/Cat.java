@@ -41,6 +41,9 @@ public class Cat extends BaseTimeEntity {
     // 0: 건강함, 1: 치료 필요, 2: 입양, 3: 사망
 
     @NotNull
+    private String character;
+
+    @NotNull
     private Boolean dFlag;
 
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
@@ -64,20 +67,22 @@ public class Cat extends BaseTimeEntity {
     private List<CatMatch> catAccepterList;
 
     @Builder
-    public Cat(User user, String name, Byte gender, Byte neutered, Byte status) {
+    public Cat(User user, String name, Byte gender, Byte neutered, Byte status, String character) {
         this.user = user;
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
         this.status = status;
+        this.character = character;
         this.dFlag = false;
     }
 
-    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status) {
+    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status, String character) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
         this.status = status;
+        this.character = character;
 
         return this;
     }
@@ -89,13 +94,21 @@ public class Cat extends BaseTimeEntity {
     }
 
     public Cat delete() {
-        this.dFlag = true;
+        if (!this.dFlag) {
+            this.dFlag = true;
+        } else {
+            throw new IllegalStateException("already deleted");
+        }
 
         return this;
     }
 
     public Cat restore() {
-        this.dFlag = false;
+        if (this.dFlag) {
+            this.dFlag = false;
+        } else {
+            throw new IllegalStateException("delete first");
+        }
 
         return this;
     }

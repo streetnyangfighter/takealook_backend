@@ -166,6 +166,32 @@ public class ResponseDTO {
         }
     }
 
+    @Getter
+    public static class CatImageListResponse {
+        private Long id;
+        private Cat cat;
+        private String originFileName;
+        private String fileName;
+        private String contentType;
+        private Long fileSize;
+        private String filePath;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+
+        public CatImageListResponse(CatImage entity) {
+            this.id = entity.getId();
+            this.cat = entity.getCat();
+            this.originFileName = entity.getOriginFileName();
+            this.fileName = entity.getFileName();
+            this.contentType = entity.getContentType();
+            this.fileSize = entity.getFileSize();
+            this.filePath = entity.getFilePath();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+
 
 
 

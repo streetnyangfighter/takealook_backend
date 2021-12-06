@@ -38,13 +38,21 @@ public class CatMatch extends BaseTimeEntity {
     }
 
     public CatMatch accept() {
-        this.status = 1;
+        if (this.status == 2) {
+            this.status = 1;
+        } else {
+            throw new IllegalStateException("already accepted/rejected");
+        }
 
         return this;
     }
 
     public CatMatch reject() {
-        this.status = 0;
+        if (this.status == 2) {
+            this.status = 0;
+        } else {
+            throw new IllegalStateException("already accepted/rejected");
+        }
 
         return this;
     }

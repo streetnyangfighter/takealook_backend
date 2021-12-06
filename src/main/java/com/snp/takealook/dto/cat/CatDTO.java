@@ -14,14 +14,16 @@ public class CatDTO {
         private Byte gender;
         private Byte neutered;
         private Byte status;
+        private String chracter;
 
         @Builder
-        public Create(Long userId, String name, Byte gender, Byte neutered, Byte status) {
+        public Create(Long userId, String name, Byte gender, Byte neutered, Byte status, String chracter) {
             this.userId = userId;
             this.name = name;
             this.gender = gender;
             this.neutered = neutered;
             this.status = status;
+            this.chracter = chracter;
         }
 
         public Cat toEntity(User user) {
@@ -31,6 +33,7 @@ public class CatDTO {
                     .gender(gender)
                     .neutered(neutered)
                     .status(status)
+                    .character(chracter)
                     .build();
         }
     }
@@ -41,6 +44,7 @@ public class CatDTO {
         private Byte gender;
         private Byte neutered;
         private Byte status;
+        private String character;
     }
 
     @Getter
