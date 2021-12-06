@@ -37,14 +37,6 @@ public class PostService {
 
     }
 
-//    public Long save(PostDTO.Create dto, List<MultipartFile> files) throws Exception {
-//        Board board = boardRepository.findById(dto.getBoardId())
-//                .orElseThrow(() -> new IllegalArgumentException("Board with id: " + dto.getBoardId() + " is not valid"));
-//
-//        User user = userRepository.findById(dto.getWriterId())
-//                .orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getWriterId() + " is not valid"));
-//    }
-
     // 게시글 리스트 조회
     @Transactional(readOnly = true)
     public List<PostDTO.Get> findAllByBoardId(Long boardId) {
@@ -69,7 +61,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
 
-        post.update(dto.getTitle());
+        post.update(dto.getTitle(), dto.getContent());
 
         return id;
     }

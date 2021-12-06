@@ -1,6 +1,7 @@
 package com.snp.takealook.domain.community;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +36,6 @@ public class Comment {
     @NotNull
     @Lob
     private String content;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     @JsonBackReference

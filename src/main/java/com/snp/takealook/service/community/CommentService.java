@@ -34,6 +34,7 @@ public class CommentService {
         return commentRepository.save(dto.toEntity(post, writer)).getId();
     }
 
+    // 댓글 리스트 조회
     @Transactional(readOnly = true)
     public List<CommentDTO.Get> findAllPostId(Long postId) {
         Post post = postRepository.findById(postId)

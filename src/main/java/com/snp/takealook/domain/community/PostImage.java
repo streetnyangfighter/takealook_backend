@@ -1,5 +1,6 @@
 package com.snp.takealook.domain.community;
 
+import com.snp.takealook.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class PostImage {
+public class PostImage extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +35,6 @@ public class PostImage {
 
     @NotNull
     private Long fileSize;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     @Builder
     public PostImage(Post post, String orignFileName, String contentType, String filePath, Long fileSize) {
