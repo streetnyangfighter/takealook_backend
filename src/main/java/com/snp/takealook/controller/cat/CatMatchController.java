@@ -15,32 +15,32 @@ public class CatMatchController {
 
     private final CatMatchService catMatchService;
 
-    @PostMapping("cat/{catId}/catmatch")
+    @PostMapping("user/{userId}/cat/{catId}/catmatch")
     public Long match(@RequestBody CatMatchDTO.Match dto) {
         return catMatchService.match(dto);
     }
 
-    @PatchMapping("cat/{catId}/catmatch/accept/{id}")
+    @PatchMapping("user/{userId}/cat/{catId}/catmatch/accept/{id}")
     public Long accept(@PathVariable Long id) {
         return catMatchService.accept(id);
     }
 
-    @PatchMapping("cat/{catId}/catmatch/reject/{id}")
+    @PatchMapping("user/{userId}/cat/{catId}/catmatch/reject/{id}")
     public Long reject(@PathVariable Long id) {
         return catMatchService.reject(id);
     }
 
-    @DeleteMapping("user/{userId}/catmatch/receive/{id}")
+    @DeleteMapping("/user/{userId}/catmatch/receive/{id}")
     public void delete(@PathVariable Long id) {
         catMatchService.delete(id);
     }
 
-    @GetMapping("user/{userId}/catmatch/send")
+    @GetMapping("/user/{userId}/catmatch/send")
     public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(@PathVariable Long userId) {
         return catMatchService.findAllSendByUserId(userId);
     }
 
-    @GetMapping("user/{userId}/catmatch/receive")
+    @GetMapping("/user/{userId}/catmatch/receive")
     public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(@PathVariable Long userId) {
         return catMatchService.findAllReceiveByUserId(userId);
     }

@@ -23,8 +23,8 @@ public class CatCareService {
     private final CatRepository catRepository;
 
     @Transactional
-    public Long save(CatCareDTO.Create dto) {
-        Cat cat = catRepository.findById(dto.getCatId()).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + dto.getCatId() + " is not valid"));
+    public Long save(Long catId, CatCareDTO.Create dto) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         return catCareRepository.save(dto.toEntity(cat)).getId();
     }

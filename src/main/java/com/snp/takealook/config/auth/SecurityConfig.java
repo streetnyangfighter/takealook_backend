@@ -1,5 +1,6 @@
 package com.snp.takealook.config.auth;
 
+import com.snp.takealook.config.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

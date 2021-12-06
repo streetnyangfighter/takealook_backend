@@ -9,13 +9,11 @@ public class CatCareDTO {
 
     @Getter
     public static class Create {
-        private Long catId;
         private Byte type;
         private String message;
 
         @Builder
-        public Create(Long catId, Byte type, String message) {
-            this.catId = catId;
+        public Create(Byte type, String message) {
             this.type = type;
             this.message = message;
         }

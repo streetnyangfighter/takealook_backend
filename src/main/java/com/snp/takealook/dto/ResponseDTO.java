@@ -13,6 +13,7 @@ import java.util.List;
 
 public class ResponseDTO {
 
+    /** USER 관련 ResponseDTO */
     @Getter
     public static class UserResponse {
         private Long id;
@@ -74,23 +75,24 @@ public class ResponseDTO {
         }
     }
 
+    /** CAT 관련 ResponseDTO */
     @Getter
     public static class CatResponse {
         private Long id;
         private String name;
         private Byte gender;
         private Byte neutered;
-        private Byte status;
         private List<User> carers;
+        private CatStatus status;
 //        private List<CatImage> catImageList;
 
-        public CatResponse(Cat cat, List<User> carers) {
-            this.id = cat.getId();
-            this.name = cat.getName();
-            this.gender = cat.getGender();
-            this.neutered = cat.getNeutered();
-            this.status = cat.getStatus();
+        public CatResponse(Cat entity, List<User> carers, CatStatus status) {
+            this.id = entity.getId();
+            this.name = entity.getName();
+            this.gender = entity.getGender();
+            this.neutered = entity.getNeutered();
             this.carers = carers;
+            this.status = status;
         }
     }
 
@@ -101,7 +103,6 @@ public class ResponseDTO {
         private CatGroup catGroup;
         private String name;
         private Byte neutered;
-        private Byte status;
         private Boolean dFlag;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
@@ -112,7 +113,6 @@ public class ResponseDTO {
             this.catGroup = entity.getCatGroup();
             this.name = entity.getName();
             this.neutered = entity.getNeutered();
-            this.status = entity.getStatus();
             this.dFlag = entity.getDFlag();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
@@ -190,6 +190,23 @@ public class ResponseDTO {
             this.contentType = entity.getContentType();
             this.fileSize = entity.getFileSize();
             this.filePath = entity.getFilePath();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+    @Getter
+    public static class CatStatusResponse {
+        private Long id;
+        private User user;
+        private Byte status;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+
+        public CatStatusResponse(CatStatus entity) {
+            this.id = entity.getId();
+            this.user = entity.getCat().getUser();
+            this.status = entity.getStatus();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
         }
