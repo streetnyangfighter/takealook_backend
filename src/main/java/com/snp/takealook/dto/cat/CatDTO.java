@@ -9,21 +9,17 @@ public class CatDTO {
 
     @Getter
     public static class Create {
-        private Long userId;
         private String name;
         private Byte gender;
         private Byte neutered;
-        private Byte status;
-        private String chracter;
+        private String info;
 
         @Builder
-        public Create(Long userId, String name, Byte gender, Byte neutered, Byte status, String chracter) {
-            this.userId = userId;
+        public Create(String name, Byte gender, Byte neutered, String info) {
             this.name = name;
             this.gender = gender;
             this.neutered = neutered;
-            this.status = status;
-            this.chracter = chracter;
+            this.info = info;
         }
 
         public Cat toEntity(User user) {
@@ -32,8 +28,7 @@ public class CatDTO {
                     .name(name)
                     .gender(gender)
                     .neutered(neutered)
-                    .status(status)
-                    .character(chracter)
+                    .info(info)
                     .build();
         }
     }
@@ -43,8 +38,7 @@ public class CatDTO {
         private String name;
         private Byte gender;
         private Byte neutered;
-        private Byte status;
-        private String character;
+        private String info;
     }
 
     @Getter
