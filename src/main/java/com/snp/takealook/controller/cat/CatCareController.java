@@ -30,7 +30,7 @@ public class CatCareController {
         return catCareService.delete(id);
     }
 
-    @GetMapping("/user/{userId}/cat/{catId}/catcare")
+    @GetMapping("/user/{userId}/cat/{catId}/catcares")
     public List<ResponseDTO.CatCareListResponse> findAllByCatId(@PathVariable Long catId) {
         return catCareService.findAllByCatId(catId);
     }

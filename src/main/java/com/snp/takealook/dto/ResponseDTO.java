@@ -82,17 +82,19 @@ public class ResponseDTO {
         private String name;
         private Byte gender;
         private Byte neutered;
-        private List<User> carers;
         private CatStatus status;
+        private List<User> carers;
+        private List<String> infoList;
 //        private List<CatImage> catImageList;
 
-        public CatResponse(Cat entity, List<User> carers, CatStatus status) {
+        public CatResponse(Cat entity, CatStatus status, List<User> carers, List<String> infoList) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
             this.neutered = entity.getNeutered();
-            this.carers = carers;
             this.status = status;
+            this.carers = carers;
+            this.infoList = infoList;
         }
     }
 
@@ -103,6 +105,7 @@ public class ResponseDTO {
         private CatGroup catGroup;
         private String name;
         private Byte neutered;
+        private String info;
         private Boolean dFlag;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
@@ -113,6 +116,7 @@ public class ResponseDTO {
             this.catGroup = entity.getCatGroup();
             this.name = entity.getName();
             this.neutered = entity.getNeutered();
+            this.info = entity.getInfo();
             this.dFlag = entity.getDFlag();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();

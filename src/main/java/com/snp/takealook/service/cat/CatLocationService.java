@@ -58,11 +58,15 @@ public class CatLocationService {
     @Transactional
     public List<ResponseDTO.CatLocationListResponse> findAllByCatId(Long catId) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-        List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
         List<CatLocation> catLocationList = new ArrayList<>();
 
-        for (Cat sameCat : sameGroupCatList) {
-            catLocationList.addAll(sameCat.getCatLocationList());
+        try { // 매칭이 되어있는 상태
+            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+            for (Cat sameCat : sameGroupCatList) {
+                catLocationList.addAll(sameCat.getCatLocationList());
+            }
+        } catch (NullPointerException e) { // 매칭 없이 단독 고양이 상태
+            catLocationList.addAll(cat.getCatLocationList());
         }
 
         catLocationList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));

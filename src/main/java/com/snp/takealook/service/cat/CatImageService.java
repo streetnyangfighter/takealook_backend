@@ -1,5 +1,6 @@
 package com.snp.takealook.service.cat;
 
+import com.snp.takealook.domain.BaseTimeEntity;
 import com.snp.takealook.domain.cat.Cat;
 import com.snp.takealook.domain.cat.CatImage;
 import com.snp.takealook.dto.ResponseDTO;
@@ -18,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,11 +114,17 @@ public class CatImageService {
     public List<ResponseDTO.CatImageListResponse> findAllByCatId(@PathVariable Long catId) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
         List<CatImage> catImageList = new ArrayList<>();
-        List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
 
-        for (Cat sameCat : sameGroupCatList) {
-            catImageList.addAll(sameCat.getCatImageList());
+        try {
+            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+            for (Cat sameCat : sameGroupCatList) {
+                catImageList.addAll(sameCat.getCatImageList());
+            }
+        } catch (NullPointerException e) {
+            catImageList.addAll(cat.getCatImageList());
         }
+
+        catImageList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
 
         return catImageList.stream()
                 .map(ResponseDTO.CatImageListResponse::new)

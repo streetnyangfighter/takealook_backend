@@ -35,7 +35,7 @@ public class CatService {
     public Long update(Long id, CatDTO.Update dto) {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
 
-        return cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getGender(), dto.getCharacter()).getId();
+        return cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getGender(), dto.getInfo()).getId();
     }
 
     @Transactional
@@ -73,21 +73,24 @@ public class CatService {
         Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
         List<User> carers = new ArrayList<>();
         List<CatStatus> catStatusList = new ArrayList<>();
+        List<String> catInfoList = new ArrayList<>();
 
         try { // 매칭이 되어있는 상태
             List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
             for (Cat sameCat : sameGroupCatList) {
                 carers.add(sameCat.getUser());
                 catStatusList.addAll(sameCat.getCatStatusList());
+                catInfoList.add(sameCat.getInfo());
             }
-        } catch(Exception e) { // 매칭 없이 단독 고양이 상태
+        } catch(NullPointerException e) { // 매칭 없이 단독 고양이 상태
             carers.add(cat.getUser());
             catStatusList.addAll(cat.getCatStatusList());
+            catInfoList.add(cat.getInfo());
         }
 
         catStatusList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
 
-        return new ResponseDTO.CatResponse(cat, carers, catStatusList.get(0));
+        return new ResponseDTO.CatResponse(cat, catStatusList.get(0), carers, catInfoList);
     }
 
 }

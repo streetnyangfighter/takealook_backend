@@ -37,7 +37,7 @@ public class Cat extends BaseTimeEntity {
     // 0: 중성화 X, 1: 중성화 O, 2: 확인 불가
 
     @NotNull
-    private String character;
+    private String info;
 
     @NotNull
     private Boolean dFlag;
@@ -67,20 +67,20 @@ public class Cat extends BaseTimeEntity {
     private List<CatMatch> catAccepterList;
 
     @Builder
-    public Cat(User user, String name, Byte gender, Byte neutered, String character) {
+    public Cat(User user, String name, Byte gender, Byte neutered, String info) {
         this.user = user;
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
-        this.character = character;
+        this.info = info;
         this.dFlag = false;
     }
 
-    public Cat updateInfo(String name, Byte gender, Byte neutered, String character) {
+    public Cat updateInfo(String name, Byte gender, Byte neutered, String info) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
-        this.character = character;
+        this.info = info;
 
         return this;
     }

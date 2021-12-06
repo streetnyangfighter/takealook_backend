@@ -1,7 +1,9 @@
 package com.snp.takealook.controller.cat;
 
+import com.snp.takealook.domain.cat.CatStatus;
 import com.snp.takealook.dto.ResponseDTO;
 import com.snp.takealook.dto.cat.CatDTO;
+import com.snp.takealook.dto.cat.CatStatusDTO;
 import com.snp.takealook.service.cat.CatImageService;
 import com.snp.takealook.service.cat.CatLocationService;
 import com.snp.takealook.service.cat.CatService;
@@ -25,33 +27,33 @@ public class CatController {
     private final CatLocationService catLocationService;
     private final CatImageService catImageService;
 
-    @PostMapping(value = "/user/{userId}/cat", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/user/{userId}/cat", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long userId,
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,
-                     @RequestPart(value = "catStatus") Byte status,
+                     @RequestPart(value = "catStatus") CatStatusDTO.Create catStatus,
                      @RequestPart(value = "catLoc") List<CatDTO.LocationList> catLocList,
                      @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(userId, catInfo);
-        catStatusService.save(catId, status);
+        catStatusService.save(catId, catStatus);
         catLocationService.save(catId, catLocList);
         return catImageService.save(catId, files);
     }
 
-    @PostMapping(value = "/user/{userId}/cat/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/user/{userId}/cat/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long update(@PathVariable Long id,
                        @RequestPart(value = "catInfo", required = false) CatDTO.Update catInfo,
-                       @RequestPart(value = "catStatus", required = false) Byte status,
+                       @RequestPart(value = "catStatus", required = false) CatStatusDTO.Create catStatus,
                        @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> catLocList,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         catService.update(id, catInfo);
-        catStatusService.save(id, status);
+        catStatusService.save(id, catStatus);
         catLocationService.update(id, catLocList);
         return catImageService.update(id, files);
     }
 
     @PostMapping("/user/{userId}/cat/{id}/status")
-    public Long updateStatus(@PathVariable Long id, @RequestBody Byte status) {
-        return catStatusService.save(id, status);
+    public Long saveStatus(@PathVariable Long id, @RequestBody CatStatusDTO.Create catStatus) {
+        return catStatusService.save(id, catStatus);
     }
 
     @PatchMapping("/user/{userId}/cat/{id}/delete")
@@ -82,5 +84,10 @@ public class CatController {
     @GetMapping("/user/{userId}/cat/{id}/catlocations")
     public List<ResponseDTO.CatLocationListResponse> findAllLocationsById(@PathVariable Long id) {
         return catLocationService.findAllByCatId(id);
+    }
+
+    @GetMapping("/user/{userId}/cat/{id}/catimages")
+    public List<ResponseDTO.CatImageListResponse> findAllImagesById(@PathVariable Long id) {
+        return catImageService.findAllByCatId(id);
     }
 }
