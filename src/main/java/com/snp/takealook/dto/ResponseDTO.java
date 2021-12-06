@@ -38,9 +38,9 @@ public class ResponseDTO {
         private User user;
         private String message;
         private Byte type;
+        private Boolean checked;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private Boolean checked;
 
         public NotificationListResponse(Notification entity) {
             this.id = entity.getId();
@@ -60,6 +60,8 @@ public class ResponseDTO {
         private String sido;
         private String gugun;
         private String dong;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
 
         public UserLocationListResponse(UserLocation entity) {
             this.id = entity.getId();
@@ -67,6 +69,8 @@ public class ResponseDTO {
             this.sido = entity.getSido();
             this.gugun = entity.getGugun();
             this.dong = entity.getDong();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
         }
     }
 

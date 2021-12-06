@@ -86,6 +86,12 @@ public class CatMatchService {
     }
 
     @Transactional
+    public void delete(Long id) {
+        CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
+        catMatchRepository.delete(catMatch);
+    }
+
+    @Transactional
     public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         List<CatMatch> sendList = new ArrayList<>();

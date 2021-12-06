@@ -10,12 +10,9 @@ import com.snp.takealook.domain.community.Post;
 import com.snp.takealook.domain.community.PostLike;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -78,7 +75,7 @@ public class User extends BaseTimeEntity {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, String loginType, Boolean dFlag, Role role) {
+    public User(String loginId, String nickname, String phone, String image, String loginType, Role role) {
         this.loginId = loginId;
         this.nickname = nickname;
         this.phone = phone;

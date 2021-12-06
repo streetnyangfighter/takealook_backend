@@ -30,6 +30,11 @@ public class CatMatchController {
         return catMatchService.reject(id);
     }
 
+    @DeleteMapping("user/{userId}/catmatch/receive/{id}")
+    public void delete(@PathVariable Long id) {
+        catMatchService.delete(id);
+    }
+
     @GetMapping("user/{userId}/catmatch/send")
     public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(@PathVariable Long userId) {
         return catMatchService.findAllSendByUserId(userId);
