@@ -38,8 +38,8 @@ public class CatMatchService {
     }
 
     @Transactional
-    public Long accept(Long id) {
-        CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
+    public Long accept(Long catmatchId) {
+        CatMatch catMatch = catMatchRepository.findById(catmatchId).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + catmatchId + " is not valid"));
         Cat proposer = catMatch.getProposer();
         Cat accepter = catMatch.getAccepter();
 
@@ -79,15 +79,15 @@ public class CatMatchService {
     }
 
     @Transactional
-    public Long reject(Long id) {
-        CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
+    public Long reject(Long catmatchId) {
+        CatMatch catMatch = catMatchRepository.findById(catmatchId).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + catmatchId + " is not valid"));
 
         return catMatch.reject().getId();
     }
 
     @Transactional
-    public void delete(Long id) {
-        CatMatch catMatch = catMatchRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + id + " is not valid"));
+    public void delete(Long catmatchId) {
+        CatMatch catMatch = catMatchRepository.findById(catmatchId).orElseThrow(() -> new IllegalArgumentException("CatMatch with id: " + catmatchId + " is not valid"));
         if (catMatch.getStatus() != 2) {
             throw new IllegalStateException("catMatch already accepted/rejected");
         }

@@ -1,4 +1,4 @@
-package com.snp.takealook.config.auth;
+package com.snp.takealook.config.auth.service;
 
 import com.snp.takealook.config.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
