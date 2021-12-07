@@ -5,6 +5,7 @@ import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.domain.user.UserLocation;
 import com.snp.takealook.oauth.entity.ProviderType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -118,7 +119,7 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.neutered = entity.getNeutered();
             this.info = entity.getInfo();
-            this.dFlag = entity.getDFlag();
+            this.dFlag = entity.getDflag();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
         }

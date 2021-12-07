@@ -43,7 +43,7 @@ public class Cat extends BaseTimeEntity {
     private String info;
 
     @NotNull
-    private Boolean dFlag;
+    private Boolean dflag;
 
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -76,7 +76,7 @@ public class Cat extends BaseTimeEntity {
         this.gender = gender;
         this.neutered = neutered;
         this.info = info;
-        this.dFlag = false;
+        this.dflag = false;
     }
 
     public Cat updateInfo(String name, Byte gender, Byte neutered, String info) {
@@ -89,8 +89,8 @@ public class Cat extends BaseTimeEntity {
     }
 
     public Cat delete() {
-        if (!this.dFlag) {
-            this.dFlag = true;
+        if (!this.dflag) {
+            this.dflag = true;
         } else {
             throw new IllegalStateException("already deleted");
         }
@@ -99,8 +99,8 @@ public class Cat extends BaseTimeEntity {
     }
 
     public Cat restore() {
-        if (this.dFlag) {
-            this.dFlag = false;
+        if (this.dflag) {
+            this.dflag = false;
         } else {
             throw new IllegalStateException("delete first");
         }

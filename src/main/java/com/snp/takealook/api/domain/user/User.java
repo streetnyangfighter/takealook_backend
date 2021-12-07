@@ -107,8 +107,8 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public User delete(Boolean dFlag) {
-        this.dFlag = dFlag;
+    public User delete(Boolean dflag) {
+        this.dflag = dflag;
 
         return this;
     }
@@ -130,4 +130,5 @@ public class User extends BaseTimeEntity {
     public void setImage(String image) {
         this.image = image;
     }
+  
 }

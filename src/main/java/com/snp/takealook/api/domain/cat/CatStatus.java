@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class CatStatus extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,4 +31,5 @@ public class CatStatus extends BaseTimeEntity {
         this.cat = cat;
         this.status = status;
     }
+
 }

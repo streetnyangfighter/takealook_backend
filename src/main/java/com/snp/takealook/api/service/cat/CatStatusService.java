@@ -6,12 +6,13 @@ import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.cat.CatStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class CatStatusService {
+
     private final CatStatusRepository catStatusRepository;
     private final CatRepository catRepository;
 

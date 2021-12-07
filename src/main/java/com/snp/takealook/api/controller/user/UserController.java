@@ -3,6 +3,7 @@ package com.snp.takealook.api.controller.user;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.service.user.UserService;
+import lombok.RequiredArgsConstructor;
 import com.snp.takealook.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
