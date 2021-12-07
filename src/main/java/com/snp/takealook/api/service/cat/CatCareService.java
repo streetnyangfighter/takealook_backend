@@ -1,5 +1,6 @@
 package com.snp.takealook.api.service.cat;
 
+import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatCare;
 import com.snp.takealook.api.dto.ResponseDTO;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,39 +24,45 @@ public class CatCareService {
     private final CatRepository catRepository;
 
     @Transactional
-    public Long save(CatCareDTO.Create dto) {
-        Cat cat = catRepository.findById(dto.getCatId()).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + dto.getCatId() + " is not valid"));
+    public Long save(Long catId, CatCareDTO.Create dto) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         return catCareRepository.save(dto.toEntity(cat)).getId();
     }
 
     @Transactional
-    public Long update(Long id, CatCareDTO.Update dto) {
-        CatCare catCare = catCareRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + id + " is not valid"));
+    public Long update(Long catcareId, CatCareDTO.Update dto) {
+        CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
         catCare.update(dto.getType(), dto.getMessage());
 
-        return id;
+        return catcareId;
     }
 
     @Transactional
-    public Long delete(Long id) {
-        CatCare catCare = catCareRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + id + " is not valid"));
+    public Long delete(Long catcareId) {
+        CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
         catCareRepository.delete(catCare);
 
-        return id;
+        return catcareId;
     }
 
     @Transactional
     public List<ResponseDTO.CatCareListResponse> findAllByCatId(Long catId) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-        List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
         List<CatCare> catCareList = new ArrayList<>();
 
-        for (Cat sameCat : sameGroupCatList) {
-            catCareList.addAll(sameCat.getCatCareList());
+        try {
+            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+            for (Cat sameCat : sameGroupCatList) {
+                catCareList.addAll(sameCat.getCatCareList());
+            }
+        } catch (NullPointerException e) {
+            catCareList.addAll(cat.getCatCareList());
         }
+
+        catCareList.sort(Comparator.comparing(BaseTimeEntity::getModifiedAt));
 
         return catCareList.stream()
                 .map(ResponseDTO.CatCareListResponse::new)

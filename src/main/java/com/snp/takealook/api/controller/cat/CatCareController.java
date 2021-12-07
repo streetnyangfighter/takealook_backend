@@ -3,6 +3,7 @@ package com.snp.takealook.api.controller.cat;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatCareDTO;
 import com.snp.takealook.api.service.cat.CatCareService;
+import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,23 +15,26 @@ import java.util.List;
 public class CatCareController {
 
     private final CatCareService catCareService;
+    private final NotificationService notificationService;
 
-    @PostMapping("cat/{catId}/catcare")
-    public Long save(@RequestBody CatCareDTO.Create dto) {
-        return catCareService.save(dto);
+    @PostMapping("/user/{userId}/cat/{catId}/catcare")
+    public Long save(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
+        Long saveId = catCareService.save(catId, dto);
+        notificationService.saveGroupNotification(userId, catId,(byte)1);
+        return saveId;
     }
 
-    @PutMapping("cat/{catId}/catcare/{id}")
-    public Long update(@PathVariable Long id, @RequestBody CatCareDTO.Update dto) {
-        return catCareService.update(id, dto);
+    @PutMapping("/user/{userId}/cat/{catId}/catcare/{catcareId}")
+    public Long update(@PathVariable Long catcareId, @RequestBody CatCareDTO.Update dto) {
+        return catCareService.update(catcareId, dto);
     }
 
-    @DeleteMapping("cat/{catId}/catcare/{id}")
-    public Long delete(@PathVariable Long id) {
-        return catCareService.delete(id);
+    @DeleteMapping("/user/{userId}/cat/{catId}/catcare/{catcareId}")
+    public Long delete(@PathVariable Long catcareId) {
+        return catCareService.delete(catcareId);
     }
 
-    @GetMapping("cat/{catId}/catcare")
+    @GetMapping("/user/{userId}/cat/{catId}/catcares")
     public List<ResponseDTO.CatCareListResponse> findAllByCatId(@PathVariable Long catId) {
         return catCareService.findAllByCatId(catId);
     }
