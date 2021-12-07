@@ -3,6 +3,7 @@ package com.snp.takealook.service.user;
 import com.snp.takealook.domain.user.Notification;
 import com.snp.takealook.domain.user.User;
 import com.snp.takealook.dto.ResponseDTO;
+import com.snp.takealook.dto.user.NotificationDTO;
 import com.snp.takealook.repository.user.NotificationRepository;
 import com.snp.takealook.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,13 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+
+    @Transactional
+    public Long save(Long userId, NotificationDTO.Create dto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        return notificationRepository.save(dto.toEntity(user)).getId();
+    }
 
     @Transactional
     public Long check(Long id) {
