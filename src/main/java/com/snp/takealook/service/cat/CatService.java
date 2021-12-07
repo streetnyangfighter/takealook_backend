@@ -32,22 +32,22 @@ public class CatService {
     }
 
     @Transactional
-    public Long update(Long id, CatDTO.Update dto) {
-        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+    public Long update(Long catId, CatDTO.Update dto) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         return cat.updateInfo(dto.getName(), dto.getNeutered(), dto.getGender(), dto.getInfo()).getId();
     }
 
     @Transactional
-    public Long delete(Long id) {
-        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+    public Long delete(Long catId) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         return cat.delete().getId();
     }
 
     @Transactional
-    public Long restore(Long id) {
-        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+    public Long restore(Long catId) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         return cat.restore().getId();
     }
@@ -62,15 +62,15 @@ public class CatService {
     }
 
     @Transactional
-    public Long removeFromGroup(Long id) {
-        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+    public Long removeFromGroup(Long catId) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         return cat.updateCatGroup(null).getId();
     }
 
     @Transactional
-    public ResponseDTO.CatResponse findOne(Long id) {
-        Cat cat = catRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + id + " is not valid"));
+    public ResponseDTO.CatResponse findOne(Long catId) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
         List<User> carers = new ArrayList<>();
         List<CatStatus> catStatusList = new ArrayList<>();
         List<String> catInfoList = new ArrayList<>();

@@ -32,21 +32,21 @@ public class CatCareService {
     }
 
     @Transactional
-    public Long update(Long id, CatCareDTO.Update dto) {
-        CatCare catCare = catCareRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + id + " is not valid"));
+    public Long update(Long catcareId, CatCareDTO.Update dto) {
+        CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
         catCare.update(dto.getType(), dto.getMessage());
 
-        return id;
+        return catcareId;
     }
 
     @Transactional
-    public Long delete(Long id) {
-        CatCare catCare = catCareRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + id + " is not valid"));
+    public Long delete(Long catcareId) {
+        CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
         catCareRepository.delete(catCare);
 
-        return id;
+        return catcareId;
     }
 
     @Transactional

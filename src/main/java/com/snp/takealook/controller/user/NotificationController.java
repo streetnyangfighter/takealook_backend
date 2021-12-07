@@ -14,12 +14,12 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PatchMapping("/notification/check/{id}")
-    public Long check(@PathVariable Long id) {
-        return notificationService.check(id);
+    @PatchMapping("user/{userId}/notification/{notificationId}")
+    public Long check(@PathVariable Long notificationId) {
+        return notificationService.check(notificationId);
     }
 
-    @GetMapping("/notification/{userId}")
+    @GetMapping("user/{userId}/notifications")
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(@PathVariable Long userId) {
         List<ResponseDTO.NotificationListResponse> list = null;
         try{

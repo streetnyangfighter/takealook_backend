@@ -8,6 +8,7 @@ import com.snp.takealook.service.cat.CatImageService;
 import com.snp.takealook.service.cat.CatLocationService;
 import com.snp.takealook.service.cat.CatService;
 import com.snp.takealook.service.cat.CatStatusService;
+import com.snp.takealook.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class CatController {
     private final CatStatusService catStatusService;
     private final CatLocationService catLocationService;
     private final CatImageService catImageService;
+    private final NotificationService notificationService;
 
     @PostMapping(value = "/user/{userId}/cat", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long userId,
@@ -35,40 +37,45 @@ public class CatController {
                      @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(userId, catInfo);
         catStatusService.save(catId, catStatus);
+        notificationService.saveGroupNotification(userId, catId, (byte)2);
         catLocationService.save(catId, catLocList);
         return catImageService.save(catId, files);
     }
 
-    @PostMapping(value = "/user/{userId}/cat/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Long update(@PathVariable Long id,
+    @PostMapping(value = "/user/{userId}/cat/{catId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Long update(@PathVariable Long userId,
+                       @PathVariable Long catId,
                        @RequestPart(value = "catInfo", required = false) CatDTO.Update catInfo,
                        @RequestPart(value = "catStatus", required = false) CatStatusDTO.Create catStatus,
                        @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> catLocList,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        catService.update(id, catInfo);
-        catStatusService.save(id, catStatus);
-        catLocationService.update(id, catLocList);
-        return catImageService.update(id, files);
+        catService.update(catId, catInfo);
+        catStatusService.save(catId, catStatus);
+        notificationService.saveGroupNotification(userId, catId, (byte)2);
+        catLocationService.update(catId, catLocList);
+        return catImageService.update(catId, files);
     }
 
-    @PostMapping("/user/{userId}/cat/{id}/status")
-    public Long saveStatus(@PathVariable Long id, @RequestBody CatStatusDTO.Create catStatus) {
-        return catStatusService.save(id, catStatus);
+    @PostMapping("/user/{userId}/cat/{catId}/status")
+    public Long saveStatus(@PathVariable Long catId, @RequestBody CatStatusDTO.Create catStatus) {
+        return catStatusService.save(catId, catStatus);
     }
 
-    @PatchMapping("/user/{userId}/cat/{id}/delete")
-    public Long delete(@PathVariable Long id) {
-        return catService.delete(id);
+    @PatchMapping("/user/{userId}/cat/{catId}/delete")
+    public Long delete(@PathVariable Long catId) {
+        return catService.delete(catId);
     }
 
-    @PatchMapping("/user/{userId}/cat/{id}/restore")
-    public Long restore(@PathVariable Long id) {
-        return catService.restore(id);
+    @PatchMapping("/user/{userId}/cat/{catId}/restore")
+    public Long restore(@PathVariable Long catId) {
+        return catService.restore(catId);
     }
 
-    @PatchMapping("/user/{userId}/cat/{id}/groupout")
-    public Long removeFromGroup(@PathVariable Long id) {
-        return catService.removeFromGroup(id);
+    @PatchMapping("/user/{userId}/cat/{catId}/groupout")
+    public Long removeFromGroup(@PathVariable Long userId, @PathVariable Long catId) {
+        catService.removeFromGroup(catId);
+        notificationService.saveGroupNotification(userId, catId, (byte)6);
+        return catId;
     }
 
     @GetMapping("/user/{userId}/cats")
@@ -76,14 +83,14 @@ public class CatController {
         return catService.findAllByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}/cat/{id}")
-    public ResponseDTO.CatResponse findOne(@PathVariable Long id) {
-        return catService.findOne(id);
+    @GetMapping("/user/{userId}/cat/{catId}")
+    public ResponseDTO.CatResponse findOne(@PathVariable Long catId) {
+        return catService.findOne(catId);
     }
 
-    @GetMapping("/user/{userId}/cat/{id}/catlocations")
-    public List<ResponseDTO.CatLocationListResponse> findAllLocationsById(@PathVariable Long id) {
-        return catLocationService.findAllByCatId(id);
+    @GetMapping("/user/{userId}/cat/{catId}/catlocations")
+    public List<ResponseDTO.CatLocationListResponse> findAllLocationsById(@PathVariable Long catId) {
+        return catLocationService.findAllByCatId(catId);
     }
 
     @GetMapping("/user/{userId}/cat/{id}/catimages")
