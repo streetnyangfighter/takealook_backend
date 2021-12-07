@@ -12,4 +12,5 @@ public interface CatRepository extends JpaRepository<Cat, Long> {
     List<Cat> findCatsByUser(User user);
 
     List<Cat> findCatsByModifiedAtBeforeAndDflagTrue(LocalDateTime dateTime);
+
 }

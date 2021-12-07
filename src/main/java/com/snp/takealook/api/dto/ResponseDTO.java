@@ -4,6 +4,8 @@ import com.snp.takealook.api.domain.cat.*;
 import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.domain.user.UserLocation;
+import com.snp.takealook.oauth.entity.ProviderType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,7 +23,7 @@ public class ResponseDTO {
         private String nickname;
         private String phone;
         private String image;
-        private String loginType;
+        private ProviderType providerType;
 
         public UserResponse(User entity) {
             this.id = entity.getId();
@@ -29,7 +31,7 @@ public class ResponseDTO {
             this.nickname = entity.getNickname();
             this.phone = entity.getPhone();
             this.image = entity.getImage();
-            this.loginType = entity.getLoginType();
+            this.providerType = entity.getProviderType();
         }
     }
 

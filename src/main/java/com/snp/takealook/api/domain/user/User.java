@@ -9,6 +9,8 @@ import com.snp.takealook.api.domain.community.CommentLike;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.community.PostLike;
 
+import com.snp.takealook.oauth.entity.ProviderType;
+import com.snp.takealook.oauth.entity.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +30,9 @@ public class User extends BaseTimeEntity {
     private String loginId;
 
     @NotNull
+    private String password;
+
+    @NotNull
     private String nickname;
 
     private String phone;
@@ -36,15 +41,16 @@ public class User extends BaseTimeEntity {
     @Lob
     private String image;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private String loginType;
+    private ProviderType providerType;
 
     @NotNull
-    private Boolean dflag;
+    private Boolean dFlag;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Role role;
+    private RoleType roleType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -75,14 +81,15 @@ public class User extends BaseTimeEntity {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, String loginType, Role role) {
+    public User(String loginId, String nickname, String phone, String image, ProviderType providerType, Boolean dFlag, RoleType roleType) {
         this.loginId = loginId;
+        this.password = "NO_PASS";
         this.nickname = nickname;
         this.phone = phone;
         this.image = image;
-        this.loginType = loginType;
-        this.dflag = false;
-        this.role = role;
+        this.providerType = providerType;
+        this.dFlag = false;
+        this.roleType = roleType;
     }
 
     public User update(String nickname, String image) {
@@ -100,14 +107,14 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public User delete(Boolean dFlag) {
-        this.dflag = dFlag;
+    public User delete(Boolean dflag) {
+        this.dflag = dflag;
 
         return this;
     }
 
     public String getRoleKey() {
-        return this.role.getKey();
+        return this.roleType.getDisplayName();
     }
 
     public User updateLocations(List<UserLocation> userLocationList) {
@@ -116,4 +123,12 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+  
 }

@@ -116,4 +116,9 @@ public class UserService {
         user.updateLocations(list);
     }
 
+    @Transactional
+    public User getUser(String loginId) {
+        return userRepository.findByLoginId(loginId);
+    }
+
 }

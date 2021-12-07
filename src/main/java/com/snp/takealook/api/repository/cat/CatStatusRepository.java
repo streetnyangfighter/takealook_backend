@@ -9,4 +9,5 @@ import java.util.List;
 public interface CatStatusRepository extends JpaRepository<CatStatus, Long> {
 
     List<CatStatus> findCatStatusByModifiedAtBefore(LocalDateTime dateTime);
+
 }

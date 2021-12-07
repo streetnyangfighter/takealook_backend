@@ -4,6 +4,9 @@ import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import com.snp.takealook.common.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,6 +60,15 @@ public class UserController {
     public Long updateTest(@PathVariable Long id, @RequestBody UserDTO.Update dto, @RequestBody List<UserDTO.LocationList> dtoList) {
         userService.updateInfo(id, dto, dtoList);
         return id;
+    }
+
+    @GetMapping("/api/v1/users")
+    public ApiResponse getUser() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = userService.getUser(principal.getUsername());
+
+        return ApiResponse.success("user", user);
     }
 
 }

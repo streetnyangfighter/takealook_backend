@@ -3,7 +3,10 @@ package com.snp.takealook.api.domain.cat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.user.User;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Cat extends BaseTimeEntity {
-  
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -116,5 +119,5 @@ public class Cat extends BaseTimeEntity {
 
         return this;
     }
-  
+
 }
