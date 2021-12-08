@@ -2,6 +2,7 @@ package com.snp.takealook.api.controller.community;
 
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.community.PostImage;
+import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
 import com.snp.takealook.api.dto.community.PostLikeDTO;
 import com.snp.takealook.api.service.community.PostImageService;
@@ -33,13 +34,13 @@ public class PostController {
 
     // 게시글 리스트 조회
     @GetMapping("/posts/{boardId}")
-    public List<PostDTO.Get> findAllByBoardId(@PathVariable Long boardId) {
+    public List<ResponseDTO.PostResponse> findAllByBoardId(@PathVariable Long boardId) {
         return postService.findAllByBoardId(boardId);
     }
 
     // 게시글 상세 조회
     @GetMapping("/post/{id}")
-    public Post getPost(@PathVariable Long id) {
+    public ResponseDTO.PostResponse getPost(@PathVariable Long id) {
         return postService.getPost(id);
     }
 

@@ -36,24 +36,6 @@ public class PostDTO {
     }
 
     @Getter
-    public static class Get {
-        private Board board;
-        private User writer;
-        private String title;
-        private String content;
-        private LocalDateTime modifiedAt;
-        // 댓글, 추천
-
-        public Get(Post entity) {
-            this.board = entity.getBoard();
-            this.writer = entity.getWriter();
-            this.title = entity.getTitle();
-            this.content = entity.getContent();
-            this.modifiedAt = entity.getModifiedAt();
-        }
-    }
-
-    @Getter
     public static class Update {
         private String title;
         private String content;

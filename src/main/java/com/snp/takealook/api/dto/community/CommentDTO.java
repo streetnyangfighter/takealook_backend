@@ -33,21 +33,6 @@ public class CommentDTO {
     }
 
     @Getter
-    public static class Get {
-        private Post post;
-        private User writer;
-        private String content;
-        private LocalDateTime modifiedAt;
-
-        public Get(Comment entity) {
-            this.post = entity.getPost();
-            this.writer = entity.getWriter();
-            this.content = entity.getContent();
-            this.modifiedAt = entity.getModifiedAt();
-        }
-    }
-
-    @Getter
     public static class Update {
         private String content;
     }

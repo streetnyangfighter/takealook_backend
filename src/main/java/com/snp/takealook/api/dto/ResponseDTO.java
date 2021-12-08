@@ -1,6 +1,9 @@
 package com.snp.takealook.api.dto;
 
 import com.snp.takealook.api.domain.cat.*;
+import com.snp.takealook.api.domain.community.Board;
+import com.snp.takealook.api.domain.community.Comment;
+import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.domain.user.UserLocation;
@@ -218,7 +221,56 @@ public class ResponseDTO {
         }
     }
 
+    @Getter
+    public static class PostResponse {
+        private Board board;
+        private String writer;
+        private String title;
+        private String content;
+        private LocalDateTime modifiedAt;
+        // 댓글, 추천
 
+        public PostResponse(Post entity) {
+            this.board = entity.getBoard();
+            this.writer = entity.getWriter().getNickname();
+            this.title = entity.getTitle();
+            this.content = entity.getContent();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+    @Getter
+    public static class PostListResponse {
+        private Board board;
+        private User writer;
+        private String title;
+        private String content;
+        private LocalDateTime modifiedAt;
+        // 댓글, 추천
+
+        public PostListResponse(Post entity) {
+            this.board = entity.getBoard();
+            this.writer = entity.getWriter();
+            this.title = entity.getTitle();
+            this.content = entity.getContent();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
+
+    @Getter
+    public static class CommentResponse {
+        private Post post;
+        private User writer;
+        private String content;
+        private LocalDateTime modifiedAt;
+
+        public CommentResponse(Comment entity) {
+            this.post = entity.getPost();
+            this.writer = entity.getWriter();
+            this.content = entity.getContent();
+            this.modifiedAt = entity.getModifiedAt();
+        }
+    }
 
 
 
