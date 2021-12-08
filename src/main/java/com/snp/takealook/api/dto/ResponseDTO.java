@@ -108,7 +108,7 @@ public class ResponseDTO {
         private String name;
         private Byte neutered;
         private String info;
-        private Boolean dFlag;
+        private Boolean dflag;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
@@ -119,7 +119,7 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.neutered = entity.getNeutered();
             this.info = entity.getInfo();
-            this.dFlag = entity.getDflag();
+            this.dflag = entity.getDflag();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
         }

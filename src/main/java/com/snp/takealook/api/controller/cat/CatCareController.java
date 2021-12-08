@@ -7,6 +7,7 @@ import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -20,7 +21,7 @@ public class CatCareController {
     @PostMapping("/user/{userId}/cat/{catId}/catcare")
     public Long save(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
         Long saveId = catCareService.save(catId, dto);
-        notificationService.saveGroupNotification(userId, catId,(byte)1);
+        notificationService.saveGroupNotification(userId, catId, (byte) 1);
         return saveId;
     }
 
@@ -37,5 +38,21 @@ public class CatCareController {
     @GetMapping("/user/{userId}/cat/{catId}/catcares")
     public List<ResponseDTO.CatCareListResponse> findAllByCatId(@PathVariable Long catId) {
         return catCareService.findAllByCatId(catId);
+    }
+
+    @GetMapping("/user/{userId}/cat/{catId}/catcares/monthly")
+    public List<ResponseDTO.CatCareListResponse> findMonthlyByCatId(@PathVariable Long catId, int year, int month) {
+        LocalDateTime dayStart = LocalDateTime.of(year, month, 1, 00, 00);
+        LocalDateTime dayEnd = LocalDateTime.of(year, month+1, 1, 00, 00);
+
+        return catCareService.findByCatIdAndDate(catId, dayStart, dayEnd);
+    }
+
+    @GetMapping("/user/{userId}/cat/{catId}/catcares/48hours")
+    public List<ResponseDTO.CatCareListResponse> findRecentsByCatId(@PathVariable Long catId) {
+        LocalDateTime dayStart = LocalDateTime.now().minusDays(2);
+        LocalDateTime dayEnd = LocalDateTime.now();
+
+        return catCareService.findByCatIdAndDate(catId, dayStart, dayEnd);
     }
 }

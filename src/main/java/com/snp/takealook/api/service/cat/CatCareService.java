@@ -8,9 +8,14 @@ import com.snp.takealook.api.dto.cat.CatCareDTO;
 import com.snp.takealook.api.repository.cat.CatCareRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.rmi.registry.LocateRegistry;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -68,4 +73,26 @@ public class CatCareService {
                 .map(ResponseDTO.CatCareListResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public List<ResponseDTO.CatCareListResponse> findByCatIdAndDate(Long catId, LocalDateTime dayStart, LocalDateTime dayEnd) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+        List<CatCare> catCareList = new ArrayList<>();
+
+        try {
+            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
+            for (Cat sameCat : sameGroupCatList) {
+                catCareList.addAll(catCareRepository.findCatCaresByCreatedAtIsBetweenAndCat_Id(dayStart, dayEnd, sameCat.getId()));
+            }
+        } catch (NullPointerException e) {
+            catCareList.addAll(catCareRepository.findCatCaresByCreatedAtIsBetweenAndCat_Id(dayStart, dayEnd, catId));
+        }
+
+        catCareList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+
+        return catCareList.stream()
+                .map(ResponseDTO.CatCareListResponse::new)
+                .collect(Collectors.toList());
+    }
+
 }
