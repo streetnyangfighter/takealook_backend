@@ -1,5 +1,6 @@
 package com.snp.takealook.api.controller.community;
 
+import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.CommentDTO;
 import com.snp.takealook.api.dto.community.CommentLikeDTO;
 import com.snp.takealook.api.service.community.CommentLikeService;
@@ -26,7 +27,7 @@ public class CommentController {
 
     // 게시글 댓글 리스트 조회
     @GetMapping("post/{postId}/comment")
-    public List<CommentDTO.Get> findAllByPostId(@PathVariable Long postId) {
+    public List<ResponseDTO.CommentResponse> findAllByPostId(@PathVariable Long postId) {
         return commentService.findAllPostId(postId);
     }
 

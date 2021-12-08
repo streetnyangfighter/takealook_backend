@@ -3,6 +3,7 @@ package com.snp.takealook.api.service.community;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.User;
+import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.CommentDTO;
 import com.snp.takealook.api.repository.community.CommentRepository;
 import com.snp.takealook.api.repository.community.PostRepository;
@@ -36,11 +37,11 @@ public class CommentService {
 
     // 댓글 리스트 조회
     @Transactional(readOnly = true)
-    public List<CommentDTO.Get> findAllPostId(Long postId) {
+    public List<ResponseDTO.CommentResponse> findAllPostId(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + " is not valid"));
 
-        return commentRepository.findAllByPost(post).stream().map(CommentDTO.Get::new).collect(Collectors.toList());
+        return commentRepository.findAllByPost(post).stream().map(ResponseDTO.CommentResponse::new).collect(Collectors.toList());
     }
 
     // 댓글 수정

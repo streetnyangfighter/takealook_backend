@@ -3,6 +3,7 @@ package com.snp.takealook.api.service.community;
 import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.User;
+import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
 import com.snp.takealook.api.repository.community.BoardRepository;
 import com.snp.takealook.api.repository.community.PostRepository;
@@ -38,20 +39,20 @@ public class PostService {
 
     // 게시글 리스트 조회
     @Transactional(readOnly = true)
-    public List<PostDTO.Get> findAllByBoardId(Long boardId) {
+    public List<ResponseDTO.PostResponse> findAllByBoardId(Long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board with id: " + boardId + " is not valid"));
 
-        return postRepository.findAllByBoard(board).stream().map(PostDTO.Get::new).collect(Collectors.toList());
+        return postRepository.findAllByBoard(board).stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
     }
 
     // 게시글 상세 조회
     @Transactional(readOnly = true)
-    public Post getPost(Long id) {
+    public ResponseDTO.PostResponse getPost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
 
-        return post;
+        return new ResponseDTO.PostResponse(post);
     }
 
     // 게시글 수정

@@ -81,7 +81,7 @@ public class User extends BaseTimeEntity {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, ProviderType providerType, Boolean dFlag, RoleType roleType) {
+    public User(String loginId, String nickname, String phone, String image, ProviderType providerType, Boolean dflag, RoleType roleType) {
         this.loginId = loginId;
         this.password = "NO_PASS";
         this.nickname = nickname;
