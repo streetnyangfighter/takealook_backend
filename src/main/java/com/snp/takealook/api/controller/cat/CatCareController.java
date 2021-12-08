@@ -43,7 +43,8 @@ public class CatCareController {
     @GetMapping("/user/{userId}/cat/{catId}/catcares/monthly")
     public List<ResponseDTO.CatCareListResponse> findMonthlyByCatId(@PathVariable Long catId, int year, int month) {
         LocalDateTime dayStart = LocalDateTime.of(year, month, 1, 00, 00);
-        LocalDateTime dayEnd = LocalDateTime.of(year, month+1, 1, 00, 00);
+        LocalDateTime dayEnd = dayStart.plusMonths(1);
+//        System.out.println(dayStart + " *** " + dayEnd);
 
         return catCareService.findByCatIdAndDate(catId, dayStart, dayEnd);
     }
@@ -52,6 +53,7 @@ public class CatCareController {
     public List<ResponseDTO.CatCareListResponse> findRecentsByCatId(@PathVariable Long catId) {
         LocalDateTime dayStart = LocalDateTime.now().minusDays(2);
         LocalDateTime dayEnd = LocalDateTime.now();
+//        System.out.println(dayStart + " *** " + dayEnd);
 
         return catCareService.findByCatIdAndDate(catId, dayStart, dayEnd);
     }

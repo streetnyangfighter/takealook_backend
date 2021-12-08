@@ -82,10 +82,10 @@ public class CatCareService {
         try {
             List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
             for (Cat sameCat : sameGroupCatList) {
-                catCareList.addAll(catCareRepository.findCatCaresByCreatedAtIsBetweenAndCat_Id(dayStart, dayEnd, sameCat.getId()));
+                catCareList.addAll(catCareRepository.findCatCaresByCat_IdAndCreatedAtBetween(sameCat.getId(), dayStart, dayEnd));
             }
         } catch (NullPointerException e) {
-            catCareList.addAll(catCareRepository.findCatCaresByCreatedAtIsBetweenAndCat_Id(dayStart, dayEnd, catId));
+            catCareList.addAll(catCareRepository.findCatCaresByCat_IdAndCreatedAtBetween(catId, dayStart, dayEnd));
         }
 
         catCareList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
