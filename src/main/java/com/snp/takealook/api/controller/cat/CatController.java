@@ -82,6 +82,11 @@ public class CatController {
         return catService.findAllByUserId(userId);
     }
 
+    @GetMapping("/user/{userId}/deleted-cats")
+    public List<ResponseDTO.CatListResponse> findAllDeletedByUserId(@PathVariable Long userId) {
+        return catService.findAllDeletedByUserId(userId);
+    }
+
     @GetMapping("/user/{userId}/cat/{catId}")
     public ResponseDTO.CatResponse findOne(@PathVariable Long catId) {
         return catService.findOne(catId);
