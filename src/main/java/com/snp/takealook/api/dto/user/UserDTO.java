@@ -26,11 +26,11 @@ public class UserDTO {
 
     @Getter
     public static class Delete {
-        private Boolean dFlag;
+        private Boolean dflag;
 
         @Builder
-        public Delete(Boolean dFlag) {
-            this.dFlag = dFlag;
+        public Delete(Boolean dflag) {
+            this.dflag = dflag;
         }
     }
 

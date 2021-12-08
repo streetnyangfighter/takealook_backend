@@ -9,4 +9,6 @@ import java.util.List;
 public interface CatCareRepository extends JpaRepository<CatCare, Long> {
 
     List<CatCare> findCatCaresByModifiedAtBefore(LocalDateTime dateTime);
+
+    List<CatCare> findCatCaresByCat_IdAndCreatedAtBetween(Long cat_id, LocalDateTime dayStart, LocalDateTime dayEnd);
 }
