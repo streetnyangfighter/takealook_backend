@@ -25,7 +25,7 @@ public class ResponseDTO {
         private String nickname;
         private String phone;
         private String image;
-        private ProviderType providerType;
+        private String loginType;
 
         public UserResponse(User entity) {
             this.id = entity.getId();
@@ -33,7 +33,7 @@ public class ResponseDTO {
             this.nickname = entity.getNickname();
             this.phone = entity.getPhone();
             this.image = entity.getImage();
-            this.providerType = entity.getProviderType();
+            this.loginType = entity.getLoginType();
         }
     }
 

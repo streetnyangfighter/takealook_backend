@@ -62,6 +62,15 @@ public class CatService {
     }
 
     @Transactional
+    public List<ResponseDTO.CatListResponse> findAllDeletedByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        return catRepository.findCatsByUserAndDflagTrue(user).stream()
+                .map(ResponseDTO.CatListResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public Long removeFromGroup(Long catId) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 

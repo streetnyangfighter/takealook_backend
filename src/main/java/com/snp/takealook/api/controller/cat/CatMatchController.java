@@ -44,12 +44,17 @@ public class CatMatchController {
         catMatchService.delete(catmatchId);
     }
 
-    @GetMapping("/user/{userId}/catmatch/send")
+    @GetMapping("/user/{userId}/send-catmatches")
     public List<ResponseDTO.CatMatchListResponse> findAllSendByUserId(@PathVariable Long userId) {
         return catMatchService.findAllSendByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}/catmatch/receive")
+//    @GetMapping("/user/{userId}/catmatch/receive")
+//    public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(@PathVariable Long userId) {
+//        return catMatchService.findAllReceiveByUserId(userId);
+//    }
+
+    @GetMapping("/user/{userId}/received-catmatches")
     public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(@PathVariable Long userId) {
         return catMatchService.findAllReceiveByUserId(userId);
     }

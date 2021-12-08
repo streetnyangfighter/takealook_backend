@@ -1,5 +1,6 @@
 package com.snp.takealook.api.controller;
 
+import com.snp.takealook.api.config.dto.SessionUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +17,12 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model) {
 
-//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            System.out.println(user.getNickname()+ "-------------------");
-//            model.addAttribute("userName1", user.getNickname());
-//        }
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
+        if (user != null) {
+            System.out.println(user.getNickname()+ "-------------------");
+            model.addAttribute("userName1", user.getNickname());
+        }
 
         return "index";
     }

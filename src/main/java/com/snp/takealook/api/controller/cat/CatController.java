@@ -32,7 +32,7 @@ public class CatController {
     public Long save(@PathVariable Long userId,
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,
                      @RequestPart(value = "catStatus") CatStatusDTO.Create catStatus,
-                     @RequestPart(value = "catLoc") List<CatDTO.LocationList> catLocList,
+                     @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
                      @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(userId, catInfo);
         catStatusService.save(catId, catStatus);
@@ -46,7 +46,7 @@ public class CatController {
                        @PathVariable Long catId,
                        @RequestPart(value = "catInfo", required = false) CatDTO.Update catInfo,
                        @RequestPart(value = "catStatus", required = false) CatStatusDTO.Create catStatus,
-                       @RequestPart(value = "catLoc", required = false) List<CatDTO.LocationList> catLocList,
+                       @RequestPart(value = "catLoc", required = false) CatDTO.LocationList[] catLocList,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         catService.update(catId, catInfo);
         catStatusService.save(catId, catStatus);
@@ -80,6 +80,11 @@ public class CatController {
     @GetMapping("/user/{userId}/cats")
     public List<ResponseDTO.CatListResponse> findAllByUserId(@PathVariable Long userId) {
         return catService.findAllByUserId(userId);
+    }
+
+    @GetMapping("/user/{userId}/deleted-cats")
+    public List<ResponseDTO.CatListResponse> findAllDeletedByUserId(@PathVariable Long userId) {
+        return catService.findAllDeletedByUserId(userId);
     }
 
     @GetMapping("/user/{userId}/cat/{catId}")

@@ -40,9 +40,8 @@ public class User extends BaseTimeEntity {
     @Lob
     private String image;
 
-    @Enumerated(EnumType.STRING)
     @NotNull
-    private ProviderType providerType;
+    private String loginType;
 
     @NotNull
     private Boolean dflag;
@@ -80,13 +79,13 @@ public class User extends BaseTimeEntity {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, ProviderType providerType, Boolean dflag, Role role) {
+    public User(String loginId, String nickname, String phone, String image, String loginType, Boolean dflag, Role role) {
         this.loginId = loginId;
         this.password = "NO_PASS";
         this.nickname = nickname;
         this.phone = phone;
         this.image = image;
-        this.providerType = providerType;
+        this.loginType = loginType;
         this.dflag = false;
         this.role = role;
     }
@@ -120,14 +119,6 @@ public class User extends BaseTimeEntity {
         this.userLocationList = userLocationList;
 
         return this;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
   
 }
