@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +25,10 @@ public class CatLocationService {
     private final CatRepository catRepository;
 
     @Transactional
-    public Long save(Long catId, List<CatDTO.LocationList> dtoList) {
+    public Long save(Long catId, CatDTO.LocationList[] dtoList) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
-        List<CatLocation> list = dtoList.stream()
+        List<CatLocation> list = Arrays.stream(dtoList)
                 .map(v -> CatLocation.builder()
                         .cat(cat)
                         .latitude(v.getLatitude())
@@ -39,12 +40,12 @@ public class CatLocationService {
     }
 
     @Transactional
-    public Long update(Long catId, List<CatDTO.LocationList> dtoList) {
+    public Long update(Long catId, CatDTO.LocationList[] dtoList) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         catLocationRepository.deleteAll(cat.getCatLocationList());
 
-        List<CatLocation> list = dtoList.stream()
+        List<CatLocation> list = Arrays.stream(dtoList)
                 .map(v -> CatLocation.builder()
                         .cat(cat)
                         .latitude(v.getLatitude())
