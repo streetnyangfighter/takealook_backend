@@ -12,6 +12,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class ResponseDTO {
 
@@ -67,11 +68,12 @@ public class ResponseDTO {
         private Byte pattern;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+        private Map<String, String> carers;  // 같이 돌보는 사람 이름과 프로필 사진 url
 //        private List<User> carers;
 //        private List<CatImage> catImageList;
 //        지금은 아래 단일 DTO랑 중복되지만 위의 내용 추가되면 중복 X
 
-        public CatResponse(Cat entity) {
+        public CatResponse(Cat entity, Map<String, String> carers) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
@@ -80,6 +82,7 @@ public class ResponseDTO {
             this.pattern = entity.getPattern();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
+            this.carers = carers;
 //            this.carers = carers;
 //            this.catImageList = catImageList;
         }
@@ -118,6 +121,7 @@ public class ResponseDTO {
         private String message;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+        private String userName;
 
         public CatCareListResponse(CatCare entity) {
             this.id = entity.getId();
@@ -125,6 +129,7 @@ public class ResponseDTO {
             this.message = entity.getMessage();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
+            this.userName = entity.getSelection().getUser().getNickname();
         }
     }
 

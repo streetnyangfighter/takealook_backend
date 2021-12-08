@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -25,28 +27,22 @@ public class CatService {
     private final SelectionRepository selectionRepository;
 
     @Transactional
-    public Selection validationCheck(Long userId, Long catId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-
-        return selectionRepository.findSelectionByUserAndCat(user, cat).orElseThrow(() -> new IllegalArgumentException("Match with userId: " + userId + " and catId: " + catId + " is not valid"));
-    }
-
-    @Transactional
     public Long save(CatDTO.Create dto) {
         return catRepository.save(dto.toEntity()).getId();
     }
 
     @Transactional
     public Long update(Long userId, Long catId, CatDTO.Update dto) {
-        Cat cat = validationCheck(userId, catId).getCat();
+        Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
         return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getStatus(), dto.getPattern()).getId();
     }
 
     @Transactional
     public Long changeStatus(Long userId, Long catId, Byte status) {
-        Cat cat = validationCheck(userId, catId).getCat();
+        Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
         return cat.changeStatus(status).getId();
     }
@@ -54,9 +50,17 @@ public class CatService {
     // 고양이 상세 조회 보류(함께 돌보는 사람들, 이미지 함께?)
     @Transactional(readOnly = true)
     public ResponseDTO.CatResponse findOne(Long userId, Long catId) {
-        Selection selection = validationCheck(userId, catId);
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        return new ResponseDTO.CatResponse(selection.getCat());
+        List<Selection> selectionList = selectionRepository.findSelectionsByCat(mySelection.getCat());
+        Map<String, String> carers = new HashMap<>();
+        for (Selection selection : selectionList) {
+            User user = selection.getUser();
+            carers.put(user.getId().toString() + " / " + user.getNickname(), user.getImage());
+        }
+
+        return new ResponseDTO.CatResponse(mySelection.getCat(), carers);
     }
 
     @Transactional(readOnly = true)
