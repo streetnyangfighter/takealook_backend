@@ -115,6 +115,27 @@ public class CatMatchService {
                 .collect(Collectors.toList());
     }
 
+//    @Transactional
+//    public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(Long userId) {
+//        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+//        List<CatMatch> receiveList = new ArrayList<>();
+//
+//        try {
+//            List<Cat> userCatList = user.getCatList();
+//            for (Cat cat : userCatList) {
+//                receiveList.addAll(catMatchRepository.findCatMatchesByAccepter_Id(cat.getId()));
+//            }
+//        } catch (NullPointerException e) {
+//            return null;
+//        }
+//
+//        receiveList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+//
+//        return receiveList.stream()
+//                .map(ResponseDTO.CatMatchListResponse::new)
+//                .collect(Collectors.toList());
+//    }
+
     @Transactional
     public List<ResponseDTO.CatMatchListResponse> findAllReceiveByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
@@ -123,7 +144,7 @@ public class CatMatchService {
         try {
             List<Cat> userCatList = user.getCatList();
             for (Cat cat : userCatList) {
-                receiveList.addAll(catMatchRepository.findCatMatchesByAccepter_Id(cat.getId()));
+                receiveList.addAll(catMatchRepository.findCatMatchesByAccepter_IdAndStatus(cat.getId(), (byte)2));
             }
         } catch (NullPointerException e) {
             return null;

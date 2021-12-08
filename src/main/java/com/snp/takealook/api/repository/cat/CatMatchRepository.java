@@ -8,5 +8,5 @@ import java.util.List;
 public interface CatMatchRepository extends JpaRepository<CatMatch, Long> {
 
     List<CatMatch> findCatMatchesByProposer_Id(Long proposerId);
-    List<CatMatch> findCatMatchesByAccepter_Id(Long accepterId);
+    List<CatMatch> findCatMatchesByAccepter_IdAndStatus(Long accepterId, Byte status);
 }
