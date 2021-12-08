@@ -5,10 +5,9 @@ import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
+import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.domain.user.UserLocation;
-import com.snp.takealook.oauth.entity.ProviderType;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
