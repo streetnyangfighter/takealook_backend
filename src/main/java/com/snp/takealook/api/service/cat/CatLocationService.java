@@ -1,19 +1,19 @@
 package com.snp.takealook.api.service.cat;
 
-import com.snp.takealook.api.domain.BaseTimeEntity;
+import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatLocation;
-import com.snp.takealook.api.dto.ResponseDTO;
+import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.cat.CatDTO;
+import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatLocationRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
+import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,58 +22,44 @@ import java.util.stream.Collectors;
 public class CatLocationService {
 
     private final CatLocationRepository catLocationRepository;
+    private final UserRepository userRepository;
     private final CatRepository catRepository;
+    private final SelectionRepository selectionRepository;
 
     @Transactional
-    public Long save(Long catId, CatDTO.LocationList[] dtoList) {
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+    public Long saveAll(Long selectionId, CatDTO.LocationList[] dtoList) {
+        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with id: " + selectionId + " is not valid"));
 
         List<CatLocation> list = Arrays.stream(dtoList)
                 .map(v -> CatLocation.builder()
-                        .cat(cat)
+                        .selection(selection)
                         .latitude(v.getLatitude())
                         .longitude(v.getLongitude())
                         .build())
                 .collect(Collectors.toList());
 
-        return cat.updateLocations(list).getId();
+        catLocationRepository.saveAll(list);
+
+        return selectionId;
     }
 
+    // CatLocation update로 할 지, 누적 save 할 지 보류
     @Transactional
-    public Long update(Long catId, CatDTO.LocationList[] dtoList) {
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+    public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        catLocationRepository.deleteAll(cat.getCatLocationList());
+        catLocationRepository.deleteAll(selection.getCatLocationList());
 
         List<CatLocation> list = Arrays.stream(dtoList)
                 .map(v -> CatLocation.builder()
-                        .cat(cat)
+                        .selection(selection)
                         .latitude(v.getLatitude())
                         .longitude(v.getLongitude())
                         .build())
                 .collect(Collectors.toList());
 
-        return cat.updateLocations(list).getId();
+        return selection.updateCatLocationList(list).getId();
     }
 
-    @Transactional
-    public List<ResponseDTO.CatLocationListResponse> findAllByCatId(Long catId) {
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-        List<CatLocation> catLocationList = new ArrayList<>();
-
-        try { // 매칭이 되어있는 상태
-            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
-            for (Cat sameCat : sameGroupCatList) {
-                catLocationList.addAll(sameCat.getCatLocationList());
-            }
-        } catch (NullPointerException e) { // 매칭 없이 단독 고양이 상태
-            catLocationList.addAll(cat.getCatLocationList());
-        }
-
-        catLocationList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
-
-        return catLocationList.stream()
-                .map(ResponseDTO.CatLocationListResponse::new)
-                .collect(Collectors.toList());
-    }
+    // 고양이별 발견 지역 전체 조회
 }

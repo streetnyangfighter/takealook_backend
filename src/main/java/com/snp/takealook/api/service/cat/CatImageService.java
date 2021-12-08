@@ -1,16 +1,17 @@
 package com.snp.takealook.api.service.cat;
 
-import com.snp.takealook.api.domain.BaseTimeEntity;
+import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatImage;
-import com.snp.takealook.api.dto.ResponseDTO;
+import com.snp.takealook.api.domain.user.User;
+import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatImageRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
+import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -18,21 +19,18 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class CatImageService {
 
     private final CatImageRepository catImageRepository;
-    private final CatRepository catRepository;
+    private final SelectionRepository selectionRepository;
 
     @Transactional
-    public Long save(Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+    public Long save(Long selectionId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with id: " + selectionId + " is not valid"));
 
         if (files.size() != 0) {
             for (MultipartFile file : files) {
@@ -40,7 +38,7 @@ public class CatImageService {
                 String contentType = file.getContentType();
                 Long fileSize = file.getSize();
                 String originalFileExtension;
-                String savePath = System.getProperty("user.dir") + "/images/catImages/" + cat.getId();
+                String savePath = System.getProperty("user.dir") + "/images/catImages/" + selection.getCat().getId();
 
                 if (!new File(savePath).exists()) {
                     try {
@@ -73,27 +71,27 @@ public class CatImageService {
                 file.transferTo(new File(filePath));
 
                 CatImage catImage = CatImage.builder()
-                        .cat(cat)
+                        .selection(selection)
                         .originFileName(originalFileName)
                         .fileName(fileName)
-                        .filePath(filePath)
                         .contentType(originalFileExtension)
+                        .filePath(filePath)
                         .fileSize(fileSize)
                         .build();
 
-                System.out.println(catImage.getCat().getName());
                 catImageRepository.save(catImage);
-
             }
         }
-        return cat.getId();
+
+        return selectionId;
     }
 
+    // 자기가 등록한 사진만 업데이트 가능
     @Transactional
-    public Long update(Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-        List<CatImage> catImageList = cat.getCatImageList();
+    public Long update(Long userId, Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
+        List<CatImage> catImageList = selection.getCatImageList();
         for (CatImage catImage : catImageList) {
             File file = new File(catImage.getFilePath());
 
@@ -104,31 +102,12 @@ public class CatImageService {
             }
         }
 
-        catImageRepository.deleteAll(cat.getCatImageList());
-        cat.getCatImageList().clear();
+        catImageRepository.deleteAll(selection.getCatImageList());
+        selection.getCatImageList().clear();
 
-        return save(catId, files);
+        return save(selection.getId(), files);
     }
 
-    @Transactional
-    public List<ResponseDTO.CatImageListResponse> findAllByCatId(@PathVariable Long catId) {
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-        List<CatImage> catImageList = new ArrayList<>();
-
-        try {
-            List<Cat> sameGroupCatList = cat.getCatGroup().getCatList();
-            for (Cat sameCat : sameGroupCatList) {
-                catImageList.addAll(sameCat.getCatImageList());
-            }
-        } catch (NullPointerException e) {
-            catImageList.addAll(cat.getCatImageList());
-        }
-
-        catImageList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
-
-        return catImageList.stream()
-                .map(ResponseDTO.CatImageListResponse::new)
-                .collect(Collectors.toList());
-    }
+    // 고양이별 이미지 전체 조회 -> 프론트에 보내줘야 할 값 정확히 확인
 
 }

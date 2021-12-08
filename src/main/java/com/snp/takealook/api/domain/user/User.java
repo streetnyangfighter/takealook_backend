@@ -2,7 +2,7 @@ package com.snp.takealook.api.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.cat.Cat;
+import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.CommentLike;
 import com.snp.takealook.api.domain.community.Post;
@@ -52,11 +52,7 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Cat> catList;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<UserLocation> userLocationList;
+    private List<Selection> selectionList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -79,7 +75,7 @@ public class User extends BaseTimeEntity {
     private List<PostLike> postLikeListList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, String loginType, Boolean dflag, Role role) {
+    public User(String loginId, String nickname, String phone, String image, String loginType, Role role) {
         this.loginId = loginId;
         this.password = "NO_PASS";
         this.nickname = nickname;
@@ -113,12 +109,6 @@ public class User extends BaseTimeEntity {
 
     public String getRoleKey() {
         return this.role.getKey();
-    }
-
-    public User updateLocations(List<UserLocation> userLocationList) {
-        this.userLocationList = userLocationList;
-
-        return this;
     }
   
 }

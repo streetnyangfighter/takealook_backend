@@ -5,9 +5,7 @@ import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
-import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
-import com.snp.takealook.api.domain.user.UserLocation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -58,27 +56,6 @@ public class ResponseDTO {
         }
     }
 
-    @Getter
-    public static class UserLocationListResponse {
-        private Long id;
-        private User user;
-        private String sido;
-        private String gugun;
-        private String dong;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
-
-        public UserLocationListResponse(UserLocation entity) {
-            this.id = entity.getId();
-            this.user = entity.getUser();
-            this.sido = entity.getSido();
-            this.gugun = entity.getGugun();
-            this.dong = entity.getDong();
-            this.createdAt = entity.getCreatedAt();
-            this.modifiedAt = entity.getModifiedAt();
-        }
-    }
-
     /** CAT 관련 ResponseDTO */
     @Getter
     public static class CatResponse {
@@ -86,61 +63,49 @@ public class ResponseDTO {
         private String name;
         private Byte gender;
         private Byte neutered;
-        private CatStatus status;
-        private List<User> carers;
-        private List<String> infoList;
+        private Byte status;
+        private Byte pattern;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+//        private List<User> carers;
 //        private List<CatImage> catImageList;
+//        지금은 아래 단일 DTO랑 중복되지만 위의 내용 추가되면 중복 X
 
-        public CatResponse(Cat entity, CatStatus status, List<User> carers, List<String> infoList) {
+        public CatResponse(Cat entity) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
             this.neutered = entity.getNeutered();
-            this.status = status;
-            this.carers = carers;
-            this.infoList = infoList;
+            this.status = entity.getStatus();
+            this.pattern = entity.getPattern();
+            this.createdAt = entity.getCreatedAt();
+            this.modifiedAt = entity.getModifiedAt();
+//            this.carers = carers;
+//            this.catImageList = catImageList;
         }
     }
 
     @Getter
     public static class CatListResponse {
         private Long id;
-        private User user;
-        private CatGroup catGroup;
         private String name;
+        private Byte gender;
         private Byte neutered;
-        private String info;
-        private Boolean dflag;
+        private Byte status;
+        private Byte pattern;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+//        회원의 고양이 리스트 뽑아줄 때,
+//        고양이 대표 사진 1장
+//        돌봐주고 있는 사람 수? 같은 정보 필요하다면 추가
 
         public CatListResponse(Cat entity) {
             this.id = entity.getId();
-            this.user = entity.getUser();
-            this.catGroup = entity.getCatGroup();
             this.name = entity.getName();
+            this.gender = entity.getGender();
             this.neutered = entity.getNeutered();
-            this.info = entity.getInfo();
-            this.dflag = entity.getDflag();
-            this.createdAt = entity.getCreatedAt();
-            this.modifiedAt = entity.getModifiedAt();
-        }
-    }
-
-    @Getter
-    public static class CatMatchListResponse {
-        private Long id;
-        private Cat proposer;
-        private Cat accepter;
-        private Byte status;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
-
-        public CatMatchListResponse(CatMatch entity) {
-            this.id = entity.getId();
-            this.proposer = entity.getProposer();
-            this.accepter = entity.getAccepter();
             this.status = entity.getStatus();
+            this.pattern = entity.getPattern();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
         }
@@ -181,7 +146,6 @@ public class ResponseDTO {
     @Getter
     public static class CatImageListResponse {
         private Long id;
-        private Cat cat;
         private String originFileName;
         private String fileName;
         private String contentType;
@@ -192,7 +156,6 @@ public class ResponseDTO {
 
         public CatImageListResponse(CatImage entity) {
             this.id = entity.getId();
-            this.cat = entity.getCat();
             this.originFileName = entity.getOriginFileName();
             this.fileName = entity.getFileName();
             this.contentType = entity.getContentType();
@@ -203,23 +166,8 @@ public class ResponseDTO {
         }
     }
 
-    @Getter
-    public static class CatStatusResponse {
-        private Long id;
-        private User user;
-        private Byte status;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
 
-        public CatStatusResponse(CatStatus entity) {
-            this.id = entity.getId();
-            this.user = entity.getCat().getUser();
-            this.status = entity.getStatus();
-            this.createdAt = entity.getCreatedAt();
-            this.modifiedAt = entity.getModifiedAt();
-        }
-    }
-
+    /** COMMUNITY 관련 ResponseDTO */
     @Getter
     public static class PostResponse {
         private Board board;
@@ -268,111 +216,6 @@ public class ResponseDTO {
             this.writer = entity.getWriter();
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @Data
-    @AllArgsConstructor
-    public static class BaseResponse {
-        Boolean success;
-        String msg;
-    }
-
-    public static class Create extends BaseResponse {
-        Long id;
-
-        public Create(Long id, Boolean success, String msg) {
-            super(success, msg);
-            this.id = id;
-        }
-    }
-
-    public static class Update extends BaseResponse {
-        public Update(Boolean success, String msg) {
-            super(success, msg);
-        }
-    }
-
-    public static class Delete extends BaseResponse {
-        public Delete(Boolean success, String msg) {
-            super(success, msg);
         }
     }
 

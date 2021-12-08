@@ -1,7 +1,7 @@
-package com.snp.takealook.api.config;
+package com.snp.takealook.config;
 
-import com.snp.takealook.api.config.dto.OAuthAttributes;
-import com.snp.takealook.api.config.dto.SessionUser;
+import com.snp.takealook.config.dto.OAuthAttributes;
+import com.snp.takealook.config.dto.SessionUser;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
