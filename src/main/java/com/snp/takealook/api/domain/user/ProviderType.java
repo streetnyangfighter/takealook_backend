@@ -1,4 +1,4 @@
-package com.snp.takealook.oauth.entity;
+package com.snp.takealook.api.domain.user;
 
 import lombok.Getter;
 
