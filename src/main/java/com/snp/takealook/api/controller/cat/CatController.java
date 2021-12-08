@@ -33,7 +33,7 @@ public class CatController {
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,
                      @RequestPart(value = "catStatus") CatStatusDTO.Create catStatus,
                      @RequestPart(value = "catLoc") List<CatDTO.LocationList> catLocList,
-                     @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+                     @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(userId, catInfo);
         catStatusService.save(catId, catStatus);
         notificationService.saveGroupNotification(userId, catId, (byte)2);

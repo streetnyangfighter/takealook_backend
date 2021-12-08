@@ -46,7 +46,7 @@ public class User extends BaseTimeEntity {
     private ProviderType providerType;
 
     @NotNull
-    private Boolean dFlag;
+    private Boolean dflag;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -88,7 +88,7 @@ public class User extends BaseTimeEntity {
         this.phone = phone;
         this.image = image;
         this.providerType = providerType;
-        this.dFlag = false;
+        this.dflag = false;
         this.roleType = roleType;
     }
 
