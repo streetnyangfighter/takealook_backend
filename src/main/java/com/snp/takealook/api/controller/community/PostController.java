@@ -1,6 +1,5 @@
 package com.snp.takealook.api.controller.community;
 
-import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.community.PostImage;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
@@ -9,6 +8,7 @@ import com.snp.takealook.api.service.community.PostImageService;
 import com.snp.takealook.api.service.community.PostLikeService;
 import com.snp.takealook.api.service.community.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,10 +26,14 @@ public class PostController {
     private final PostImageService postImageService;
 
     // Post -------------------------------------------------------------------------------
-    // 게시글 작성
-    @PostMapping("/post")
-    public Long save(@RequestBody PostDTO.Create dto) {
-        return postService.save(dto);
+    // 게시글 작성 + 썸네일 추가
+    @PostMapping(value = "/post", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Long save(@RequestPart(value = "postText") PostDTO.Create dto,
+                     @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        Long postId = postService.save(dto);
+        postImageService.save(postId, file);
+
+        return postId;
     }
 
     // 게시글 리스트 조회

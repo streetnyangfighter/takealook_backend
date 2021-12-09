@@ -3,16 +3,19 @@ package com.snp.takealook.api.dto;
 import com.snp.takealook.api.domain.cat.*;
 import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;
+import com.snp.takealook.api.domain.community.CommentLike;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import org.hibernate.hql.internal.ast.tree.IntoClause;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ResponseDTO {
 
@@ -176,51 +179,65 @@ public class ResponseDTO {
     @Getter
     public static class PostResponse {
         private Board board;
+        private String writerImgUrl;
         private String writer;
         private String title;
         private String content;
         private LocalDateTime modifiedAt;
-        // 댓글, 추천
+        private int postLike;
+        private List<CommentResponse> commentList;
+        private int commentListCount;
 
         public PostResponse(Post entity) {
             this.board = entity.getBoard();
+            this.writerImgUrl = entity.getWriter().getImage();
             this.writer = entity.getWriter().getNickname();
             this.title = entity.getTitle();
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
+            this.postLike = entity.getPostLikeList().size();
+            this.commentList = entity.getCommentList().stream().map(CommentResponse::new).collect(Collectors.toList());
+            this.commentListCount = commentList.size();
         }
     }
 
     @Getter
     public static class PostListResponse {
         private Board board;
-        private User writer;
+        private String thumbnail;
+        private String writer;
         private String title;
         private String content;
+        private int postLike;
         private LocalDateTime modifiedAt;
-        // 댓글, 추천
+        private int commentListCount;
 
         public PostListResponse(Post entity) {
             this.board = entity.getBoard();
-            this.writer = entity.getWriter();
+            this.thumbnail = entity.getPostImageList().get(0).getFilePath();
+            this.writer = entity.getWriter().getNickname();
             this.title = entity.getTitle();
             this.content = entity.getContent();
+            this.postLike = entity.getPostLikeList().size();
             this.modifiedAt = entity.getModifiedAt();
+            this.commentListCount = entity.getCommentList().size();
         }
     }
 
     @Getter
     public static class CommentResponse {
-        private Post post;
-        private User writer;
+        private String writer;
+        private String writerImg;
         private String content;
         private LocalDateTime modifiedAt;
+        private int commentLike;
 
         public CommentResponse(Comment entity) {
-            this.post = entity.getPost();
-            this.writer = entity.getWriter();
+            this.writer = entity.getWriter().getNickname();
+            this.writerImg = entity.getWriter().getImage();
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
+            this.commentLike = entity.getCommentLikeList().size();
         }
     }
 
