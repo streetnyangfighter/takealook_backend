@@ -28,18 +28,20 @@ public class PostImageService {
 
         List<PostImage> oldPostImages = post.getPostImageList();
 
-        for (PostImage oldPostImage :oldPostImages) {
-            File oldFile = new File(oldPostImage.getFilePath());
+        if(oldPostImages != null) {
+            for (PostImage oldPostImage :oldPostImages) {
+                File oldFile = new File(oldPostImage.getFilePath());
 
-            if(oldFile.exists()) {
-                oldFile.delete();
-            } else {
-                System.out.println("not exists");
+                if(oldFile.exists()) {
+                    oldFile.delete();
+                } else {
+                    System.out.println("not exists");
+                }
             }
-        }
 
-        postImageRepository.deleteAll(oldPostImages);
-        post.getPostImageList().removeAll(oldPostImages);
+            postImageRepository.deleteAll(oldPostImages);
+            post.getPostImageList().removeAll(oldPostImages);
+        }
 
         if (!file.isEmpty()) {
             String orignalFileName = file.getOriginalFilename();
@@ -66,7 +68,6 @@ public class PostImageService {
                     .fileSize(fileSize)
                     .build();
 
-            System.out.println(postImage.getPost().getTitle());
             postImageRepository.save(postImage);
 
         }
