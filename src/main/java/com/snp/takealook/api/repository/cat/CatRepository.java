@@ -8,9 +8,4 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CatRepository extends JpaRepository<Cat, Long> {
-
-    List<Cat> findCatsByUser(User user);
-    List<Cat> findCatsByUserAndDflagTrue(User user);
-    List<Cat> findCatsByModifiedAtBeforeAndDflagTrue(LocalDateTime dateTime);
-
 }

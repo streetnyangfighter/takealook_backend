@@ -12,23 +12,25 @@ public class CatDTO {
         private String name;
         private Byte gender;
         private Byte neutered;
-        private String info;
+        private Byte status;
+        private Byte pattern;
 
         @Builder
-        public Create(String name, Byte gender, Byte neutered, String info) {
+        public Create(String name, Byte gender, Byte neutered, Byte status, Byte pattern) {
             this.name = name;
             this.gender = gender;
             this.neutered = neutered;
-            this.info = info;
+            this.status = status;
+            this.pattern = pattern;
         }
 
-        public Cat toEntity(User user) {
+        public Cat toEntity() {
             return Cat.builder()
-                    .user(user)
                     .name(name)
                     .gender(gender)
                     .neutered(neutered)
-                    .info(info)
+                    .status(status)
+                    .pattern(pattern)
                     .build();
         }
     }
@@ -38,7 +40,8 @@ public class CatDTO {
         private String name;
         private Byte gender;
         private Byte neutered;
-        private String info;
+        private Byte status;
+        private Byte pattern;
     }
 
     @Getter

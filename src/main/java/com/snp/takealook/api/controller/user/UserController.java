@@ -39,24 +39,24 @@ public class UserController {
 //        return userService.updateInfo(id, dto);
 //    }
 
-    // 회원 삭제
-    @PatchMapping("/user/{id}")
-    public Long delete(@PathVariable Long id) {
-        userService.delete(id);
-        return id;
-    }
+//    // 회원 삭제
+//    @PatchMapping("/user/{id}")
+//    public Long delete(@PathVariable Long id) {
+//        userService.delete(id);
+//        return id;
+//    }
+//
+//    @PutMapping("/user/locations/{id}")
+//    public Long updateLocations(@PathVariable Long id, @RequestBody List<UserDTO.LocationList> dtoList) {
+//        userService.updateLocations(id, dtoList);
+//        return id;
+//    }
 
-    @PutMapping("/user/locations/{id}")
-    public Long updateLocations(@PathVariable Long id, @RequestBody List<UserDTO.LocationList> dtoList) {
-        userService.updateLocations(id, dtoList);
-        return id;
-    }
-
-    // 회원 정보 수정과 위치 수정 통합 (테스트)
-    @PatchMapping("/user/test/{id}")
-    public Long updateTest(@PathVariable Long id, @RequestBody UserDTO.Update dto, @RequestBody List<UserDTO.LocationList> dtoList) {
-        userService.updateInfo(id, dto, dtoList);
-        return id;
-    }
+//    // 회원 정보 수정과 위치 수정 통합 (테스트)
+//    @PatchMapping("/user/test/{id}")
+//    public Long updateTest(@PathVariable Long id, @RequestBody UserDTO.Update dto, @RequestBody List<UserDTO.LocationList> dtoList) {
+//        userService.updateInfo(id, dto, dtoList);
+//        return id;
+//    }
 
 }

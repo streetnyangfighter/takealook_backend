@@ -1,6 +1,7 @@
 package com.snp.takealook.api.domain.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
+import com.snp.takealook.api.domain.Selection;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class CatLocation extends BaseTimeEntity {
 
     @NotNull
     @ManyToOne
-    private Cat cat;
+    private Selection selection;
 
     @NotNull
     private Double latitude;
@@ -29,8 +30,8 @@ public class CatLocation extends BaseTimeEntity {
     private Double longitude;
 
     @Builder
-    public CatLocation(Cat cat, Double latitude, Double longitude) {
-        this.cat = cat;
+    public CatLocation(Selection selection, Double latitude, Double longitude) {
+        this.selection = selection;
         this.latitude = latitude;
         this.longitude = longitude;
     }

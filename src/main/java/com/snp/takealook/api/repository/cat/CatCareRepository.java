@@ -1,5 +1,6 @@
 package com.snp.takealook.api.repository.cat;
 
+import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.CatCare;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +11,5 @@ public interface CatCareRepository extends JpaRepository<CatCare, Long> {
 
     List<CatCare> findCatCaresByModifiedAtBefore(LocalDateTime dateTime);
 
-    List<CatCare> findCatCaresByCat_IdAndCreatedAtBetween(Long cat_id, LocalDateTime dayStart, LocalDateTime dayEnd);
+    List<CatCare> findCatCaresBySelectionAndCreatedAtBetween(Selection selection, LocalDateTime dayStart, LocalDateTime dayEnd);
 }

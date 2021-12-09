@@ -1,6 +1,7 @@
 package com.snp.takealook.api.domain.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
+import com.snp.takealook.api.domain.Selection;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ public class CatCare extends BaseTimeEntity {
 
     @NotNull
     @ManyToOne
-    private Cat cat;
+    private Selection selection;
 
     @NotNull
     private Byte type;
@@ -27,8 +28,8 @@ public class CatCare extends BaseTimeEntity {
     private String message;
 
     @Builder
-    public CatCare(Cat cat, Byte type, String message) {
-        this.cat = cat;
+    public CatCare(Selection selection, Byte type, String message) {
+        this.selection = selection;
         this.type = type;
         this.message = message;
     }

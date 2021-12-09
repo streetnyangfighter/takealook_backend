@@ -1,4 +1,4 @@
-package com.snp.takealook.api.config.dto;
+package com.snp.takealook.config.dto;
 
 import com.snp.takealook.api.domain.user.Role;
 import com.snp.takealook.api.domain.user.User;
@@ -75,7 +75,6 @@ public class OAuthAttributes {
                 .loginId(loginId)
                 .image(image)
                 .loginType(registrationId)
-                .dflag(false)
                 .role(Role.USER)
                 .build();
     }

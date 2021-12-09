@@ -1,6 +1,7 @@
 package com.snp.takealook.api.domain.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
+import com.snp.takealook.api.domain.Selection;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class CatImage extends BaseTimeEntity {
 
     @NotNull
     @ManyToOne
-    private Cat cat;
+    private Selection selection;
 
     @NotNull
     private String originFileName;
@@ -38,8 +39,8 @@ public class CatImage extends BaseTimeEntity {
     private String filePath;
 
     @Builder
-    public CatImage(Cat cat, String originFileName, String fileName, String contentType, String filePath, Long fileSize) {
-        this.cat = cat;
+    public CatImage(Selection selection, String originFileName, String fileName, String contentType, String filePath, Long fileSize) {
+        this.selection = selection;
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.contentType = contentType;

@@ -1,4 +1,4 @@
-package com.snp.takealook.api.config;
+package com.snp.takealook.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
