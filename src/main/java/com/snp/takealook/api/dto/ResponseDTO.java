@@ -59,6 +59,19 @@ public class ResponseDTO {
 
     /** CAT 관련 ResponseDTO */
     @Getter
+    public static class Carer {
+        private Long id;
+        private String userName;
+        private String userImage;
+
+        public Carer(User entity) {
+            this.id = entity.getId();
+            this.userName = entity.getNickname();
+            this.userImage = entity.getImage();
+        }
+    }
+
+    @Getter
     public static class CatResponse {
         private Long id;
         private String name;
@@ -67,13 +80,9 @@ public class ResponseDTO {
         private Byte status;
         private Byte pattern;
         private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
-        private Map<String, String> carers;  // 같이 돌보는 사람 이름과 프로필 사진 url
-//        private List<User> carers;
-//        private List<CatImage> catImageList;
-//        지금은 아래 단일 DTO랑 중복되지만 위의 내용 추가되면 중복 X
+        private List<Carer> carers;
 
-        public CatResponse(Cat entity, Map<String, String> carers) {
+        public CatResponse(Cat entity, List<Carer> carers) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
@@ -81,10 +90,7 @@ public class ResponseDTO {
             this.status = entity.getStatus();
             this.pattern = entity.getPattern();
             this.createdAt = entity.getCreatedAt();
-            this.modifiedAt = entity.getModifiedAt();
             this.carers = carers;
-//            this.carers = carers;
-//            this.catImageList = catImageList;
         }
     }
 
@@ -92,25 +98,22 @@ public class ResponseDTO {
     public static class CatListResponse {
         private Long id;
         private String name;
-        private Byte gender;
-        private Byte neutered;
         private Byte status;
-        private Byte pattern;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
-//        회원의 고양이 리스트 뽑아줄 때,
-//        고양이 대표 사진 1장
-//        돌봐주고 있는 사람 수? 같은 정보 필요하다면 추가
+        private List<CatCareListResponse> recentCares;
+        private CatLocationResponse recentLocation;
 
-        public CatListResponse(Cat entity) {
+        public CatListResponse(Cat entity, List<CatCareListResponse> recentCares) {
             this.id = entity.getId();
             this.name = entity.getName();
-            this.gender = entity.getGender();
-            this.neutered = entity.getNeutered();
             this.status = entity.getStatus();
-            this.pattern = entity.getPattern();
-            this.createdAt = entity.getCreatedAt();
-            this.modifiedAt = entity.getModifiedAt();
+            this.recentCares = recentCares;
+        }
+
+        public CatListResponse(Cat entity, CatLocationResponse recentLocation) {
+            this.id = entity.getId();
+            this.name = entity.getName();
+            this.status = entity.getStatus();
+            this.recentLocation = recentLocation;
         }
     }
 
@@ -121,7 +124,7 @@ public class ResponseDTO {
         private String message;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private String userName;
+        private Carer carer;
 
         public CatCareListResponse(CatCare entity) {
             this.id = entity.getId();
@@ -129,21 +132,21 @@ public class ResponseDTO {
             this.message = entity.getMessage();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.userName = entity.getSelection().getUser().getNickname();
+            this.carer = new Carer(entity.getSelection().getUser());
         }
     }
 
     @Getter
-    public static class CatLocationListResponse {
+    public static class CatLocationResponse {
         private Long id;
         private Double latitude;
-        private Double longtitude;
+        private Double longitude;
         private LocalDateTime createdAt;
 
-        public CatLocationListResponse(CatLocation entity) {
+        public CatLocationResponse(CatLocation entity) {
             this.id = entity.getId();
             this.latitude = entity.getLatitude();
-            this.longtitude = entity.getLongitude();
+            this.longitude = entity.getLongitude();
             this.createdAt = entity.getCreatedAt();
         }
     }

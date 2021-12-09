@@ -34,6 +34,9 @@ public class Selection {
     @ManyToOne
     private Cat cat;
 
+    @NotNull
+    private Boolean dflag;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -54,6 +57,7 @@ public class Selection {
     public Selection(User user, Cat cat) {
         this.user = user;
         this.cat = cat;
+        this.dflag = false;
     }
 
     public Selection updateCatLocationList(List<CatLocation> catLocationList) {

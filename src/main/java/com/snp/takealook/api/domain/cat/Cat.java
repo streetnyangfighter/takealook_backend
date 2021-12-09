@@ -34,7 +34,7 @@ public class Cat extends BaseTimeEntity {
 
     @NotNull
     private Byte status;
-    // 0: 건강함, 1: 치료 필요, 2: 입양, 3: 사망
+    // 0: 건강함, 1: 치료 필요, 2: 입양, 3: 고양이 별..
 
     @NotNull
     private Byte pattern;

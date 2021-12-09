@@ -33,14 +33,14 @@ public class CatCareService {
 
     @Transactional
     public Long save(Long userId, Long catId, CatCareDTO.Create dto) {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         return catCareRepository.save(dto.toEntity(selection)).getId();
     }
 
     @Transactional
     public Long update(Long userId, Long catId, Long catcareId, CatCareDTO.Update dto) {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
         if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
@@ -51,7 +51,7 @@ public class CatCareService {
 
     @Transactional
     public void delete(Long userId, Long catId, Long catcareId) {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
         if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {

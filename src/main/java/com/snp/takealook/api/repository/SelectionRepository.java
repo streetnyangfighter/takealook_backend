@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface SelectionRepository extends JpaRepository<Selection, Long> {
 
     Optional<Selection> findSelectionByUserAndCat(User user, Cat cat);
-    Optional<Selection> findSelectionByUser_IdAndCat_Id(Long userId, Long catId);
+    Optional<Selection> findSelectionByUser_IdAndCat_IdAndDflagFalse(Long userId, Long catId);
     List<Selection> findSelectionsByUser(User user);
     List<Selection> findSelectionsByCat(Cat cat);
 }

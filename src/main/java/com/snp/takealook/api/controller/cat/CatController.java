@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CatController {
         return catId;
     }
 
-    @PostMapping("/user/{userId}/cat/{catId}/match")
+    @PostMapping("/user/{userId}/cat/{catId}/selection")
     public Long selectCat(@PathVariable Long userId, @PathVariable Long catId) {
         return selectionService.save(userId, catId);
     }
@@ -50,7 +51,6 @@ public class CatController {
                        @RequestPart(value = "catLoc", required = false) CatDTO.LocationList[] catLocList,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         catService.update(userId, catId, catInfo);
-        //save로 update로? save하면 계속 누적, update하면 이전 정보 휘발
         catLocationService.update(userId, catId, catLocList);
         catImageService.update(userId, catId, files);
 
@@ -64,18 +64,29 @@ public class CatController {
 
     // 간택 취소 보류
 
-    // 고양이 상세 조회 보류(함께 돌보는 사람들, 이미지 함께?)
-    @GetMapping("user/{userId}/cat/{catId}")
+    @GetMapping("/user/{userId}/cat/{catId}")
     public ResponseDTO.CatResponse findOne(@PathVariable Long userId, @PathVariable Long catId) {
         return catService.findOne(userId, catId);
     }
 
-    @GetMapping("user/{userId}/cats")
+    @GetMapping("/user/{userId}/cats")
     public List<ResponseDTO.CatListResponse> findAllByUserId(@PathVariable Long userId) {
         return catService.findAllByUserId(userId);
     }
 
-    // 고양이별 발견 지역 전체 조회
+    @GetMapping("/user/{userId}/cats/recent-location")
+    public List<ResponseDTO.CatListResponse> findMyCatsRecentLocation(@PathVariable Long userId) {
+        return catService.findMyCatsRecentLocation(userId);
+    }
+
+    @GetMapping("/user/{userId}/cat/{catId}/locations")
+    public List<ResponseDTO.CatLocationResponse> findLocationsByCatId(@PathVariable Long userId, @PathVariable Long catId) {
+        return catService.findLocationsByCatId(userId, catId);
+    }
 
     // 고양이별 이미지 전체 조회 -> 프론트에 보내줘야 할 값 정확히 확인
+    @GetMapping("/user/{userId}/cat/{catId}/images")
+    public List<File> findImagesByCatId(@PathVariable Long userId, @PathVariable Long catId) {
+        return catService.findImagesByCatId(userId, catId);
+    }
 }
