@@ -1,9 +1,7 @@
 package com.snp.takealook.api.service.cat;
 
 import com.snp.takealook.api.domain.Selection;
-import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatLocation;
-import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.cat.CatDTO;
 import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatLocationRepository;
@@ -22,8 +20,6 @@ import java.util.stream.Collectors;
 public class CatLocationService {
 
     private final CatLocationRepository catLocationRepository;
-    private final UserRepository userRepository;
-    private final CatRepository catRepository;
     private final SelectionRepository selectionRepository;
 
     @Transactional
@@ -46,7 +42,7 @@ public class CatLocationService {
     // CatLocation update로 할 지, 누적 save 할 지 보류
     @Transactional
     public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         catLocationRepository.deleteAll(selection.getCatLocationList());
 

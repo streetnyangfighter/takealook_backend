@@ -3,11 +3,8 @@ package com.snp.takealook.api.service.cat;
 import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatImage;
-import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatImageRepository;
-import com.snp.takealook.api.repository.cat.CatRepository;
-import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,7 +86,7 @@ public class CatImageService {
     // 자기가 등록한 사진만 업데이트 가능
     @Transactional
     public Long update(Long userId, Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<CatImage> catImageList = selection.getCatImageList();
         for (CatImage catImage : catImageList) {
