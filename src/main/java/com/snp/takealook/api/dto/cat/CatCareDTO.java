@@ -1,6 +1,6 @@
 package com.snp.takealook.api.dto.cat;
 
-import com.snp.takealook.api.domain.cat.Cat;
+import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.CatCare;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +18,9 @@ public class CatCareDTO {
             this.message = message;
         }
 
-        public CatCare toEntity(Cat cat) {
+        public CatCare toEntity(Selection selection) {
             return CatCare.builder()
-                    .cat(cat)
+                    .selection(selection)
                     .type(type)
                     .message(message)
                     .build();

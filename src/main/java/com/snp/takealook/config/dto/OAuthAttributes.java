@@ -75,7 +75,6 @@ public class OAuthAttributes {
                 .loginId(loginId)
                 .image(image)
                 .loginType(registrationId)
-                .dflag(false)
                 .role(Role.USER)
                 .build();
     }
