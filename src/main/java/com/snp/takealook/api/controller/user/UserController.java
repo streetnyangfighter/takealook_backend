@@ -65,4 +65,9 @@ public class UserController {
 //        return id;
 //    }
 
+    @GetMapping("/user/test/hardDelete")
+    public void testHardDelete() {
+        userService.testHardDelete();
+    }
+
 }

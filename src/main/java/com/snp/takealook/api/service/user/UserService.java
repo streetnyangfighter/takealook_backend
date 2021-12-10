@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -99,6 +100,14 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
         return user.restore().getId();
+    }
+
+    @Transactional
+    public void testHardDelete() {
+//        LocalDateTime limitDate = LocalDateTime.now().minusMonths(3);
+        LocalDateTime limitDate = LocalDateTime.now().minusMinutes(3);
+        System.out.println(limitDate);
+        System.out.println(userRepository.hardDelete(limitDate));
     }
 //
 //    @Transactional
