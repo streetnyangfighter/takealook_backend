@@ -34,11 +34,11 @@ public class SelectionController {
 
     //간택 삭제(내가 작성한 정보 남김)
     @PatchMapping("/user/{userId}/cat/{catId}/selection/soft-delete")
-    public void softDelete(@PathVariable Long userId, @PathVariable Long catId) {
-        selectionService.softDelete(userId, catId);
+    public void softDelete(@PathVariable Long userId, @PathVariable Long catId, boolean deleteCat) {
+        selectionService.softDelete(userId, catId, deleteCat);
     }
 
-    //간택 삭제(내가 작성한 정보 남기지 않음)
+    //간택 삭제(내가 작성한 정보 남기지 않음) -> 사용 X
     @DeleteMapping("/user/{userId}/cat/{catId}/selection/hard-delete")
     public void hardDelete(@PathVariable Long userId, @PathVariable Long catId) {
         selectionService.hardDelete(userId, catId);
