@@ -1,17 +1,19 @@
 package com.snp.takealook.api.service.cat;
 
+import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.CatLocation;
+import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
 import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatLocationRepository;
-import com.snp.takealook.api.repository.cat.CatRepository;
-import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,6 @@ public class CatLocationService {
         return selectionId;
     }
 
-    // CatLocation update로 할 지, 누적 save 할 지 보류
     @Transactional
     public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
         Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
@@ -57,5 +58,21 @@ public class CatLocationService {
         return selection.updateCatLocationList(list).getId();
     }
 
-    // 고양이별 발견 지역 전체 조회
+    @Transactional(readOnly = true)
+    public List<ResponseDTO.CatLocationResponse> findLocationsByCatId(Long userId, Long catId) {
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+
+        List<Selection> selectionList = mySelection.getCat().getSelectionList();
+        List<CatLocation> catLocationList = new ArrayList<>();
+        for (Selection selection : selectionList) {
+            catLocationList.addAll(selection.getCatLocationList());
+        }
+
+        catLocationList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+
+        return catLocationList.stream()
+                .map(ResponseDTO.CatLocationResponse::new)
+                .collect(Collectors.toList());
+    }
 }

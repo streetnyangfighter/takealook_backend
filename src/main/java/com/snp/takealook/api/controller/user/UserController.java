@@ -39,13 +39,19 @@ public class UserController {
 //        return userService.updateInfo(id, dto);
 //    }
 
-//    // 회원 삭제
-//    @PatchMapping("/user/{id}")
-//    public Long delete(@PathVariable Long id) {
-//        userService.delete(id);
-//        return id;
-//    }
-//
+    // 회원 삭제
+    @PatchMapping("/user/{userId}/delete")
+    public Long delete(@PathVariable Long userId) {
+        return userService.delete(userId);
+    }
+
+    // 회원 복구
+    @PatchMapping("/user/{userId}/restore")
+    public Long restore(@PathVariable Long userId) {
+        return userService.restore(userId);
+    }
+
+
 //    @PutMapping("/user/locations/{id}")
 //    public Long updateLocations(@PathVariable Long id, @RequestBody List<UserDTO.LocationList> dtoList) {
 //        userService.updateLocations(id, dtoList);
