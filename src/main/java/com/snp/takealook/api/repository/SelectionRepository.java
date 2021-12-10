@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface SelectionRepository extends JpaRepository<Selection, Long> {
 
     Optional<Selection> findSelectionByUser_IdAndCat_Id(Long userId, Long catId);
+
 }

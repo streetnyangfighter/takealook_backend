@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -90,6 +91,13 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
         return user.delete().getId();
+    }
+
+    @Transactional
+    public void deleteHard(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+        userRepository.delete(user);
     }
 
     // 회원 복구

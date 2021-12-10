@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,14 +41,17 @@ public class Selection {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatCare> catCareList;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatImage> catImageList;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatLocation> catLocationList;
@@ -63,13 +68,12 @@ public class Selection {
         return this;
     }
 
-    public Selection softDelete() {
+    public Selection setUserNull() {
         if (Objects.equals(this.getUser(), null)) {
             throw new IllegalStateException("이미 삭제된 간택 내역입니다.");
         }
 
         this.user = null;
-
         return this;
     }
 

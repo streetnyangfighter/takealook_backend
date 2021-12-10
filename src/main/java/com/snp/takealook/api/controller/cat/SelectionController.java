@@ -1,6 +1,7 @@
 package com.snp.takealook.api.controller.cat;
 
 import com.snp.takealook.api.dto.cat.CatDTO;
+import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.service.SelectionService;
 import com.snp.takealook.api.service.cat.CatService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ public class SelectionController {
 
     private final SelectionService selectionService;
     private final CatService catService;
+
+    //test용
+    private final SelectionRepository selectionRepository;
 
     @PostMapping("/user/{userId}/cat/{catId}/selection")
     public Long save(@PathVariable Long userId, @PathVariable Long catId) {
@@ -43,4 +47,5 @@ public class SelectionController {
     public void hardDelete(@PathVariable Long userId, @PathVariable Long catId) {
         selectionService.hardDelete(userId, catId);
     }
+
 }
