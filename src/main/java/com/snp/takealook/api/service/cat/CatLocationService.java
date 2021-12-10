@@ -43,7 +43,7 @@ public class CatLocationService {
 
     @Transactional
     public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         catLocationRepository.deleteAll(selection.getCatLocationList());
 
@@ -60,7 +60,7 @@ public class CatLocationService {
 
     @Transactional(readOnly = true)
     public List<ResponseDTO.CatLocationResponse> findLocationsByCatId(Long userId, Long catId) {
-        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId)
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<Selection> selectionList = mySelection.getCat().getSelectionList();
