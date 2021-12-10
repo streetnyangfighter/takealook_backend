@@ -1,5 +1,6 @@
 package com.snp.takealook.api.dto;
 
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import com.snp.takealook.api.domain.cat.*;
 import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;
@@ -60,20 +61,22 @@ public class ResponseDTO {
         }
     }
 
-    /** CAT 관련 ResponseDTO */
     @Getter
-    public static class Carer {
+    public static class UserInfo {
         private Long id;
         private String userName;
         private String userImage;
+        private Boolean dflag;
 
-        public Carer(User entity) {
+        public UserInfo(User entity) {
             this.id = entity.getId();
             this.userName = entity.getNickname();
             this.userImage = entity.getImage();
+            this.dflag = entity.getDflag();
         }
     }
 
+    /** CAT 관련 ResponseDTO */
     @Getter
     public static class CatResponse {
         private Long id;
@@ -83,9 +86,9 @@ public class ResponseDTO {
         private Byte status;
         private Byte pattern;
         private LocalDateTime createdAt;
-        private List<Carer> carers;
+        private List<UserInfo> carers;
 
-        public CatResponse(Cat entity, List<Carer> carers) {
+        public CatResponse(Cat entity, List<UserInfo> carers) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
@@ -127,7 +130,7 @@ public class ResponseDTO {
         private String message;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private Carer carer;
+        private UserInfo carer;
 
         public CatCareListResponse(CatCare entity) {
             this.id = entity.getId();
@@ -135,7 +138,7 @@ public class ResponseDTO {
             this.message = entity.getMessage();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.carer = new Carer(entity.getSelection().getUser());
+            this.carer = new UserInfo(entity.getSelection().getUser());
         }
     }
 

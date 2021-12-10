@@ -9,7 +9,6 @@ import com.snp.takealook.api.dto.cat.CatCareDTO;
 import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatCareRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
-import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 public class CatCareService {
 
     private final CatCareRepository catCareRepository;
-    private final UserRepository userRepository;
     private final CatRepository catRepository;
     private final SelectionRepository selectionRepository;
 
@@ -42,9 +39,9 @@ public class CatCareService {
         Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
-        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
-            throw new IllegalStateException("only can update my catcare");
-        }
+//        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
+//            throw new IllegalStateException("only can update my catcare");
+//        }
         return catCare.update(dto.getType(), dto.getMessage()).getId();
     }
 
@@ -53,16 +50,16 @@ public class CatCareService {
         Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
-        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
-            throw new IllegalStateException("only can delete my catcare");
-        }
+//        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
+//            throw new IllegalStateException("only can delete my catcare");
+//        }
         catCareRepository.delete(catCare);
     }
 
     @Transactional(readOnly = true)
     public List<ResponseDTO.CatCareListResponse> findByCatIdAndDate(Long catId, LocalDateTime dayStart, LocalDateTime dayEnd) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-        List<Selection> selectionList = selectionRepository.findSelectionsByCat(cat);
+        List<Selection> selectionList = cat.getSelectionList();
 
         List<CatCare> catCareList = new ArrayList<>();
         for (Selection selection : selectionList) {

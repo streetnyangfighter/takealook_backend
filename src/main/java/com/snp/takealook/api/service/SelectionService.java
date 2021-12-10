@@ -34,43 +34,27 @@ public class SelectionService {
 
     // 간택 정보 업데이트
     @Transactional
-    public Long update(Long userId, Long catId, Long selectionId, Long newCatId) {
+    public Long update(Long userId, Long catId, Long newCatId) {
+        // 자기가 이미 돌보고 있는 고양이에 다시 연결하는 일은 없도록 조치해야함
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
-        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
+        Cat cat = catRepository.findById(newCatId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
-        if (!Objects.equals(mySelection, selection)) {
-            throw new IllegalStateException("only can delete my selection");
-        }
-
-        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
-
-        return selection.update(cat).getId();
+        return mySelection.update(cat).getId();
     }
 
     // 간택 소프트 딜리트
     @Transactional
-    public void softDelete(Long userId, Long catId, Long selectionId) {
+    public void softDelete(Long userId, Long catId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
-        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
 
-        if (!Objects.equals(mySelection, selection)) {
-            throw new IllegalStateException("only can delete my selection");
-        }
-
-        selection.softDelete();
+        mySelection.softDelete();
     }
 
     // 간택 하드 딜리트
     @Transactional
-    public void hardDelete(Long userId, Long catId, Long selectionId) {
+    public void hardDelete(Long userId, Long catId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
-        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
 
-        if (!Objects.equals(mySelection, selection)) {
-            throw new IllegalStateException("only can delete my selection");
-        }
-
-        //이거하면 고양이도 지워지는지 확인하고 수정해야함
-        selectionRepository.delete(selection);
+        selectionRepository.delete(mySelection);
     }
 }

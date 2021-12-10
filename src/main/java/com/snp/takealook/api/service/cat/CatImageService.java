@@ -109,7 +109,7 @@ public class CatImageService {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        List<Selection> selectionList = selectionRepository.findSelectionsByCat(mySelection.getCat());
+        List<Selection> selectionList = mySelection.getCat().getSelectionList();
         List<File> fileList = new ArrayList<>();
         for (Selection selection : selectionList) {
             List<CatImage> imageList = selection.getCatImageList();

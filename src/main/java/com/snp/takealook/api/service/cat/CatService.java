@@ -53,11 +53,11 @@ public class CatService {
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<Selection> selectionList = mySelection.getCat().getSelectionList();
-        List<ResponseDTO.Carer> carers = new ArrayList<>();
+        List<ResponseDTO.UserInfo> carers = new ArrayList<>();
         for (Selection selection : selectionList) {
             // 유저가 null이 아닌지도 체크해줘야함
             if (!selection.getUser().getDflag()) {
-                    carers.add(new ResponseDTO.Carer(selection.getUser()));
+                    carers.add(new ResponseDTO.UserInfo(selection.getUser()));
             }
         }
 
