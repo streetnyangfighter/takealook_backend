@@ -101,8 +101,20 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public User delete(Boolean dflag) {
-        this.dflag = dflag;
+    public User delete() {
+        if (this.dflag) {
+            throw new IllegalStateException("이미 탈퇴한 회원입니다.");
+        }
+        this.dflag = true;
+
+        return this;
+    }
+
+    public User restore() {
+        if (!this.dflag) {
+            throw new IllegalStateException("탈퇴하지 않은 회원입니다");
+        }
+        this.dflag = false;
 
         return this;
     }

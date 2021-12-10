@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -83,7 +84,6 @@ public class CatImageService {
         return selectionId;
     }
 
-    // 자기가 등록한 사진만 업데이트 가능
     @Transactional
     public Long update(Long userId, Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
@@ -105,6 +105,21 @@ public class CatImageService {
         return save(selection.getId(), files);
     }
 
-    // 고양이별 이미지 전체 조회 -> 프론트에 보내줘야 할 값 정확히 확인
+    @Transactional(readOnly = true)
+    public List<File> findImagesByCatId(Long userId, Long catId) {
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
+        List<Selection> selectionList = selectionRepository.findSelectionsByCat(mySelection.getCat());
+        List<File> fileList = new ArrayList<>();
+        for (Selection selection : selectionList) {
+            List<CatImage> imageList = selection.getCatImageList();
+            for (CatImage catImage : imageList) {
+                File file = new File(catImage.getFilePath());
+                fileList.add(file);
+            }
+        }
+
+        return fileList;
+    }
 }

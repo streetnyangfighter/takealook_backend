@@ -4,7 +4,6 @@ import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatCare;
-import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatCareDTO;
 import com.snp.takealook.api.repository.SelectionRepository;
@@ -70,7 +69,7 @@ public class CatCareService {
             catCareList.addAll(catCareRepository.findCatCaresBySelectionAndCreatedAtBetween(selection, dayStart, dayEnd));
         }
 
-        catCareList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+        catCareList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
 
         return catCareList.stream()
                 .map(ResponseDTO.CatCareListResponse::new)

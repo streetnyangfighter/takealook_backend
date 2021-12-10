@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class SelectionService {
     private final UserRepository userRepository;
     private final CatRepository catRepository;
 
-    // 매치 추가하기
+    // 간택 추가하기
     @Transactional
     public Long save(Long userId, Long catId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
@@ -32,5 +33,44 @@ public class SelectionService {
                 .build()).getId();
     }
 
-    // 매치 삭제하기 -> 하면 이전 정보 어떻게 할 지 보류
+    // 간택 정보 업데이트
+    @Transactional
+    public Long update(Long userId, Long catId, Long selectionId, Long newCatId) {
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
+
+        if (!Objects.equals(mySelection, selection)) {
+            throw new IllegalStateException("only can delete my selection");
+        }
+
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+
+        return selection.update(cat).getId();
+    }
+
+    // 간택 소프트 딜리트
+    @Transactional
+    public void softDelete(Long userId, Long catId, Long selectionId) {
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
+
+        if (!Objects.equals(mySelection, selection)) {
+            throw new IllegalStateException("only can delete my selection");
+        }
+
+        selection.softDelete();
+    }
+
+    // 간택 하드 딜리트
+    @Transactional
+    public void hardDelete(Long userId, Long catId, Long selectionId) {
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
+
+        if (!Objects.equals(mySelection, selection)) {
+            throw new IllegalStateException("only can delete my selection");
+        }
+
+        selectionRepository.delete(selection);
+    }
 }

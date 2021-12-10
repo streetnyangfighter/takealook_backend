@@ -83,14 +83,23 @@ public class UserService {
 //        return id;
 //    }
 
-//    // 회원 탈퇴
-//    @Transactional
-//    public void delete(Long id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
-//
-//        user.delete(true);
-//    }
+    // 회원 탈퇴
+    @Transactional
+    public Long delete(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+
+        return user.delete().getId();
+    }
+
+    // 회원 복구
+    @Transactional
+    public Long restore(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+
+        return user.restore().getId();
+    }
 //
 //    @Transactional
 //    public void updateLocations(Long id, List<UserDTO.LocationList> dtoList) {

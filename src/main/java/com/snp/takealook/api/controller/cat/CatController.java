@@ -27,7 +27,7 @@ public class CatController {
     private final CatImageService catImageService;
 
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Long saveNewCat(@PathVariable Long userId,
+    public Long save(@PathVariable Long userId,
                            @RequestPart(value = "catInfo") CatDTO.Create catInfo,
                            @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
                            @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
@@ -37,11 +37,6 @@ public class CatController {
         catImageService.save(selectionId, files);
 
         return catId;
-    }
-
-    @PostMapping("/user/{userId}/cat/{catId}/selection")
-    public Long selectCat(@PathVariable Long userId, @PathVariable Long catId) {
-        return selectionService.save(userId, catId);
     }
 
     @PostMapping(value = "/user/{userId}/cat/{catId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -62,8 +57,6 @@ public class CatController {
         return catService.changeStatus(userId, catId, status);
     }
 
-    // 간택 취소 보류
-
     @GetMapping("/user/{userId}/cat/{catId}")
     public ResponseDTO.CatResponse findOne(@PathVariable Long userId, @PathVariable Long catId) {
         return catService.findOne(userId, catId);
@@ -81,12 +74,12 @@ public class CatController {
 
     @GetMapping("/user/{userId}/cat/{catId}/locations")
     public List<ResponseDTO.CatLocationResponse> findLocationsByCatId(@PathVariable Long userId, @PathVariable Long catId) {
-        return catService.findLocationsByCatId(userId, catId);
+        return catLocationService.findLocationsByCatId(userId, catId);
     }
 
     // 고양이별 이미지 전체 조회 -> 프론트에 보내줘야 할 값 정확히 확인
     @GetMapping("/user/{userId}/cat/{catId}/images")
     public List<File> findImagesByCatId(@PathVariable Long userId, @PathVariable Long catId) {
-        return catService.findImagesByCatId(userId, catId);
+        return catImageService.findImagesByCatId(userId, catId);
     }
 }

@@ -14,8 +14,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,16 +28,12 @@ public class Selection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private User user;
 
     @NotNull
     @ManyToOne
     private Cat cat;
-
-    @NotNull
-    private Boolean dflag;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -57,7 +55,22 @@ public class Selection {
     public Selection(User user, Cat cat) {
         this.user = user;
         this.cat = cat;
-        this.dflag = false;
+    }
+
+    public Selection update(Cat cat) {
+        this.cat = cat;
+
+        return this;
+    }
+
+    public Selection softDelete() {
+        if (Objects.equals(this.getUser(), null)) {
+            throw new IllegalStateException("이미 삭제된 간택 내역입니다.");
+        }
+
+        this.user = null;
+
+        return this;
     }
 
     public Selection updateCatLocationList(List<CatLocation> catLocationList) {
