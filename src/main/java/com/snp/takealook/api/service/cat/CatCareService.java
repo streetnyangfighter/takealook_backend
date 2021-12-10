@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -39,9 +40,9 @@ public class CatCareService {
         Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
-//        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
-//            throw new IllegalStateException("only can update my catcare");
-//        }
+        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
+            throw new IllegalStateException("only can update my catcare");
+        }
         return catCare.update(dto.getType(), dto.getMessage()).getId();
     }
 
@@ -50,9 +51,9 @@ public class CatCareService {
         Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
 
-//        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
-//            throw new IllegalStateException("only can delete my catcare");
-//        }
+        if (!Objects.equals(catCare.getSelection().getId(), selection.getId())) {
+            throw new IllegalStateException("only can delete my catcare");
+        }
         catCareRepository.delete(catCare);
     }
 

@@ -44,10 +44,14 @@ public class SelectionService {
 
     // 간택 소프트 딜리트
     @Transactional
-    public void softDelete(Long userId, Long catId) {
+    public void softDelete(Long userId, Long catId, boolean deleteCat) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         mySelection.softDelete();
+
+        if (deleteCat) { // 해당 고양이를 돌보는 유일한 유저가 도감에서 고양이를 삭제했을 경우 고양이도 함께 삭제
+            catRepository.delete(mySelection.getCat());
+        }
     }
 
     // 간택 하드 딜리트

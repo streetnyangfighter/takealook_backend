@@ -138,7 +138,12 @@ public class ResponseDTO {
             this.message = entity.getMessage();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.carer = new UserInfo(entity.getSelection().getUser());
+
+            try {
+                this.carer = new UserInfo(entity.getSelection().getUser());
+            } catch (NullPointerException e) {
+                System.out.println("유저가 null로 설정된 경우 포함");
+            }
         }
     }
 
