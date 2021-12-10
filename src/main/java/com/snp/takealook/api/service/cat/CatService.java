@@ -55,9 +55,12 @@ public class CatService {
         List<Selection> selectionList = mySelection.getCat().getSelectionList();
         List<ResponseDTO.UserInfo> carers = new ArrayList<>();
         for (Selection selection : selectionList) {
-            // 유저가 null이 아닌지도 체크해줘야함
-            if (!selection.getUser().getDflag()) {
+            try {
+                if (!selection.getUser().getDflag()) {
                     carers.add(new ResponseDTO.UserInfo(selection.getUser()));
+                }
+            } catch (NullPointerException e) {
+                System.out.println("유저가 null로 설정된 경우 포함");
             }
         }
 
