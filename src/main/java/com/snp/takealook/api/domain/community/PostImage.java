@@ -18,7 +18,6 @@ public class PostImage extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private Post post;
 

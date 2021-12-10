@@ -19,11 +19,9 @@ public class CommentLike extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private Comment comment;
 
-    @NotNull
     @ManyToOne
     private User user;
 

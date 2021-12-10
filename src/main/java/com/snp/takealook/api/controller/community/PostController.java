@@ -49,9 +49,15 @@ public class PostController {
     }
 
     // 게시글 수정
-    @PutMapping("/post/{id}")
-    public Long update(@PathVariable Long id, @RequestBody PostDTO.Update dto) {
-        return postService.update(id, dto);
+    @PostMapping("/post/{id}")
+    public Long update(@PathVariable Long id,
+                       @RequestPart(value = "postText") PostDTO.Update dto,
+                       @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        Long postId = postService.update(id, dto);
+        System.out.println(postId);
+        postImageService.save(postId, file);
+
+        return postId;
     }
 
     // 게시글 삭제
