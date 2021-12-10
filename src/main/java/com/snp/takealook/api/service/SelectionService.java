@@ -71,6 +71,7 @@ public class SelectionService {
             throw new IllegalStateException("only can delete my selection");
         }
 
+        //이거하면 고양이도 지워지는지 확인하고 수정해야함
         selectionRepository.delete(selection);
     }
 }

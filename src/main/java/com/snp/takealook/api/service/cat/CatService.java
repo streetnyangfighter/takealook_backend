@@ -4,7 +4,6 @@ import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatCare;
-import com.snp.takealook.api.domain.cat.CatImage;
 import com.snp.takealook.api.domain.cat.CatLocation;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
@@ -57,7 +56,8 @@ public class CatService {
         List<Selection> selectionList = mySelection.getCat().getSelectionList();
         List<ResponseDTO.Carer> carers = new ArrayList<>();
         for (Selection selection : selectionList) {
-            if (!selection.getDflag() && !selection.getUser().getDflag()) {
+            // 유저가 null이 아닌지도 체크해줘야함
+            if (!selection.getUser().getDflag()) {
                     carers.add(new ResponseDTO.Carer(selection.getUser()));
             }
         }
@@ -73,26 +73,24 @@ public class CatService {
 
         List<Cat> userCatList = new ArrayList<>();
         for (Selection selection : selectionList) {
-            if (!selection.getDflag()) {
-                userCatList.add(selection.getCat());
+            userCatList.add(selection.getCat());
 
-                List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
-                List<CatCare> recentCares = new ArrayList<>();
-                for (Selection sameCatSelection : sameCatSelectionList) {
-                    recentCares.addAll(sameCatSelection.getCatCareList());
-                }
-
-                recentCares.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
-                if (recentCares.size() > 3) {
-                    recentCares = recentCares.subList(0, 3);
-                }
-
-                List<ResponseDTO.CatCareListResponse> recentCaresResponse = recentCares.stream()
-                        .map(ResponseDTO.CatCareListResponse::new)
-                        .collect(Collectors.toList());
-
-                result.add(new ResponseDTO.CatListResponse(selection.getCat(), recentCaresResponse));
+            List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
+            List<CatCare> recentCares = new ArrayList<>();
+            for (Selection sameCatSelection : sameCatSelectionList) {
+                recentCares.addAll(sameCatSelection.getCatCareList());
             }
+
+            recentCares.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
+            if (recentCares.size() > 3) {
+                recentCares = recentCares.subList(0, 3);
+            }
+
+            List<ResponseDTO.CatCareListResponse> recentCaresResponse = recentCares.stream()
+                    .map(ResponseDTO.CatCareListResponse::new)
+                    .collect(Collectors.toList());
+
+            result.add(new ResponseDTO.CatListResponse(selection.getCat(), recentCaresResponse));
         }
 
         return result;
@@ -106,19 +104,17 @@ public class CatService {
 
         List<Cat> userCatList = new ArrayList<>();
         for (Selection selection : selectionList) {
-            if (!selection.getDflag()) {
-                userCatList.add(selection.getCat());
+            userCatList.add(selection.getCat());
 
-                List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
-                List<CatLocation> recentLocations = new ArrayList<>();
-                for (Selection sameCatSelection : sameCatSelectionList) {
-                    recentLocations.addAll(sameCatSelection.getCatLocationList());
-                }
-
-                recentLocations.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
-
-                result.add(new ResponseDTO.CatListResponse(selection.getCat(), new ResponseDTO.CatLocationResponse(recentLocations.get(0))));
+            List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
+            List<CatLocation> recentLocations = new ArrayList<>();
+            for (Selection sameCatSelection : sameCatSelectionList) {
+                recentLocations.addAll(sameCatSelection.getCatLocationList());
             }
+
+            recentLocations.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
+
+            result.add(new ResponseDTO.CatListResponse(selection.getCat(), new ResponseDTO.CatLocationResponse(recentLocations.get(0))));
         }
 
         return result;
