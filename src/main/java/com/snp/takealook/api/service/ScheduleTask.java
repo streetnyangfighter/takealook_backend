@@ -1,22 +1,25 @@
-//package com.snp.takealook.api.service;
-//
-//import com.snp.takealook.api.repository.cat.CatCareRepository;
-//import com.snp.takealook.api.repository.cat.CatLocationRepository;
-//import com.snp.takealook.api.repository.cat.CatRepository;
-//import com.snp.takealook.api.repository.user.UserRepository;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.scheduling.annotation.Scheduled;
-//import org.springframework.stereotype.Component;
-//
-//import java.time.LocalDateTime;
-//
-//@Component
-//@RequiredArgsConstructor
-//public class ScheduleTask {
-//
-//    private final UserRepository userRepository;
-//    private final CatLocationRepository catLocationRepository;
-//    private final CatCareRepository catCareRepository;
+package com.snp.takealook.api.service;
+
+import com.snp.takealook.api.repository.user.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class ScheduleTask {
+
+    private final UserRepository userRepository;
+
+    @Scheduled(fixedRate = 1000 * 60L * 60L * 24L)
+    public void userHardDelete() {
+        System.out.println("");
+        // 유저를 찾고
+        // 레포지토리에서 조건에 맞는 유저를 찾아 -> 유저리스트 get
+        // 삭제하고 싶은 유저를 도감에서 null로 바꿔준다
+
+        // 유저 삭제
+    }
 //
 //    @Scheduled(fixedRate = 1000 * 60L * 60L * 24L)
 //    public void deleteUser() {
@@ -42,4 +45,4 @@
 //        catCareRepository.deleteAll(catCareRepository.findCatCaresByModifiedAtBefore(dateTime));
 //    }
 //
-//}
+}
