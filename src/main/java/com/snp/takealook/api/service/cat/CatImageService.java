@@ -1,7 +1,6 @@
 package com.snp.takealook.api.service.cat;
 
 import com.snp.takealook.api.domain.Selection;
-import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatImage;
 import com.snp.takealook.api.repository.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatImageRepository;
@@ -86,7 +85,7 @@ public class CatImageService {
 
     @Transactional
     public Long update(Long userId, Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<CatImage> catImageList = selection.getCatImageList();
         for (CatImage catImage : catImageList) {
@@ -107,7 +106,7 @@ public class CatImageService {
 
     @Transactional(readOnly = true)
     public List<File> findImagesByCatId(Long userId, Long catId) {
-        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId)
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<Selection> selectionList = selectionRepository.findSelectionsByCat(mySelection.getCat());

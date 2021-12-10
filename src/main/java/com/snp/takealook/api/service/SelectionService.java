@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +35,7 @@ public class SelectionService {
     // 간택 정보 업데이트
     @Transactional
     public Long update(Long userId, Long catId, Long selectionId, Long newCatId) {
-        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
 
         if (!Objects.equals(mySelection, selection)) {
@@ -51,7 +50,7 @@ public class SelectionService {
     // 간택 소프트 딜리트
     @Transactional
     public void softDelete(Long userId, Long catId, Long selectionId) {
-        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
 
         if (!Objects.equals(mySelection, selection)) {
@@ -64,7 +63,7 @@ public class SelectionService {
     // 간택 하드 딜리트
     @Transactional
     public void hardDelete(Long userId, Long catId, Long selectionId) {
-        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_IdAndDflagFalse(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with Id: " + selectionId + " is not valid"));
 
         if (!Objects.equals(mySelection, selection)) {

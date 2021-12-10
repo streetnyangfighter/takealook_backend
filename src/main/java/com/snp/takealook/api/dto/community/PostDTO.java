@@ -6,8 +6,6 @@ import com.snp.takealook.api.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 public class PostDTO {
 
     @Getter
