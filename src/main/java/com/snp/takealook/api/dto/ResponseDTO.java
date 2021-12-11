@@ -190,8 +190,7 @@ public class ResponseDTO {
     @Getter
     public static class PostResponse {
         private Board board;
-        private String writerImgUrl;
-        private String writer;
+        private UserInfo writer;
         private String title;
         private String content;
         private LocalDateTime modifiedAt;
@@ -201,8 +200,7 @@ public class ResponseDTO {
 
         public PostResponse(Post entity) {
             this.board = entity.getBoard();
-            this.writerImgUrl = entity.getWriter().getImage();
-            this.writer = entity.getWriter().getNickname();
+            this.writer = new UserInfo(entity.getWriter());
             this.title = entity.getTitle();
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
@@ -216,7 +214,7 @@ public class ResponseDTO {
     public static class PostListResponse {
         private Board board;
         private String thumbnail;
-        private String writer;
+        private UserInfo writer;
         private String title;
         private String content;
         private int postLike;
@@ -226,7 +224,7 @@ public class ResponseDTO {
         public PostListResponse(Post entity) {
             this.board = entity.getBoard();
             this.thumbnail = entity.getPostImageList().get(0).getFilePath();
-            this.writer = entity.getWriter().getNickname();
+            this.writer = new UserInfo(entity.getWriter());
             this.title = entity.getTitle();
             this.content = entity.getContent();
             this.postLike = entity.getPostLikeList().size();
@@ -237,15 +235,13 @@ public class ResponseDTO {
 
     @Getter
     public static class CommentResponse {
-        private String writer;
-        private String writerImg;
+        private UserInfo writer;
         private String content;
         private LocalDateTime modifiedAt;
         private int commentLike;
 
         public CommentResponse(Comment entity) {
-            this.writer = entity.getWriter().getNickname();
-            this.writerImg = entity.getWriter().getImage();
+            this.writer = new UserInfo(entity.getWriter());
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
             this.commentLike = entity.getCommentLikeList().size();
