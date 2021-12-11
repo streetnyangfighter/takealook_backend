@@ -3,6 +3,7 @@ package com.snp.takealook.api.controller.cat;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatCareDTO;
 import com.snp.takealook.api.service.cat.CatCareService;
+import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +16,13 @@ import java.util.List;
 public class CatCareController {
 
     private final CatCareService catCareService;
+    private final NotificationService notificationService;
 
     @PostMapping("/user/{userId}/cat/{catId}/catcare")
     public Long save(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
-        return catCareService.save(userId, catId, dto);
+        Long saveId = catCareService.save(userId, catId, dto);
+        notificationService.save(userId, catId, (byte) 0);
+        return saveId;
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}/catcare/{catcareId}")
