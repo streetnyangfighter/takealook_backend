@@ -85,9 +85,9 @@ public class CatImageService {
 
     @Transactional
     public Long update(Long userId, Long catId, List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        List<CatImage> catImageList = selection.getCatImageList();
+        List<CatImage> catImageList = mySelection.getCatImageList();
         for (CatImage catImage : catImageList) {
             File file = new File(catImage.getFilePath());
 
@@ -98,10 +98,10 @@ public class CatImageService {
             }
         }
 
-        catImageRepository.deleteAll(selection.getCatImageList());
-        selection.getCatImageList().clear();
+        catImageRepository.deleteAll(mySelection.getCatImageList());
+        mySelection.getCatImageList().clear();
 
-        return save(selection.getId(), files);
+        return save(mySelection.getId(), files);
     }
 
     @Transactional(readOnly = true)
