@@ -6,6 +6,7 @@ import com.snp.takealook.api.service.SelectionService;
 import com.snp.takealook.api.service.cat.CatImageService;
 import com.snp.takealook.api.service.cat.CatLocationService;
 import com.snp.takealook.api.service.cat.CatService;
+import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class CatController {
     private final SelectionService selectionService;
     private final CatLocationService catLocationService;
     private final CatImageService catImageService;
+    private final NotificationService notificationService;
 
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long userId,
@@ -54,7 +56,9 @@ public class CatController {
 
     @PatchMapping("/user/{userId}/cat/{catId}")
     public Long changeStatus(@PathVariable Long userId, @PathVariable Long catId, Byte status) {
-        return catService.changeStatus(userId, catId, status);
+        Long updateId = catService.changeStatus(userId, catId, status);
+        notificationService.save(userId, catId, (byte) 1);
+        return updateId;
     }
 
     @GetMapping("/user/{userId}/cat/{catId}")

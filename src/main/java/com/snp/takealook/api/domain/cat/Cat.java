@@ -40,7 +40,8 @@ public class Cat extends BaseTimeEntity {
     private Byte pattern;
     // 0: 치즈 태비, 1: 고등어 태비, 2: 젖소, ...
 
-    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL)
+    // 고양이를 삭제하면 간택 내역 - 연결된 정보 일괄 삭제 되도록 처리
+    @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Selection> selectionList;
 

@@ -45,6 +45,11 @@ public class UserController {
         return userService.delete(userId);
     }
 
+    @DeleteMapping("/test/delete")
+    public void deleteHard(Long id) {
+        userService.deleteHard(id);
+    }
+
     // 회원 복구
     @PatchMapping("/user/{userId}/restore")
     public Long restore(@PathVariable Long userId) {

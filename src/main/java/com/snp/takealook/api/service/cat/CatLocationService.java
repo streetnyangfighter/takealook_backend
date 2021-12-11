@@ -43,19 +43,19 @@ public class CatLocationService {
 
     @Transactional
     public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
-        Selection selection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        catLocationRepository.deleteAll(selection.getCatLocationList());
+        catLocationRepository.deleteAll(mySelection.getCatLocationList());
 
         List<CatLocation> list = Arrays.stream(dtoList)
                 .map(v -> CatLocation.builder()
-                        .selection(selection)
+                        .selection(mySelection)
                         .latitude(v.getLatitude())
                         .longitude(v.getLongitude())
                         .build())
                 .collect(Collectors.toList());
 
-        return selection.updateCatLocationList(list).getId();
+        return mySelection.updateCatLocationList(list).getId();
     }
 
     @Transactional(readOnly = true)
