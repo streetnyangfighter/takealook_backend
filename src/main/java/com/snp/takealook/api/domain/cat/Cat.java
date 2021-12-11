@@ -2,7 +2,6 @@ package com.snp.takealook.api.domain.cat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.Selection;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

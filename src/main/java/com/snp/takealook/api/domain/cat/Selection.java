@@ -1,35 +1,29 @@
-package com.snp.takealook.api.domain;
+package com.snp.takealook.api.domain.cat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.snp.takealook.api.domain.cat.Cat;
-import com.snp.takealook.api.domain.cat.CatCare;
-import com.snp.takealook.api.domain.cat.CatImage;
-import com.snp.takealook.api.domain.cat.CatLocation;
+import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Selection {
+public class Selection extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
     private User user;
 
@@ -37,22 +31,18 @@ public class Selection {
     @ManyToOne
     private Cat cat;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @NotNull
+    private Boolean dflag;
 
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatCare> catCareList;
 
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatImage> catImageList;
 
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CatLocation> catLocationList;
 
@@ -60,6 +50,7 @@ public class Selection {
     public Selection(User user, Cat cat) {
         this.user = user;
         this.cat = cat;
+        this.dflag = false;
     }
 
     public Selection update(Cat cat) {
@@ -68,12 +59,12 @@ public class Selection {
         return this;
     }
 
-    public Selection setUserNull() {
-        if (Objects.equals(this.getUser(), null)) {
-            throw new IllegalStateException("이미 삭제된 간택 내역입니다.");
+    public Selection delete() {
+        if (this.dflag) {
+            throw new IllegalStateException("이미 도감에서 삭제 되었습니다.");
         }
 
-        this.user = null;
+        this.dflag = true;
         return this;
     }
 

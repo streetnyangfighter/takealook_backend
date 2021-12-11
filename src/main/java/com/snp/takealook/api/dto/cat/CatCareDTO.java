@@ -1,6 +1,6 @@
 package com.snp.takealook.api.dto.cat;
 
-import com.snp.takealook.api.domain.Selection;
+import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.CatCare;
 import lombok.Builder;
 import lombok.Getter;

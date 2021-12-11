@@ -1,7 +1,6 @@
 package com.snp.takealook.api.domain.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.Selection;
 import lombok.*;
 
 import javax.persistence.*;

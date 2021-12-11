@@ -43,7 +43,6 @@ public class ResponseDTO {
     @Getter
     public static class NotificationListResponse {
         private Long id;
-        private User user;
         private String message;
         private Byte type;
         private Boolean checked;
@@ -52,7 +51,6 @@ public class ResponseDTO {
 
         public NotificationListResponse(Notification entity) {
             this.id = entity.getId();
-            this.user = entity.getUser();
             this.message = entity.getMessage();
             this.type = entity.getType();
             this.createdAt = entity.getCreatedAt();
@@ -138,12 +136,7 @@ public class ResponseDTO {
             this.message = entity.getMessage();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-
-            try {
-                this.carer = new UserInfo(entity.getSelection().getUser());
-            } catch (NullPointerException e) {
-                System.out.println("유저가 null로 설정된 경우 포함");
-            }
+            this.carer = new UserInfo(entity.getSelection().getUser());
         }
     }
 

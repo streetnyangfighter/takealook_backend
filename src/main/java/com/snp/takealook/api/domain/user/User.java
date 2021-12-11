@@ -2,7 +2,7 @@ package com.snp.takealook.api.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.Selection;
+import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.CommentLike;
 import com.snp.takealook.api.domain.community.Post;
@@ -11,8 +11,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
