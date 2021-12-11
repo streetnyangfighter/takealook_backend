@@ -41,18 +41,18 @@ public class Selection {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CatCare> catCareList;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CatImage> catImageList;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CatLocation> catLocationList;
 
