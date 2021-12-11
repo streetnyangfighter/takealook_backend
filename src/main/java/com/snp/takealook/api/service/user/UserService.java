@@ -1,5 +1,6 @@
 package com.snp.takealook.api.service.user;
 
+import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.user.UserDTO;
@@ -113,9 +114,23 @@ public class UserService {
     @Transactional
     public void testHardDelete() {
 //        LocalDateTime limitDate = LocalDateTime.now().minusMonths(3);
-        LocalDateTime limitDate = LocalDateTime.now().minusMinutes(3);
-        System.out.println(limitDate);
-        System.out.println(userRepository.hardDelete(limitDate));
+        LocalDateTime limitDate = LocalDateTime.now().minusMinutes(1);
+
+        List<User> userList = userRepository.findUsersByModifiedAtBeforeAndDflagTrue(limitDate);
+
+        for (User user : userList) {
+
+            List<Post> postList = user.getPostList();
+
+            for (Post post : postList) {
+                post.setWriterNull();
+            }
+        }
+
+        System.out.println(userList.size());
+        userRepository.deleteAll(userRepository.findUsersByModifiedAtBeforeAndDflagTrue(limitDate));
+
+//        System.out.println(userRepository.hardDelete(limitDate));
     }
 //
 //    @Transactional

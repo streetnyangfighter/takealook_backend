@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,11 +23,9 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private Post post;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
@@ -34,7 +34,8 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CommentLike> commentLikeList;
 
