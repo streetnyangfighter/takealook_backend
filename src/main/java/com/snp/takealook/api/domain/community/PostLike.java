@@ -19,11 +19,9 @@ public class PostLike extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private Post post;
 
-    @NotNull
     @ManyToOne
     private User user;
 
