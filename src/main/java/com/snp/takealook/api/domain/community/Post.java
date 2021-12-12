@@ -25,7 +25,6 @@ public class Post extends BaseTimeEntity {
     @ManyToOne
     private Board board;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
@@ -36,15 +35,15 @@ public class Post extends BaseTimeEntity {
     @Lob @NotNull
     private String content;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Comment> commentList;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<PostLike> postLikeList;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<PostImage> postImageList;
 
@@ -63,4 +62,7 @@ public class Post extends BaseTimeEntity {
         return this;
     }
 
+    public void setWriterNull() {
+        this.writer = null;
+    }
 }

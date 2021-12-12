@@ -21,11 +21,9 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     private Post post;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
@@ -34,7 +32,7 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CommentLike> commentLikeList;
 
