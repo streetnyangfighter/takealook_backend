@@ -45,7 +45,6 @@ public class NotificationService {
 
         List<Selection> selectionList = cat.getSelectionList();
         for (Selection selection : selectionList) {
-            // 자기 자신에게는 알림을 남길 필요가 없음
             if (!Objects.equals(selection.getUser(), user)) {
                 notificationRepository.save(new Notification(selection.getUser(), message, type));
             }
@@ -58,6 +57,7 @@ public class NotificationService {
 
         // GET 되어 회원에게 조회되면 읽음(check) 처리
         // 를 해주었는데, 아래 hasUncheckedNotification 에서 아래 수정사항이 반영되지 않음ㅜ
+//        user.getNotificationList().stream().map(v -> v.check());
         for (Notification notification : user.getNotificationList()) {
             notification.check();
         }

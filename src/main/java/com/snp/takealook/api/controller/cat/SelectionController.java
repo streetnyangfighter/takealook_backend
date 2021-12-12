@@ -29,6 +29,8 @@ public class SelectionController {
         Long updateId = selectionService.update(userId, catId, newCatId);
         notificationService.save(userId, catId, (byte) 3);
         notificationService.save(userId, newCatId, (byte) 2);
+        // 여기서 캣 딜리트로 돌보는 사람이 0인 고양이 삭제..?
+        catService.delete(catId);
         return updateId;
     }
 
