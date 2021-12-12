@@ -65,6 +65,7 @@ public class PostController {
     // 게시글 삭제
     @DeleteMapping("/post/{id}")
     public Long delete(@PathVariable Long id) {
+        postImageService.delete(id);
         postService.delete(id);
         return id;
     }
