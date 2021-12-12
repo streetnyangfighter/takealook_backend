@@ -14,7 +14,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("user/{userId}/notifications")
+    @GetMapping("/user/{userId}/notifications")
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(@PathVariable Long userId) {
         return notificationService.findAllByUserId(userId);
     }

@@ -27,8 +27,8 @@ public class SelectionController {
     @PatchMapping("/user/{userId}/cat/{catId}/selection")
     public Long update(@PathVariable Long userId, @PathVariable Long catId, Long newCatId) {
         Long updateId = selectionService.update(userId, catId, newCatId);
-        notificationService.save(userId, catId, (byte) 3);
-        notificationService.save(userId, newCatId, (byte) 2);
+        notificationService.catSave(userId, catId, (byte) 3);
+        notificationService.catSave(userId, newCatId, (byte) 2);
         catService.delete(catId);
 
         return updateId;

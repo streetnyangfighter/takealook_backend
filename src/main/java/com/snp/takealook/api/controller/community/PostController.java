@@ -56,7 +56,6 @@ public class PostController {
                        @RequestPart(value = "postText") PostDTO.Update dto,
                        @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
         Long postId = postService.update(id, dto);
-        System.out.println(postId);
         postImageService.save(postId, file);
 
         return postId;
