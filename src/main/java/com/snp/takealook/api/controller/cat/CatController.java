@@ -2,7 +2,7 @@ package com.snp.takealook.api.controller.cat;
 
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.service.SelectionService;
+import com.snp.takealook.api.service.cat.SelectionService;
 import com.snp.takealook.api.service.cat.CatImageService;
 import com.snp.takealook.api.service.cat.CatLocationService;
 import com.snp.takealook.api.service.cat.CatService;
@@ -50,6 +50,7 @@ public class CatController {
         catService.update(userId, catId, catInfo);
         catLocationService.update(userId, catId, catLocList);
         catImageService.update(userId, catId, files);
+        notificationService.catSave(userId, catId, (byte) 1);
 
         return catId;
     }
@@ -57,7 +58,7 @@ public class CatController {
     @PatchMapping("/user/{userId}/cat/{catId}")
     public Long changeStatus(@PathVariable Long userId, @PathVariable Long catId, Byte status) {
         Long updateId = catService.changeStatus(userId, catId, status);
-        notificationService.save(userId, catId, (byte) 1);
+        notificationService.catSave(userId, catId, (byte) 1);
         return updateId;
     }
 

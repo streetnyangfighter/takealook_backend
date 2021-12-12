@@ -21,7 +21,7 @@ public class CatCareController {
     @PostMapping("/user/{userId}/cat/{catId}/catcare")
     public Long save(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
         Long saveId = catCareService.save(userId, catId, dto);
-        notificationService.save(userId, catId, (byte) 0);
+        notificationService.catSave(userId, catId, (byte) 0);
         return saveId;
     }
 
@@ -39,7 +39,6 @@ public class CatCareController {
     public List<ResponseDTO.CatCareListResponse> findMonthlyByCatId(@PathVariable Long catId, int year, int month) {
         LocalDateTime dayStart = LocalDateTime.of(year, month, 1, 00, 00);
         LocalDateTime dayEnd = dayStart.plusMonths(1);
-//        System.out.println(dayStart + " *** " + dayEnd);
 
         return catCareService.findByCatIdAndDate(catId, dayStart, dayEnd);
     }
@@ -48,7 +47,6 @@ public class CatCareController {
     public List<ResponseDTO.CatCareListResponse> findRecentsByCatId(@PathVariable Long catId) {
         LocalDateTime dayStart = LocalDateTime.now().minusDays(2);
         LocalDateTime dayEnd = LocalDateTime.now();
-//        System.out.println(dayStart + " *** " + dayEnd);
 
         return catCareService.findByCatIdAndDate(catId, dayStart, dayEnd);
     }

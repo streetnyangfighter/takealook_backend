@@ -1,14 +1,14 @@
 package com.snp.takealook.api.service.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.Selection;
+import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatCare;
 import com.snp.takealook.api.domain.cat.CatLocation;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.repository.SelectionRepository;
+import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,15 +52,11 @@ public class CatService {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        List<Selection> selectionList = mySelection.getCat().getSelectionList();
+        List<Selection> selectionList = selectionRepository.findSelectionsByCatAndDflagFalse(mySelection.getCat());
         List<ResponseDTO.UserInfo> carers = new ArrayList<>();
         for (Selection selection : selectionList) {
-            try {
-                if (!selection.getUser().getDflag()) {
-                    carers.add(new ResponseDTO.UserInfo(selection.getUser()));
-                }
-            } catch (NullPointerException e) {
-                System.out.println("유저가 null로 설정된 경우 포함");
+            if (!selection.getUser().getDflag()) {
+                carers.add(new ResponseDTO.UserInfo(selection.getUser()));
             }
         }
 
@@ -70,7 +66,7 @@ public class CatService {
     @Transactional(readOnly = true)
     public List<ResponseDTO.CatListResponse> findAllByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
-        List<Selection> selectionList = user.getSelectionList();
+        List<Selection> selectionList = selectionRepository.findSelectionsByUserAndDflagFalse(user);
         List<ResponseDTO.CatListResponse> result = new ArrayList<>();
 
         List<Cat> userCatList = new ArrayList<>();
@@ -101,7 +97,7 @@ public class CatService {
     @Transactional(readOnly = true)
     public List<ResponseDTO.CatListResponse> findMyCatsRecentLocation(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
-        List<Selection> selectionList = user.getSelectionList();
+        List<Selection> selectionList = selectionRepository.findSelectionsByUserAndDflagFalse(user);
         List<ResponseDTO.CatListResponse> result = new ArrayList<>();
 
         List<Cat> userCatList = new ArrayList<>();

@@ -14,13 +14,15 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PatchMapping("user/{userId}/notification/{notificationId}")
-    public Long check(@PathVariable Long notificationId) {
-        return notificationService.check(notificationId);
-    }
-
     @GetMapping("user/{userId}/notifications")
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(@PathVariable Long userId) {
         return notificationService.findAllByUserId(userId);
+    }
+
+    @GetMapping("user/{userId}/unchecked-notifications")
+    public Boolean hasUncheckedNotifation(@PathVariable Long userId) {
+        return notificationService.hasUncheckedNotifation(userId);
+        // 결과값이 true 이면 확인하지 않은 알림이 있음
+        // 결과값이 fasle 이면 확인하지 않은 알림이 없음
     }
 }

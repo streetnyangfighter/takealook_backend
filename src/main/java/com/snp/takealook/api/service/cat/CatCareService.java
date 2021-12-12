@@ -1,12 +1,12 @@
 package com.snp.takealook.api.service.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.Selection;
+import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatCare;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatCareDTO;
-import com.snp.takealook.api.repository.SelectionRepository;
+import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatCareRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import lombok.RequiredArgsConstructor;
