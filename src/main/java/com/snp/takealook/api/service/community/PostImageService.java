@@ -29,7 +29,7 @@ public class PostImageService {
         List<PostImage> oldPostImages = post.getPostImageList();
 
         if(oldPostImages != null) {
-            for (PostImage oldPostImage :oldPostImages) {
+            for (PostImage oldPostImage : oldPostImages) {
                 File oldFile = new File(oldPostImage.getFilePath());
 
                 if(oldFile.exists()) {
@@ -72,6 +72,33 @@ public class PostImageService {
 
         }
         return post.getId();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        System.out.println("-------------------------------- postImage delete");
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+
+        List<PostImage> oldPostImages = post.getPostImageList();
+
+        if(oldPostImages != null) {
+            for (PostImage oldPostImage :oldPostImages) {
+                File oldFile = new File(oldPostImage.getFilePath());
+
+                if(oldFile.exists()) {
+                    oldFile.delete();
+                } else {
+                    System.out.println("not exists");
+                }
+
+                System.out.println(oldFile.getParentFile());
+                oldFile.getParentFile().delete();
+            }
+
+            postImageRepository.deleteAll(oldPostImages);
+            post.getPostImageList().removeAll(oldPostImages);
+        }
     }
 
     @Transactional

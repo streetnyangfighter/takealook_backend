@@ -50,7 +50,7 @@ public class CatController {
         catService.update(userId, catId, catInfo);
         catLocationService.update(userId, catId, catLocList);
         catImageService.update(userId, catId, files);
-        notificationService.save(userId, catId, (byte) 1);
+        notificationService.catSave(userId, catId, (byte) 1);
 
         return catId;
     }
@@ -58,7 +58,7 @@ public class CatController {
     @PatchMapping("/user/{userId}/cat/{catId}")
     public Long changeStatus(@PathVariable Long userId, @PathVariable Long catId, Byte status) {
         Long updateId = catService.changeStatus(userId, catId, status);
-        notificationService.save(userId, catId, (byte) 1);
+        notificationService.catSave(userId, catId, (byte) 1);
         return updateId;
     }
 

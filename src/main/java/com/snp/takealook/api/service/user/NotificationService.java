@@ -6,7 +6,6 @@ import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.repository.cat.CatRepository;
-import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.repository.community.CommentRepository;
@@ -32,7 +31,7 @@ public class NotificationService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void save(Long userId, Long catId, Byte type) {
+    public void catSave(Long userId, Long catId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
         String message = null;
@@ -105,7 +104,7 @@ public class NotificationService {
             notificationRepository.save(new Notification(user, message, type));
         }
     }
-  
+
     @Transactional
     public void commentSave(Long id, Long userId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
@@ -120,4 +119,27 @@ public class NotificationService {
             notificationRepository.save(new Notification(user, message, type));
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<ResponseDTO.NotificationListResponse> findAllByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        // GET 되어 회원에게 조회되면 읽음(check) 처리
+        // 를 해주었는데, 아래 hasUncheckedNotification 에서 아래 수정사항이 반영되지 않음ㅜ
+        for (Notification notification : user.getNotificationList()) {
+            notification.check();
+        }
+
+        return user.getNotificationList().stream()
+                .map(ResponseDTO.NotificationListResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean hasUncheckedNotifation(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        return notificationRepository.findNotificationsByUserAndCheckedFalse(user).size() != 0;
+    }
+    
 }
