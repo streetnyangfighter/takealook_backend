@@ -7,6 +7,7 @@ import com.snp.takealook.api.dto.community.PostLikeDTO;
 import com.snp.takealook.api.service.community.PostImageService;
 import com.snp.takealook.api.service.community.PostLikeService;
 import com.snp.takealook.api.service.community.PostService;
+import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class PostController {
     private final PostService postService;
     private final PostLikeService postLikeService;
     private final PostImageService postImageService;
+    private final NotificationService notificationService;
 
     // Post -------------------------------------------------------------------------------
     // 게시글 작성 + 썸네일 추가
@@ -69,22 +71,23 @@ public class PostController {
 
     // Post Thumbnail -------------------------------------------------------------------
     // 게시글 썸네일 추가
-    @PostMapping("/post/{id}/thumbnail")
-    public Long save(@PathVariable Long id, @RequestPart(value = "files") MultipartFile file) throws IOException, NoSuchAlgorithmException {
-        return postImageService.save(id, file);
-    }
-
-    // 게시글 썸네일 조회
-    @GetMapping("/post/{id}/thumbnail")
-    public PostImage getThumbnail(@PathVariable Long id) {
-        return postImageService.getTumbnail(id);
-    }
+//    @PostMapping("/post/{id}/thumbnail")
+//    public Long save(@PathVariable Long id, @RequestPart(value = "files") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+//        return postImageService.save(id, file);
+//    }
+//
+//    // 게시글 썸네일 조회
+//    @GetMapping("/post/{id}/thumbnail")
+//    public PostImage getThumbnail(@PathVariable Long id) {
+//        return postImageService.getTumbnail(id);
+//    }
 
     // Post Like ------------------------------------------------------------------------
     // 게시글 추천
     @PostMapping("/post/{id}/like")
     public void like(@PathVariable Long id, @RequestBody PostLikeDTO.Like dto) {
         postLikeService.like(id, dto);
+        notificationService.postSave(id, dto.getUserId(), (byte) 6);
     }
 
     // 게시글 추천 취소
@@ -93,9 +96,9 @@ public class PostController {
         postLikeService.unlike(id, dto);
     }
 
-    // 게시글별 추천 카운트
-    @GetMapping("/post/{id}/like")
-    public Long countLike(@PathVariable Long id) {
-        return postLikeService.countLike(id);
-    }
+//    // 게시글별 추천 카운트
+//    @GetMapping("/post/{id}/like")
+//    public Long countLike(@PathVariable Long id) {
+//        return postLikeService.countLike(id);
+//    }
 }
