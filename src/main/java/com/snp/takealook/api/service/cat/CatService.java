@@ -47,6 +47,15 @@ public class CatService {
         return cat.changeStatus(status).getId();
     }
 
+    @Transactional
+    public void delete(Long catId) {
+        Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+
+        if (cat.getSelectionList().size() == 0) {
+            catRepository.delete(cat);
+        }
+    }
+
     @Transactional(readOnly = true)
     public ResponseDTO.CatResponse findOne(Long userId, Long catId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
