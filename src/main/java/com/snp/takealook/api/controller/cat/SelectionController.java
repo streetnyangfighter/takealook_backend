@@ -19,7 +19,7 @@ public class SelectionController {
     @PostMapping("/user/{userId}/cat/{catId}/selection")
     public Long save(@PathVariable Long userId, @PathVariable Long catId) {
         Long saveId = selectionService.save(userId, catId);
-        notificationService.save(userId, catId, (byte) 2);
+        notificationService.catSave(userId, catId, (byte) 2);
         return saveId;
     }
 
@@ -27,8 +27,8 @@ public class SelectionController {
     @PatchMapping("/user/{userId}/cat/{catId}/selection")
     public Long update(@PathVariable Long userId, @PathVariable Long catId, Long newCatId) {
         Long updateId = selectionService.update(userId, catId, newCatId);
-        notificationService.save(userId, catId, (byte) 3);
-        notificationService.save(userId, newCatId, (byte) 2);
+        notificationService.catSave(userId, catId, (byte) 3);
+        notificationService.catSave(userId, newCatId, (byte) 2);
         return updateId;
     }
 
@@ -36,7 +36,7 @@ public class SelectionController {
     @PatchMapping("/user/{userId}/cat/{catId}/selection/new")
     public Long updateNewCat(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatDTO.Create catInfo) {
         Long newCatId = catService.save(catInfo);
-        notificationService.save(userId, catId, (byte) 4);
+        notificationService.catSave(userId, catId, (byte) 4);
         return selectionService.update(userId, catId, newCatId);
     }
 
@@ -44,7 +44,7 @@ public class SelectionController {
     @PatchMapping("/user/{userId}/cat/{catId}/selection/soft-delete")
     public void softDelete(@PathVariable Long userId, @PathVariable Long catId, boolean deleteCat) {
         selectionService.softDelete(userId, catId);
-        notificationService.save(userId, catId, (byte) 4);
+        notificationService.catSave(userId, catId, (byte) 4);
     }
 
 }

@@ -6,16 +6,8 @@ import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.repository.cat.CatRepository;
-import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
-import com.snp.takealook.api.domain.user.Notification;
-import com.snp.takealook.api.domain.user.User;
-import com.snp.takealook.api.dto.ResponseDTO;
-import com.snp.takealook.api.dto.community.PostLikeDTO;
-import com.snp.takealook.api.dto.user.NotificationDTO;
-import com.snp.takealook.api.repository.SelectionRepository;
-import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.community.CommentRepository;
 import com.snp.takealook.api.repository.community.PostRepository;
 import com.snp.takealook.api.repository.user.NotificationRepository;
@@ -35,12 +27,11 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final CatRepository catRepository;
-    private final SelectionRepository selectionRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void save(Long userId, Long catId, Byte type) {
+    public void catSave(Long userId, Long catId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
         String message = null;
@@ -67,12 +58,35 @@ public class NotificationService {
     }
 
     @Transactional
-    public Long check(Long notificationId) {
-        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new IllegalArgumentException("Notification with id: " + notificationId + " is not valid"));
+    public void postSave(Long id, Long userId, Byte type) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+        String message = null;
 
-        notification.check();
+        if (type == 5) {
+            message = user.getNickname() + "님이 '" + post.getTitle()+ "'에 댓글을 남겼습니다.";
+        } else if (type == 6) {
+            message = user.getNickname() + "님이 '" + post.getTitle()+ "'을 추천했습니다.";
+        }
 
-        return notificationId;
+        if(!Objects.equals(user.getNickname(), post.getWriter().getNickname())) {
+            notificationRepository.save(new Notification(user, message, type));
+        }
+    }
+
+    @Transactional
+    public void commentSave(Long id, Long userId, Byte type) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+        String message = null;
+
+        if (type == 7) {
+            message = user.getNickname() + "님이 '" +  comment.getContent()+ "' 댓글을 추천했습니다.";
+        }
+
+        if(!Objects.equals(user.getNickname(), comment.getWriter().getNickname())) {
+            notificationRepository.save(new Notification(user, message, type));
+        }
     }
 
     @Transactional(readOnly = true)
@@ -96,36 +110,5 @@ public class NotificationService {
 
         return notificationRepository.findNotificationsByUserAndCheckedFalse(user).size() != 0;
     }
-
-    @Transactional
-    public void postSave(Long id, Long userId, Byte type) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
-        String message = null;
-
-        if (type == 5) {
-            message = user.getNickname() + "님이 '" + post.getTitle()+ "'에 댓글을 남겼습니다.";
-        } else if (type == 6) {
-            message = user.getNickname() + "님이 '" + post.getTitle()+ "'을 추천했습니다.";
-        }
-
-        if(!Objects.equals(user.getNickname(), post.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type));
-        }
-    }
-  
-    @Transactional
-    public void commentSave(Long id, Long userId, Byte type) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
-        String message = null;
-
-        if (type == 7) {
-            message = user.getNickname() + "님이 '" +  comment.getContent()+ "' 댓글을 추천했습니다.";
-        }
-
-        if(!Objects.equals(user.getNickname(), comment.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type));
-        }
-    }
+    
 }

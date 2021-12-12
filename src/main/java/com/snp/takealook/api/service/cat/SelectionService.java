@@ -40,7 +40,7 @@ public class SelectionService {
         mySelection.update(newCat);
 
         // 다른 고양이를 추천받아 기존 고양이를 돌보는 사람이 0명일 경우, 해당 고양이 삭제
-        // 를 해주려했는데 위에서 update를 했고, db 에도 수정된 데이터만 남았는데
+        // 를 해주려했는데 위에서 update 를 했고, db 에도 수정된 데이터만 남았는데
         // 아래 size 는 0이 아닌 것으로 나와서 삭제가 되지 않음
         // 어거지로 삭제를 시키면 cat 아래 연관된 selection list 도 삭제됨ㅜ
         if (pastCat.getSelectionList().size() == 0) {
