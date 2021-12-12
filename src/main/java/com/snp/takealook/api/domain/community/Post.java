@@ -7,8 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,17 +35,14 @@ public class Post extends BaseTimeEntity {
     @Lob @NotNull
     private String content;
 
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Comment> commentList;
 
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<PostLike> postLikeList;
 
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<PostImage> postImageList;
