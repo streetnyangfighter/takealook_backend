@@ -1,6 +1,6 @@
 package com.snp.takealook.api.repository.cat;
 
-import com.snp.takealook.api.domain.Selection;
+import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.CatCare;
 import org.springframework.data.jpa.repository.JpaRepository;
 

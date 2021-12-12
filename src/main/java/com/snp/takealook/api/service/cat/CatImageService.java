@@ -1,8 +1,8 @@
 package com.snp.takealook.api.service.cat;
 
-import com.snp.takealook.api.domain.Selection;
+import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.CatImage;
-import com.snp.takealook.api.repository.SelectionRepository;
+import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
