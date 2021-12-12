@@ -9,13 +9,6 @@ import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
-import com.snp.takealook.api.domain.user.Notification;
-import com.snp.takealook.api.domain.user.User;
-import com.snp.takealook.api.dto.ResponseDTO;
-import com.snp.takealook.api.dto.community.PostLikeDTO;
-import com.snp.takealook.api.dto.user.NotificationDTO;
-import com.snp.takealook.api.repository.SelectionRepository;
-import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.community.CommentRepository;
 import com.snp.takealook.api.repository.community.PostRepository;
 import com.snp.takealook.api.repository.user.NotificationRepository;
@@ -35,7 +28,6 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final CatRepository catRepository;
-    private final SelectionRepository selectionRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
