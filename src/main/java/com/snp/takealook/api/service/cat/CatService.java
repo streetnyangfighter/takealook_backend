@@ -48,19 +48,19 @@ public class CatService {
     }
 
     @Transactional
-    public Long changeDflag(Long userId, Long catId, String msg) {
+    public Long changeDflag(Long userId, Long catId) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.sendCatStar(msg).getId();
+        return cat.sendCatStar().getId();
     }
 
     @Transactional
-    public Long changeAflag(Long userId, Long catId, String msg) {
+    public Long changeAflag(Long userId, Long catId) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.adopt(msg).getId();
+        return cat.adopt().getId();
     }
 
     @Transactional

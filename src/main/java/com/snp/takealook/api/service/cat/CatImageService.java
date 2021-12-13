@@ -62,7 +62,7 @@ public class CatImageService {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
                 String current_date = now.format(dateTimeFormatter);
 
-                String fileName = current_date + "-" + originalFileName;
+                String fileName = current_date;
                 String filePath = savePath + "/" + fileName;
 
                 file.transferTo(new File(filePath));

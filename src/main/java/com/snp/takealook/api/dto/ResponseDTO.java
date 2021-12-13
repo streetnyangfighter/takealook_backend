@@ -84,9 +84,9 @@ public class ResponseDTO {
         private Byte status;
         private Byte pattern;
         private Boolean dflag;
-        private String dMsg;
+//        private String dMsg;
         private Boolean aflag;
-        private String aMsg;
+//        private String aMsg;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<UserInfo> carers;
@@ -99,9 +99,9 @@ public class ResponseDTO {
             this.status = entity.getStatus();
             this.pattern = entity.getPattern();
             this.dflag = entity.getDflag();
-            this.dMsg = entity.getDMsg();
+//            this.dMsg = entity.getDMsg();
             this.aflag = entity.getAflag();
-            this.aMsg = entity.getAMsg();
+//            this.aMsg = entity.getAMsg();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
             this.carers = carers;
@@ -135,12 +135,12 @@ public class ResponseDTO {
     public static class CatStarResponse {
         private Long id;
         private String name;
-        private String dMsg;
+//        private String dMsg;
 
         public CatStarResponse(Cat entity) {
             this.id = entity.getId();
             this.name = entity.getName();
-            this.dMsg = entity.getDMsg();
+//            this.dMsg = entity.getDMsg();
         }
     }
 
@@ -148,12 +148,12 @@ public class ResponseDTO {
     public static class CatAdoptedResponse {
         private Long id;
         private String name;
-        private String aMsg;
+//        private String aMsg;
 
         public CatAdoptedResponse(Cat entity) {
             this.id = entity.getId();
             this.name = entity.getName();
-            this.aMsg = entity.getAMsg();
+//            this.aMsg = entity.getAMsg();
         }
     }
 

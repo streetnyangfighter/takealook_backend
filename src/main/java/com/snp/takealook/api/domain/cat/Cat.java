@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jboss.jandex.Main;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,15 +44,18 @@ public class Cat extends BaseTimeEntity {
     private Boolean dflag;
     // 사망 여부
 
-    @Column(name = "dmsg")
-    private String dMsg;
+//    @Column(name = "dmsg")
+//    private String dMsg;
 
     @NotNull
     private Boolean aflag;
     // 입양 여부
 
-    @Column(name = "a_msg")
-    private String aMsg;
+//    @Column(name = "a_msg")
+//    private String aMsg;
+
+    @OneToOne
+    private MainImage mainImage;
 
     // 고양이를 삭제하면 간택 내역 - 연결된 정보 일괄 삭제 되도록 처리
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -85,24 +89,30 @@ public class Cat extends BaseTimeEntity {
         return this;
     }
 
-    public Cat sendCatStar(String msg) {
+    public Cat sendCatStar() {
         if (this.dflag) {
             throw new IllegalStateException("이미 고양이 별에 간 고양이입니다.");
         }
 
         this.dflag = true;
-        this.dMsg = msg;
+//        this.dMsg = msg;
 
         return this;
     }
 
-    public Cat adopt(String msg) {
+    public Cat adopt() {
         if (this.aflag) {
             throw new IllegalStateException("이미 입양된 고양이입니다.");
         }
 
         this.aflag = true;
-        this.aMsg = msg;
+//        this.aMsg = msg;
+
+        return this;
+    }
+
+    public Cat setMainImg(MainImage mainImage) {
+        this.mainImage = mainImage;
 
         return this;
     }
