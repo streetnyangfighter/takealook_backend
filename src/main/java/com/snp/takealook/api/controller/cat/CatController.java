@@ -2,10 +2,7 @@ package com.snp.takealook.api.controller.cat;
 
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.service.cat.SelectionService;
-import com.snp.takealook.api.service.cat.CatImageService;
-import com.snp.takealook.api.service.cat.CatLocationService;
-import com.snp.takealook.api.service.cat.CatService;
+import com.snp.takealook.api.service.cat.*;
 import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -27,16 +24,20 @@ public class CatController {
     private final CatLocationService catLocationService;
     private final CatImageService catImageService;
     private final NotificationService notificationService;
+    private final MainImageService mainImageService;
 
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long userId,
                            @RequestPart(value = "catInfo") CatDTO.Create catInfo,
                            @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
-                           @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+                           @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         Long catId = catService.save(catInfo);
         Long selectionId = selectionService.save(userId, catId);
         catLocationService.saveAll(selectionId, catLocList);
-        catImageService.save(selectionId, files);
+        mainImageService.save(catId, files.get(0));
+        if (files.size() > 1) {
+            catImageService.save(selectionId, files.subList(1, files.size()));
+        }
 
         return catId;
     }
@@ -44,12 +45,15 @@ public class CatController {
     @PostMapping(value = "/user/{userId}/cat/{catId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long update(@PathVariable Long userId,
                        @PathVariable Long catId,
-                       @RequestPart(value = "catInfo", required = false) CatDTO.Update catInfo,
-                       @RequestPart(value = "catLoc", required = false) CatDTO.LocationList[] catLocList,
-                       @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+                       @RequestPart(value = "catInfo") CatDTO.Update catInfo,
+                       @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
+                       @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         catService.update(userId, catId, catInfo);
         catLocationService.update(userId, catId, catLocList);
-        catImageService.update(userId, catId, files);
+        mainImageService.update(catId, files.get(0));
+        if (files.size() > 1) {
+            catImageService.update(userId, catId, files.subList(1, files.size()));
+        }
         notificationService.catSave(userId, catId, (byte) 1);
 
         return catId;
@@ -64,14 +68,14 @@ public class CatController {
 
     @PatchMapping("/user/{userId}/cat/{catId}/cat-star")
     public Long changeDflag(@PathVariable Long userId, @PathVariable Long catId, @RequestBody String msg) {
-        Long updateId = catService.changeDflag(userId, catId, msg);
+        Long updateId = catService.changeDflag(userId, catId);
         notificationService.catSave(userId, catId, (byte) 6);
         return updateId;
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}/adoptation")
     public Long changeAflag(@PathVariable Long userId, @PathVariable Long catId, @RequestBody String msg) {
-        Long updateId = catService.changeAflag(userId, catId, msg);
+        Long updateId = catService.changeAflag(userId, catId);
         notificationService.catSave(userId, catId, (byte) 7);
         return updateId;
     }

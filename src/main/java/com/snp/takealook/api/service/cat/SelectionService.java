@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class SelectionService {
@@ -23,6 +25,11 @@ public class SelectionService {
     public Long save(Long userId, Long catId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
+
+        Optional<Selection> exist = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId);
+        if (exist.isPresent()) {
+            throw new IllegalStateException("이전에 도감에서 삭제한 고양이입니다.");
+        }
 
         return selectionRepository.save(Selection.builder()
                 .user(user)
