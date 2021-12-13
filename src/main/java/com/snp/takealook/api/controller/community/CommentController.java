@@ -25,7 +25,7 @@ public class CommentController {
     @PostMapping("/post/{postId}/comment")
     public Long save(@PathVariable Long postId, @RequestBody CommentDTO.Create dto) {
         Long commentId = commentService.save(postId, dto);
-        notificationService.postSave(postId, dto.getWriterId(), (byte) 5);
+        notificationService.postSave(postId, dto.getWriterId(), (byte) 8);
         return commentId;
     }
 
@@ -53,7 +53,7 @@ public class CommentController {
     @PostMapping("/post/{postId}/comment/{commentId}/like")
     public void like(@PathVariable Long commentId, @RequestBody CommentLikeDTO.Like dto) {
         commentLikeService.like(commentId, dto);
-        notificationService.commentSave(commentId, dto.getUserId(), (byte) 7);
+        notificationService.commentSave(commentId, dto.getUserId(), (byte) 10);
     }
 
     // 댓글 추천 취소

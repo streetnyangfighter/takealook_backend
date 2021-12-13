@@ -62,6 +62,20 @@ public class CatController {
         return updateId;
     }
 
+    @PatchMapping("/user/{userId}/cat/{catId}/cat-star")
+    public Long changeDflag(@PathVariable Long userId, @PathVariable Long catId, @RequestBody String msg) {
+        Long updateId = catService.changeDflag(userId, catId, msg);
+        notificationService.catSave(userId, catId, (byte) 6);
+        return updateId;
+    }
+
+    @PatchMapping("/user/{userId}/cat/{catId}/adoptation")
+    public Long changeAflag(@PathVariable Long userId, @PathVariable Long catId, @RequestBody String msg) {
+        Long updateId = catService.changeAflag(userId, catId, msg);
+        notificationService.catSave(userId, catId, (byte) 7);
+        return updateId;
+    }
+
     @GetMapping("/user/{userId}/cat/{catId}")
     public ResponseDTO.CatResponse findOne(@PathVariable Long userId, @PathVariable Long catId) {
         return catService.findOne(userId, catId);
@@ -70,6 +84,16 @@ public class CatController {
     @GetMapping("/user/{userId}/cats")
     public List<ResponseDTO.CatListResponse> findAllByUserId(@PathVariable Long userId) {
         return catService.findAllByUserId(userId);
+    }
+
+    @GetMapping("/user/{userId}/cat-stars")
+    public List<ResponseDTO.CatStarResponse> findAllCatStarsByUserId(@PathVariable Long userId) {
+        return catService.findAllCatStarsByUserId(userId);
+    }
+
+    @GetMapping("/user/{userId}/adopted")
+    public List<ResponseDTO.CatAdoptedResponse> findAllAdoptedByUserId(@PathVariable Long userId) {
+        return catService.findAllAdoptedByUserId(userId);
     }
 
     @GetMapping("/user/{userId}/cats/recent-location")

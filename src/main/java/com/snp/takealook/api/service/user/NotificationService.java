@@ -46,6 +46,12 @@ public class NotificationService {
             message = user.getNickname() + " 님이 " + cat.getName() + "(이)와 같은 고양이를 추천받아 그룹을 이동했습니다.";
         } else if (type == 4) {
             message = user.getNickname() + " 님이 다른 고양이를 찾아 떠났습니다.";
+        } else if (type == 5) {
+            message = cat.getName() + "(이)를 돌보는 집사가 줄었습니다.";
+        } else if (type == 6) {
+            message = user.getNickname() + " 님이 " + cat.getName() + "(이)의 고양이 별 여행 소식을 전했습니다. 작별 메세지를 확인하세요.";
+        } else if (type == 7) {
+            message = user.getNickname() + " 님이 " + cat.getName() + "(이)를 집으로 모셔갔습니다. 인사 메세지를 확인하세요.";
         }
 
         List<Selection> selectionList = cat.getSelectionList();
