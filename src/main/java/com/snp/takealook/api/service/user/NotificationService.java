@@ -57,15 +57,6 @@ public class NotificationService {
     }
 
     @Transactional
-    public Long check(Long notificationId) {
-        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new IllegalArgumentException("Notification with id: " + notificationId + " is not valid"));
-
-        notification.check();
-
-        return notificationId;
-    }
-
-    @Transactional
     public void postSave(Long id, Long userId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
