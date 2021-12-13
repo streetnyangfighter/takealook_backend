@@ -33,11 +33,25 @@ public class Cat extends BaseTimeEntity {
 
     @NotNull
     private Byte status;
-    // 0: 건강함, 1: 치료 필요, 2: 입양, 3: 고양이 별..
+    // 0: 건강함, 1: 치료 필요
 
     @NotNull
     private Byte pattern;
     // 0: 치즈 태비, 1: 고등어 태비, 2: 젖소, ...
+
+    @NotNull
+    private Boolean dflag;
+    // 사망 여부
+
+    @Column(name = "dmsg")
+    private String dMsg;
+
+    @NotNull
+    private Boolean aflag;
+    // 입양 여부
+
+    @Column(name = "a_msg")
+    private String aMsg;
 
     // 고양이를 삭제하면 간택 내역 - 연결된 정보 일괄 삭제 되도록 처리
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -51,6 +65,8 @@ public class Cat extends BaseTimeEntity {
         this.neutered = neutered;
         this.status = status;
         this.pattern = pattern;
+        this.dflag = false;
+        this.aflag = false;
     }
 
     public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status, Byte pattern) {
@@ -65,6 +81,28 @@ public class Cat extends BaseTimeEntity {
 
     public Cat changeStatus(Byte status) {
         this.status = status;
+
+        return this;
+    }
+
+    public Cat sendCatStar(String msg) {
+        if (this.dflag) {
+            throw new IllegalStateException("이미 고양이 별에 간 고양이입니다.");
+        }
+
+        this.dflag = true;
+        this.dMsg = msg;
+
+        return this;
+    }
+
+    public Cat adopt(String msg) {
+        if (this.aflag) {
+            throw new IllegalStateException("이미 입양된 고양이입니다.");
+        }
+
+        this.aflag = true;
+        this.aMsg = msg;
 
         return this;
     }

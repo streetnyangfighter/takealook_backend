@@ -48,6 +48,22 @@ public class CatService {
     }
 
     @Transactional
+    public Long changeDflag(Long userId, Long catId, String msg) {
+        Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
+
+        return cat.sendCatStar(msg).getId();
+    }
+
+    @Transactional
+    public Long changeAflag(Long userId, Long catId, String msg) {
+        Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
+
+        return cat.adopt(msg).getId();
+    }
+
+    @Transactional
     public void delete(Long catId) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
@@ -80,24 +96,57 @@ public class CatService {
 
         List<Cat> userCatList = new ArrayList<>();
         for (Selection selection : selectionList) {
-            userCatList.add(selection.getCat());
+            if (!selection.getCat().getDflag() && !selection.getCat().getAflag()) {
+                userCatList.add(selection.getCat());
 
-            List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
-            List<CatCare> recentCares = new ArrayList<>();
-            for (Selection sameCatSelection : sameCatSelectionList) {
-                recentCares.addAll(sameCatSelection.getCatCareList());
+                List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
+                List<CatCare> recentCares = new ArrayList<>();
+                for (Selection sameCatSelection : sameCatSelectionList) {
+                    recentCares.addAll(sameCatSelection.getCatCareList());
+                }
+
+                recentCares.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
+                if (recentCares.size() > 3) {
+                    recentCares = recentCares.subList(0, 3);
+                }
+
+                List<ResponseDTO.CatCareListResponse> recentCaresResponse = recentCares.stream()
+                        .map(ResponseDTO.CatCareListResponse::new)
+                        .collect(Collectors.toList());
+
+                result.add(new ResponseDTO.CatListResponse(selection.getCat(), recentCaresResponse));
             }
 
-            recentCares.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
-            if (recentCares.size() > 3) {
-                recentCares = recentCares.subList(0, 3);
+        }
+
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponseDTO.CatStarResponse> findAllCatStarsByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        List<Selection> selectionList = selectionRepository.findSelectionsByUserAndDflagFalse(user);
+        List<ResponseDTO.CatStarResponse> result = new ArrayList<>();
+
+        for (Selection selection : selectionList) {
+            if (selection.getCat().getDflag()) {
+                result.add(new ResponseDTO.CatStarResponse(selection.getCat()));
             }
+        }
 
-            List<ResponseDTO.CatCareListResponse> recentCaresResponse = recentCares.stream()
-                    .map(ResponseDTO.CatCareListResponse::new)
-                    .collect(Collectors.toList());
+        return result;
+    }
 
-            result.add(new ResponseDTO.CatListResponse(selection.getCat(), recentCaresResponse));
+    @Transactional(readOnly = true)
+    public List<ResponseDTO.CatAdoptedResponse> findAllAdoptedByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        List<Selection> selectionList = selectionRepository.findSelectionsByUserAndDflagFalse(user);
+        List<ResponseDTO.CatAdoptedResponse> result = new ArrayList<>();
+
+        for (Selection selection : selectionList) {
+            if (selection.getCat().getAflag()) {
+                result.add(new ResponseDTO.CatAdoptedResponse(selection.getCat()));
+            }
         }
 
         return result;
@@ -111,17 +160,20 @@ public class CatService {
 
         List<Cat> userCatList = new ArrayList<>();
         for (Selection selection : selectionList) {
-            userCatList.add(selection.getCat());
+            if (!selection.getCat().getDflag() && !selection.getCat().getAflag()) {
+                userCatList.add(selection.getCat());
 
-            List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
-            List<CatLocation> recentLocations = new ArrayList<>();
-            for (Selection sameCatSelection : sameCatSelectionList) {
-                recentLocations.addAll(sameCatSelection.getCatLocationList());
+                List<Selection> sameCatSelectionList = selection.getCat().getSelectionList();
+                List<CatLocation> recentLocations = new ArrayList<>();
+                for (Selection sameCatSelection : sameCatSelectionList) {
+                    recentLocations.addAll(sameCatSelection.getCatLocationList());
+                }
+
+                recentLocations.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
+
+                result.add(new ResponseDTO.CatListResponse(selection.getCat(), new ResponseDTO.CatLocationResponse(recentLocations.get(0))));
             }
 
-            recentLocations.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt).reversed());
-
-            result.add(new ResponseDTO.CatListResponse(selection.getCat(), new ResponseDTO.CatLocationResponse(recentLocations.get(0))));
         }
 
         return result;

@@ -87,7 +87,7 @@ public class PostController {
     @PostMapping("/post/{id}/like")
     public void like(@PathVariable Long id, @RequestBody PostLikeDTO.Like dto) {
         postLikeService.like(id, dto);
-        notificationService.postSave(id, dto.getUserId(), (byte) 6);
+        notificationService.postSave(id, dto.getUserId(), (byte) 9);
     }
 
     // 게시글 추천 취소

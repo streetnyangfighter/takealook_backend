@@ -38,7 +38,7 @@ public class SelectionController {
     @PatchMapping("/user/{userId}/cat/{catId}/selection/new")
     public Long updateNewCat(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatDTO.Create catInfo) {
         Long newCatId = catService.save(catInfo);
-        notificationService.catSave(userId, catId, (byte) 4);
+        notificationService.catSave(userId, catId, (byte) 5);
         return selectionService.update(userId, catId, newCatId);
     }
 
