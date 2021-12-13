@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,9 @@ public class CatService {
             }
         }
 
-        return new ResponseDTO.CatResponse(mySelection.getCat(), carers);
+        File mainImage = new File(mySelection.getCat().getMainImage().getFilePath());
+
+        return new ResponseDTO.CatResponse(mySelection.getCat(), carers, mainImage);
     }
 
     @Transactional(readOnly = true)

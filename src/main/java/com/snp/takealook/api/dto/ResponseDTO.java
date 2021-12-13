@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.hibernate.hql.internal.ast.tree.IntoClause;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -90,8 +91,9 @@ public class ResponseDTO {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<UserInfo> carers;
+        private File mainImage;
 
-        public CatResponse(Cat entity, List<UserInfo> carers) {
+        public CatResponse(Cat entity, List<UserInfo> carers, File mainImage) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
@@ -105,6 +107,7 @@ public class ResponseDTO {
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
             this.carers = carers;
+            this.mainImage = mainImage;
         }
     }
 
