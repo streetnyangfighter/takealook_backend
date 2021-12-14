@@ -4,8 +4,10 @@ import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,21 +35,10 @@ public class UserController {
         return userService.getInfo(id);
     }
 
-    // 회원정보 수정
-//    @PutMapping("/user/{id}")
-//    public Long updateInfo(@PathVariable Long id, @RequestBody UserDTO.Update dto) {
-//        return userService.updateInfo(id, dto);
-//    }
-
     // 회원 삭제
     @PatchMapping("/user/{userId}/delete")
     public Long delete(@PathVariable Long userId) {
         return userService.delete(userId);
-    }
-
-    @DeleteMapping("/test/delete")
-    public void deleteHard(Long id) {
-        userService.deleteHard(id);
     }
 
     // 회원 복구
@@ -56,23 +47,12 @@ public class UserController {
         return userService.restore(userId);
     }
 
+    @PostMapping("/login")
+    public UserDTO.LoginInfo userLogin(@RequestBody UserDTO.Login data) throws Exception {
+        System.out.println(data.toString());
+        UserDTO.LoginInfo result = userService.userLogin(data.getCode(), data.getProvider());
 
-//    @PutMapping("/user/locations/{id}")
-//    public Long updateLocations(@PathVariable Long id, @RequestBody List<UserDTO.LocationList> dtoList) {
-//        userService.updateLocations(id, dtoList);
-//        return id;
-//    }
-
-//    // 회원 정보 수정과 위치 수정 통합 (테스트)
-//    @PatchMapping("/user/test/{id}")
-//    public Long updateTest(@PathVariable Long id, @RequestBody UserDTO.Update dto, @RequestBody List<UserDTO.LocationList> dtoList) {
-//        userService.updateInfo(id, dto, dtoList);
-//        return id;
-//    }
-
-    @GetMapping("/user/test/hardDelete")
-    public void testHardDelete() {
-        userService.testHardDelete();
+        return result;
     }
 
 }

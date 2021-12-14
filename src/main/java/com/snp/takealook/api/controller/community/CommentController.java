@@ -30,7 +30,7 @@ public class CommentController {
     }
 
     // 게시글 댓글 리스트 조회
-    @GetMapping("post/{postId}/comment")
+    @GetMapping("/post/{postId}/comment")
     public List<ResponseDTO.CommentResponse> findAllByPostId(@PathVariable Long postId) {
         return commentService.findAllPostId(postId);
     }

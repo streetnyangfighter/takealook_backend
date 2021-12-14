@@ -1,24 +1,27 @@
 package com.snp.takealook.api.service.user;
 
-import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
+import com.snp.takealook.api.dto.oauth.OauthUserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
+import com.snp.takealook.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.lang.reflect.Method;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
 
     // 회원 idx로 찾기
     @Transactional(readOnly = true)
@@ -62,30 +65,6 @@ public class UserService {
         return user;
     }
 
-//    //회원 정보 수정
-//    @Transactional
-//    public Long updateInfo(Long id, UserDTO.Update dto, List<UserDTO.LocationList> dtoList) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
-//
-//        user.updateDetail(dto.getNickname(), dto.getPhone(), dto.getImage());
-//
-//        userLocationRepository.deleteAll(user.getUserLocationList());
-//
-//        List<UserLocation> list = dtoList.stream()
-//                .map(v -> UserLocation.builder()
-//                        .user(user)
-//                        .sido(v.getSido())
-//                        .gugun(v.getGugun())
-//                        .dong(v.getDong())
-//                        .build())
-//                .collect(Collectors.toList());
-//
-//        user.updateLocations(list);
-//
-//        return id;
-//    }
-
     // 회원 탈퇴
     @Transactional
     public Long delete(Long userId) {
@@ -95,12 +74,12 @@ public class UserService {
         return user.delete().getId();
     }
 
-    @Transactional
-    public void deleteHard(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
-        userRepository.delete(user);
-    }
+//    @Transactional
+//    public void deleteHard(Long id) {
+//        User user = userRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+//        userRepository.delete(user);
+//    }
 
     // 회원 복구
     @Transactional
@@ -111,47 +90,59 @@ public class UserService {
         return user.restore().getId();
     }
 
-    @Transactional
-    public void testHardDelete() {
-//        LocalDateTime limitDate = LocalDateTime.now().minusMonths(3);
-        LocalDateTime limitDate = LocalDateTime.now().minusMinutes(1);
+    // 소셜 로그인
+    public UserDTO.LoginInfo userLogin(String code, String provider) throws Exception {
+        OauthUserInfo oauthUserInfo = null;
+        UserDTO.Register userDTO = null;
+        UserDTO.LoginInfo result = null;
 
-        List<User> userList = userRepository.findUsersByModifiedAtBeforeAndDflagTrue(limitDate);
+        try {
+            Class social = Class.forName("com.snp.takealook.api.service.user.Social");
+            Method method = social.getDeclaredMethod(provider, String.class);
+            oauthUserInfo = (OauthUserInfo) method.invoke(null, code);
 
-        for (User user : userList) {
+            System.out.println(oauthUserInfo.getNickname());
+            System.out.println(oauthUserInfo.getLoginId());
+            System.out.println(oauthUserInfo.getImage());
+            System.out.println(oauthUserInfo.getLoginType());
 
-            List<Post> postList = user.getPostList();
+            userDTO = UserDTO.Register.builder()
+                    .loginId(oauthUserInfo.getLoginId())
+                    .nickname(oauthUserInfo.getNickname())
+                    .image(oauthUserInfo.getImage())
+                    .loginType(oauthUserInfo.getLoginType())
+                    .build();
 
-            for (Post post : postList) {
-                post.setWriterNull();
+            System.out.println("-------------------------- userDTO");
+
+            User user = userRepository.findByLoginId(userDTO.getLoginId());
+
+            if (Objects.isNull(user)) {
+                user = userRepository.save(userDTO.toEntity());
             }
+
+            result = UserDTO.LoginInfo.builder()
+                    .id(user.getId())
+                    .loginId(user.getLoginId())
+                    .nickname(user.getNickname())
+                    .build();
+
+            if (user.getPhone() == null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(user.getId(), null, AuthorityUtils.createAuthorityList("USER"));
+
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwt = tokenProvider.createToken(authentication);
+                result.setAccessToken(jwt);
+            }
+
+
+        } catch (Exception e) {
+
         }
 
-        System.out.println(userList.size());
-        userRepository.deleteAll(userRepository.findUsersByModifiedAtBeforeAndDflagTrue(limitDate));
-
-//        System.out.println(userRepository.hardDelete(limitDate));
+        return result;
     }
-//
-//    @Transactional
-//    public void updateLocations(Long id, List<UserDTO.LocationList> dtoList) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
-//
-//        if (user.getUserLocationList().size() != 0) {
-//            userLocationRepository.deleteAll(user.getUserLocationList());
-//        }
-//
-//        List<UserLocation> list = dtoList.stream()
-//                .map(v -> UserLocation.builder()
-//                        .user(user)
-//                        .sido(v.getSido())
-//                        .gugun(v.getGugun())
-//                        .dong(v.getDong())
-//                        .build())
-//                .collect(Collectors.toList());
-//
-//        user.updateLocations(list);
-//    }
 
 }
