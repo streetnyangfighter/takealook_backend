@@ -3,9 +3,7 @@ package com.snp.takealook.api.service.user;
 
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
 import com.snp.takealook.api.dto.oauth.OauthUserInfo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,9 +13,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+@RequiredArgsConstructor
 public class Social {
 
     public static OauthUserInfo kakao (String code) {
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 

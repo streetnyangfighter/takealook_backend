@@ -35,12 +35,6 @@ public class UserController {
         return userService.getInfo(id);
     }
 
-    // 회원정보 수정
-//    @PutMapping("/user/{id}")
-//    public Long updateInfo(@PathVariable Long id, @RequestBody UserDTO.Update dto) {
-//        return userService.updateInfo(id, dto);
-//    }
-
     // 회원 삭제
     @PatchMapping("/user/{userId}/delete")
     public Long delete(@PathVariable Long userId) {
@@ -49,8 +43,7 @@ public class UserController {
 
     // 회원 복구
     @PatchMapping("/user/{userId}/restore")
-    public Long restore(@PathVariable Long userId, @AuthenticationPrincipal Principal user) {
-        user.getName();
+    public Long restore(@PathVariable Long userId) {
         return userService.restore(userId);
     }
 
