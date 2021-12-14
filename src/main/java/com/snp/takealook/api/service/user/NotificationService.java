@@ -57,7 +57,7 @@ public class NotificationService {
         List<Selection> selectionList = cat.getSelectionList();
         for (Selection selection : selectionList) {
             if (!Objects.equals(selection.getUser(), user)) {
-                notificationRepository.save(new Notification(selection.getUser(), message, type));
+                notificationRepository.save(new Notification(selection.getUser(), message, type, catId));
             }
         }
     }
@@ -68,14 +68,14 @@ public class NotificationService {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
         String message = null;
 
-        if (type == 5) {
+        if (type == 8) {
             message = user.getNickname() + "님이 '" + post.getTitle()+ "'에 댓글을 남겼습니다.";
-        } else if (type == 6) {
+        } else if (type == 9) {
             message = user.getNickname() + "님이 '" + post.getTitle()+ "'을 추천했습니다.";
         }
 
         if(!Objects.equals(user.getNickname(), post.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type));
+            notificationRepository.save(new Notification(user, message, type, id));
         }
     }
 
@@ -85,12 +85,12 @@ public class NotificationService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
         String message = null;
 
-        if (type == 7) {
+        if (type == 10) {
             message = user.getNickname() + "님이 '" +  comment.getContent()+ "' 댓글을 추천했습니다.";
         }
 
         if(!Objects.equals(user.getNickname(), comment.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type));
+            notificationRepository.save(new Notification(user, message, type, comment.getPost().getId()));
         }
     }
 

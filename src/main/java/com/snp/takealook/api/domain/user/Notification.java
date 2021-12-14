@@ -31,12 +31,16 @@ public class Notification extends BaseTimeEntity {
     @NotNull
     private Boolean checked;
 
+    @NotNull
+    private Long linkedId;
+
     @Builder
-    public Notification(User user, String message, Byte type) {
+    public Notification(User user, String message, Byte type, Long linkedId) {
         this.user = user;
         this.message = message;
         this.type = type;
         this.checked = false;
+        this.linkedId = linkedId;
     }
 
     public Notification check() {
