@@ -47,6 +47,7 @@ public class ResponseDTO {
         private String message;
         private Byte type;
         private Boolean checked;
+        private Long linkedId;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
@@ -54,9 +55,10 @@ public class ResponseDTO {
             this.id = entity.getId();
             this.message = entity.getMessage();
             this.type = entity.getType();
+            this.checked = entity.getChecked();
+            this.linkedId = entity.getLinkedId();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.checked = entity.getChecked();
         }
     }
 
