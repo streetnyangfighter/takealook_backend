@@ -35,6 +35,9 @@ public class Post extends BaseTimeEntity {
     @Lob @NotNull
     private String content;
 
+    @NotNull
+    private String imgUrl;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Comment> commentList;
@@ -43,16 +46,17 @@ public class Post extends BaseTimeEntity {
     @JsonBackReference
     private List<PostLike> postLikeList;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
-    private List<PostImage> postImageList;
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonBackReference
+//    private List<PostImage> postImageList;
 
     @Builder
-    public Post(Board board, User writer, String title, String content) {
+    public Post(Board board, User writer, String title, String content, String imgUrl) {
         this.board = board;
         this.writer = writer;
         this.title = title;
         this.content = content;
+        this.imgUrl = imgUrl;
     }
 
     public Post update(String title, String content) {
@@ -62,7 +66,4 @@ public class Post extends BaseTimeEntity {
         return this;
     }
 
-    public void setWriterNull() {
-        this.writer = null;
-    }
 }

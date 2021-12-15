@@ -8,6 +8,7 @@ import com.snp.takealook.api.domain.cat.CatLocation;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
+import com.snp.takealook.api.repository.cat.MainImageRepository;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
@@ -26,6 +27,7 @@ public class CatService {
     private final CatRepository catRepository;
     private final UserRepository userRepository;
     private final SelectionRepository selectionRepository;
+    private final MainImageRepository mainImageRepository;
 
     @Transactional
     public Long save(CatDTO.Create dto) {
@@ -69,7 +71,17 @@ public class CatService {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         if (cat.getSelectionList().size() == 0) {
-            catRepository.delete(cat);
+
+//            mainImageRepository.delete(cat.getMainImage());
+            File exist = new File(cat.getMainImage().getFilePath());
+            if (exist.exists()) {
+                exist.delete();
+            } else {
+                System.out.println("file not exists");
+            }
+            // selection 에 연결된 이미지도 다 지워줘야함
+
+            catRepository.delete(cat); //이거만 하면 됨
         }
     }
 
