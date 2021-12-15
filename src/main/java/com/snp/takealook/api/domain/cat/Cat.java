@@ -54,7 +54,7 @@ public class Cat extends BaseTimeEntity {
 //    @Column(name = "a_msg")
 //    private String aMsg;
 
-    @OneToOne
+    @OneToOne(mappedBy = "cat", cascade = CascadeType.ALL)
     private MainImage mainImage;
 
     // 고양이를 삭제하면 간택 내역 - 연결된 정보 일괄 삭제 되도록 처리
