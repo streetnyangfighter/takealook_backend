@@ -246,7 +246,7 @@ public class ResponseDTO {
 
         public PostListResponse(Post entity) {
             this.board = entity.getBoard();
-            this.thumbnail = entity.getPostImageList().get(0).getFilePath();
+            this.thumbnail = entity.getImgUrl();
             this.writer = new UserInfo(entity.getWriter());
             this.title = entity.getTitle();
             this.content = entity.getContent();

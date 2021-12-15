@@ -18,7 +18,8 @@ public class TestController {
 
     @PostMapping("/images")
     public String upload(@RequestPart(value = "images") MultipartFile multipartFile) throws IOException {
-        s3Uploader.upload(multipartFile, "static");
+        String url = s3Uploader.upload(multipartFile, "static");
+        System.out.println(url);
         return "test";
     }
 }

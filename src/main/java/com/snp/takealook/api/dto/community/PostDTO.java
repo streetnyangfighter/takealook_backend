@@ -14,21 +14,24 @@ public class PostDTO {
         private Long writerId;
         private String title;
         private String content;
+        private String imgUrl;
 
         @Builder
-        public Create(Long boardId, Long writerId, String title, String content) {
+        public Create(Long boardId, Long writerId, String title, String content, String imgUrl) {
             this.boardId = boardId;
             this.writerId = writerId;
             this.title = title;
             this.content = content;
+            this.imgUrl = imgUrl;
         }
 
-        public Post toEntity(Board board, User writer) {
+        public Post toEntity(Board board, User writer, String imgUrl) {
             return Post.builder()
                     .board(board)
                     .writer(writer)
                     .title(title)
                     .content(content)
+                    .imgUrl(imgUrl)
                     .build();
         }
     }
