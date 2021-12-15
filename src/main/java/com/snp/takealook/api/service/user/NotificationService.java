@@ -57,7 +57,7 @@ public class NotificationService {
         List<Selection> selectionList = cat.getSelectionList();
         for (Selection selection : selectionList) {
             if (!Objects.equals(selection.getUser(), user)) {
-                notificationRepository.save(new Notification(selection.getUser(), message, type));
+                notificationRepository.save(new Notification(selection.getUser(), message, type, catId));
             }
         }
     }
@@ -75,7 +75,7 @@ public class NotificationService {
         }
 
         if(!Objects.equals(user.getNickname(), post.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type));
+            notificationRepository.save(new Notification(user, message, type, id));
         }
     }
 
@@ -90,7 +90,7 @@ public class NotificationService {
         }
 
         if(!Objects.equals(user.getNickname(), comment.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type));
+            notificationRepository.save(new Notification(user, message, type, comment.getPost().getId()));
         }
     }
 
