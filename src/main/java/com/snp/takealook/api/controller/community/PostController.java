@@ -3,7 +3,8 @@ package com.snp.takealook.api.controller.community;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
 import com.snp.takealook.api.dto.community.PostLikeDTO;
-import com.snp.takealook.api.service.community.PostImageService;
+import com.snp.takealook.api.service.S3Uploader;
+//import com.snp.takealook.api.service.community.PostImageService;
 import com.snp.takealook.api.service.community.PostLikeService;
 import com.snp.takealook.api.service.community.PostService;
 import com.snp.takealook.api.service.user.NotificationService;
@@ -22,16 +23,17 @@ public class PostController {
 
     private final PostService postService;
     private final PostLikeService postLikeService;
-    private final PostImageService postImageService;
+//    private final PostImageService postImageService;
     private final NotificationService notificationService;
+    private final S3Uploader s3Uploader;
 
     // Post -------------------------------------------------------------------------------
     // 게시글 작성 + 썸네일 추가
     @PostMapping(value = "/post", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@RequestPart(value = "postText") PostDTO.Create dto,
                      @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
-        Long postId = postService.save(dto);
-        postImageService.save(postId, file);
+        String imgUrl = s3Uploader.upload(file, "static");
+        Long postId = postService.save(dto, imgUrl);
 
         return postId;
     }
@@ -54,7 +56,7 @@ public class PostController {
                        @RequestPart(value = "postText") PostDTO.Update dto,
                        @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
         Long postId = postService.update(id, dto);
-        postImageService.save(postId, file);
+//        postImageService.save(postId, file);
 
         return postId;
     }
@@ -62,7 +64,7 @@ public class PostController {
     // 게시글 삭제
     @DeleteMapping("/post/{id}")
     public Long delete(@PathVariable Long id) {
-        postImageService.delete(id);
+//        postImageService.delete(id);
         postService.delete(id);
         return id;
     }

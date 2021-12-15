@@ -46,4 +46,5 @@ public class MainImage extends BaseTimeEntity {
         this.fileSize = fileSize;
         this.filePath = filePath;
     }
+
 }

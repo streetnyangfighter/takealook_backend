@@ -27,7 +27,7 @@ public class PostService {
 
     // 게시글 등록
     @Transactional
-    public Long save(PostDTO.Create dto) {
+    public Long save(PostDTO.Create dto, String imgUrl) {
 
         Board board = boardRepository.findById(dto.getBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("Board with id: " + dto.getBoardId() + " is not valid"));
@@ -35,7 +35,7 @@ public class PostService {
         User user = userRepository.findById(dto.getWriterId())
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + dto.getWriterId() + " is not valid"));
 
-        return postRepository.save(dto.toEntity(board, user)).getId();
+        return postRepository.save(dto.toEntity(board, user, imgUrl)).getId();
 
     }
 
