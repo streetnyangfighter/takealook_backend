@@ -105,20 +105,19 @@ public class CatImageService {
     }
 
     @Transactional(readOnly = true)
-    public List<File> findImagesByCatId(Long userId, Long catId) {
+    public List<String> findImagesByCatId(Long userId, Long catId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<Selection> selectionList = mySelection.getCat().getSelectionList();
-        List<File> fileList = new ArrayList<>();
+        List<String> filePathList = new ArrayList<>();
         for (Selection selection : selectionList) {
             List<CatImage> imageList = selection.getCatImageList();
             for (CatImage catImage : imageList) {
-                File file = new File(catImage.getFilePath());
-                fileList.add(file);
+                filePathList.add(catImage.getFilePath());
             }
         }
 
-        return fileList;
+        return filePathList;
     }
 }
