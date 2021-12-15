@@ -86,9 +86,7 @@ public class CatService {
             }
         }
 
-        File mainImage = new File(mySelection.getCat().getMainImage().getFilePath());
-
-        return new ResponseDTO.CatResponse(mySelection.getCat(), carers, mainImage);
+        return new ResponseDTO.CatResponse(mySelection.getCat(), carers);
     }
 
     @Transactional(readOnly = true)
