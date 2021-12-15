@@ -114,7 +114,7 @@ public class CatImageService {
         for (Selection selection : selectionList) {
             List<CatImage> imageList = selection.getCatImageList();
             for (CatImage catImage : imageList) {
-                filePathList.add(catImage.getFilePath().replace(System.getProperty("user.dir"), ""));
+                filePathList.add(catImage.getFilePath().replace(System.getProperty("user.dir"), "") + catImage.getContentType());
 //                filePathList.add(catImage.getFilePath().replace("/home/ec2-user/app/takealook/", ""));
             }
         }
