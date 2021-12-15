@@ -23,27 +23,11 @@ public class CatImage extends BaseTimeEntity {
     private Selection selection;
 
     @NotNull
-    private String originFileName;
-
-    @NotNull
-    private String fileName;
-
-    @NotNull
-    private String contentType;
-
-    @NotNull
-    private Long fileSize;
-
-    @NotNull
-    private String filePath;
+    private String path;
 
     @Builder
-    public CatImage(Selection selection, String originFileName, String fileName, String contentType, String filePath, Long fileSize) {
+    public CatImage(Selection selection, String path) {
         this.selection = selection;
-        this.originFileName = originFileName;
-        this.fileName = fileName;
-        this.contentType = contentType;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
+        this.path = path;
     }
 }
