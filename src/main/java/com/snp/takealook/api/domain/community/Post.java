@@ -62,7 +62,4 @@ public class Post extends BaseTimeEntity {
         return this;
     }
 
-    public void setWriterNull() {
-        this.writer = null;
-    }
 }

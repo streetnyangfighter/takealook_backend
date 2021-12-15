@@ -1,6 +1,5 @@
 package com.snp.takealook.api.controller.community;
 
-import com.snp.takealook.api.domain.community.PostImage;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
 import com.snp.takealook.api.dto.community.PostLikeDTO;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 public class PostController {
@@ -100,5 +98,18 @@ public class PostController {
 //    @GetMapping("/post/{id}/like")
 //    public Long countLike(@PathVariable Long id) {
 //        return postLikeService.countLike(id);
+//    }
+
+    // My Page ------------------------------------------------------------------------
+    // 내가 쓴 게시물 리스트
+    @GetMapping("/user/{userId}/posts")
+    public List<ResponseDTO.PostResponse> myPosts(@PathVariable Long userId) {
+        return postService.findAllByUserId(userId);
+    }
+
+    // 내가 추천한 게시물 리스트
+//    @GetMapping("/user/{userId}/posts/like")
+//    public List<ResponseDTO.PostResponse> myLikePosts(@PathVariable Long userId) {
+//        return postService.findAllByPostLike(userId);
 //    }
 }

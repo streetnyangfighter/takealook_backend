@@ -1,6 +1,7 @@
 package com.snp.takealook.api.repository.community;
 
 import com.snp.takealook.api.domain.community.PostLike;
+import com.snp.takealook.api.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,5 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     void unLike(long postId, long userId);
 
     List<PostLike> findAllByPostId(Long postId);
+    List<PostLike> findAllByUser(User user);
 }

@@ -68,9 +68,9 @@ public class NotificationService {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
         String message = null;
 
-        if (type == 5) {
+        if (type == 8) {
             message = user.getNickname() + "님이 '" + post.getTitle()+ "'에 댓글을 남겼습니다.";
-        } else if (type == 6) {
+        } else if (type == 9) {
             message = user.getNickname() + "님이 '" + post.getTitle()+ "'을 추천했습니다.";
         }
 
@@ -85,7 +85,7 @@ public class NotificationService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
         String message = null;
 
-        if (type == 7) {
+        if (type == 10) {
             message = user.getNickname() + "님이 '" +  comment.getContent()+ "' 댓글을 추천했습니다.";
         }
 

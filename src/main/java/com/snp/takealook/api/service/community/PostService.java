@@ -6,6 +6,7 @@ import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
 import com.snp.takealook.api.repository.community.BoardRepository;
+import com.snp.takealook.api.repository.community.PostLikeRepository;
 import com.snp.takealook.api.repository.community.PostRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class PostService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     // 게시글 등록
     @Transactional
@@ -75,4 +77,21 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    // 내가 쓴 게시물 리스트
+    public List<ResponseDTO.PostResponse> findAllByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        return postRepository.findAllByWriter(user).stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
+    }
+
+    // 내가 추천한 게시물 리스트
+//    public List<ResponseDTO.PostResponse> findAllByLikePosts(Long userId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+//
+//        System.out.println(user.getPostList());
+//
+//        return postRepository.findAllByWriter(user).;
+//    }
 }
