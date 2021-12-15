@@ -46,10 +46,6 @@ public class Post extends BaseTimeEntity {
     @JsonBackReference
     private List<PostLike> postLikeList;
 
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonBackReference
-//    private List<PostImage> postImageList;
-
     @Builder
     public Post(Board board, User writer, String title, String content, String imgUrl) {
         this.board = board;
@@ -62,6 +58,12 @@ public class Post extends BaseTimeEntity {
     public Post update(String title, String content) {
         this.title = title;
         this.content = content;
+
+        return this;
+    }
+
+    public Post updateThumbnail(String imgUrl) {
+        this.imgUrl = imgUrl;
 
         return this;
     }

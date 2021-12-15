@@ -1,12 +1,12 @@
 package com.snp.takealook.api.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,6 +66,19 @@ public class S3Uploader {
 
         return Optional.empty();
 
+    }
+
+    // S3 이미지 삭제
+    public void fileDelete(String fileName) {
+        log.info("file name : "+ fileName);
+        String[] ar = fileName.split("/");
+        String file = ar[ar.length - 1];
+
+        try {
+            amazonS3Client.deleteObject(this.bucket, "static/"+file);
+        } catch (AmazonServiceException e) {
+            System.err.println(e.getErrorMessage());
+        }
     }
 
 }

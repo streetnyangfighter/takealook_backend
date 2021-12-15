@@ -4,7 +4,6 @@ import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
 import com.snp.takealook.api.dto.community.PostLikeDTO;
 import com.snp.takealook.api.service.S3Uploader;
-//import com.snp.takealook.api.service.community.PostImageService;
 import com.snp.takealook.api.service.community.PostLikeService;
 import com.snp.takealook.api.service.community.PostService;
 import com.snp.takealook.api.service.user.NotificationService;
@@ -23,7 +22,6 @@ public class PostController {
 
     private final PostService postService;
     private final PostLikeService postLikeService;
-//    private final PostImageService postImageService;
     private final NotificationService notificationService;
     private final S3Uploader s3Uploader;
 
@@ -38,7 +36,13 @@ public class PostController {
         return postId;
     }
 
-    // 게시글 리스트 조회
+    // 게시글 리스트 조회 (게시판 구분 x)
+    @GetMapping("/posts")
+    public List<ResponseDTO.PostResponse> findAllPosts() {
+        return postService.findAllPosts();
+    }
+
+    // 게시글 리스트 조회 (게시판별)
     @GetMapping("/posts/{boardId}")
     public List<ResponseDTO.PostResponse> findAllByBoardId(@PathVariable Long boardId) {
         return postService.findAllByBoardId(boardId);
@@ -55,32 +59,22 @@ public class PostController {
     public Long update(@PathVariable Long id,
                        @RequestPart(value = "postText") PostDTO.Update dto,
                        @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
-        Long postId = postService.update(id, dto);
-//        postImageService.save(postId, file);
 
-        return postId;
+        if (file.getSize() != 0) {
+            String imgUrl = s3Uploader.upload(file, "static");
+            return postService.update(id, dto, imgUrl);
+        } else {
+            return postService.update(id, dto, null);
+        }
+
     }
 
     // 게시글 삭제
     @DeleteMapping("/post/{id}")
     public Long delete(@PathVariable Long id) {
-//        postImageService.delete(id);
         postService.delete(id);
         return id;
     }
-
-    // Post Thumbnail -------------------------------------------------------------------
-    // 게시글 썸네일 추가
-//    @PostMapping("/post/{id}/thumbnail")
-//    public Long save(@PathVariable Long id, @RequestPart(value = "files") MultipartFile file) throws IOException, NoSuchAlgorithmException {
-//        return postImageService.save(id, file);
-//    }
-//
-//    // 게시글 썸네일 조회
-//    @GetMapping("/post/{id}/thumbnail")
-//    public PostImage getThumbnail(@PathVariable Long id) {
-//        return postImageService.getTumbnail(id);
-//    }
 
     // Post Like ------------------------------------------------------------------------
     // 게시글 추천
@@ -110,8 +104,8 @@ public class PostController {
     }
 
     // 내가 추천한 게시물 리스트
-//    @GetMapping("/user/{userId}/posts/like")
-//    public List<ResponseDTO.PostResponse> myLikePosts(@PathVariable Long userId) {
-//        return postService.findAllByPostLike(userId);
-//    }
+    @GetMapping("/user/{userId}/posts/like")
+    public List<ResponseDTO.PostResponse> myLikePosts(@PathVariable Long userId) {
+        return postService.findAllByLikePosts(userId);
+    }
 }
