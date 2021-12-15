@@ -112,7 +112,7 @@ public class CatController {
 
     // 고양이별 이미지 전체 조회 -> 프론트에 보내줘야 할 값 정확히 확인
     @GetMapping("/user/{userId}/cat/{catId}/images")
-    public List<File> findImagesByCatId(@PathVariable Long userId, @PathVariable Long catId) {
+    public List<String> findImagesByCatId(@PathVariable Long userId, @PathVariable Long catId) {
         return catImageService.findImagesByCatId(userId, catId);
     }
 }
