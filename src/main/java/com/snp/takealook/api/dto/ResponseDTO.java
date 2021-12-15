@@ -109,7 +109,7 @@ public class ResponseDTO {
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
             this.carers = carers;
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "").concat(entity.getMainImage().getContentType());
+            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
 //            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
         }
     }
@@ -128,7 +128,7 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.status = entity.getStatus();
             this.recentCares = recentCares;
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "").concat(entity.getMainImage().getContentType());
+            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
 //            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
         }
 
@@ -137,7 +137,7 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.status = entity.getStatus();
             this.recentLocation = recentLocation;
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "").concat(entity.getMainImage().getContentType());
+            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
 //            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
         }
     }
@@ -153,7 +153,7 @@ public class ResponseDTO {
             this.id = entity.getId();
             this.name = entity.getName();
 //            this.dMsg = entity.getDMsg();
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "").concat(entity.getMainImage().getContentType());
+            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
 //            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
         }
     }
@@ -169,7 +169,7 @@ public class ResponseDTO {
             this.id = entity.getId();
             this.name = entity.getName();
 //            this.aMsg = entity.getAMsg();
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "").concat(entity.getMainImage().getContentType());
+            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
 //            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
         }
     }
