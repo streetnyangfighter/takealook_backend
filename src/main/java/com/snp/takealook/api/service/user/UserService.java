@@ -11,12 +11,10 @@ import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -108,7 +106,7 @@ public class UserService {
 
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
 
-        if (userEntity != null) {
+        if (userEntity == null) {
             User user = User.builder()
                     .username(userInfo.getUsername())
                     .password("NO_PASSWORD")
