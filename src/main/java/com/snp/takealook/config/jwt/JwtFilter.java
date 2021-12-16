@@ -19,7 +19,7 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
-    private final TokenProvider tokenProvider;
+    private final TokenProvider2 tokenProvider2;
 
     /*
      * 토큰의 인증정보를 Security Context(Thread Local)에 저장
@@ -33,8 +33,8 @@ public class JwtFilter extends GenericFilterBean {
         String requestURI = httpServletRequest.getRequestURI();
 
         // 토큰이 있고, claims가 있다면
-        if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)){
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
+        if(StringUtils.hasText(jwt) && tokenProvider2.validateToken(jwt)){
+            Authentication authentication = tokenProvider2.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             log.debug("SecurityContext - {} save Authentication, URI = {}",authentication.getName(),requestURI);

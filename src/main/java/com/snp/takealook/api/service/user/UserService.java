@@ -10,13 +10,12 @@ import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.TokenProvider;
+import com.snp.takealook.config.jwt.TokenProvider2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,8 +24,8 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder encoder;
+    private final TokenProvider tokenProvider;
 
     // 회원 idx로 찾기
     @Transactional(readOnly = true)
@@ -128,13 +127,8 @@ public class UserService {
         }
 
         // 토큰 만들기
-//        String token = Jwts.builder()
-//                .setSubject("userId")
-//                .claim(AUTHORITIES_KEY, authorities) // payload
-//                .signWith(key, SignatureAlgorithm.HS512)
-//                .setExpiration(validity)
-//                .compact(); // 토큰 생성
+        String token = tokenProvider.createToken(userEntity);
 
-        return new ResponseDTO.JwtTokenResponse(success, "token을 만들어 넣어라~");
+        return new ResponseDTO.JwtTokenResponse(success, token);
     }
 }
