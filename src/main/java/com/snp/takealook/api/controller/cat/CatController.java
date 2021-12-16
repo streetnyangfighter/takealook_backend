@@ -33,7 +33,7 @@ public class CatController {
                            @RequestPart(value = "catInfo") CatDTO.Create catInfo,
                            @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
                            @RequestPart(value = "catMainImg") MultipartFile file,
-                           @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+                           @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         String mainImage = s3Uploader.upload(file, "static");
         Long catId = catService.save(catInfo, mainImage);
         Long selectionId = selectionService.save(userId, catId);
@@ -52,7 +52,7 @@ public class CatController {
                        @RequestPart(value = "catInfo") CatDTO.Update catInfo,
                        @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
                        @RequestPart(value = "catMainImg") MultipartFile file,
-                       @RequestPart(value = "catImg") List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+                       @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         String mainImage = s3Uploader.upload(file, "static");
         catService.update(userId, catId, catInfo, mainImage);
         catLocationService.update(userId, catId, catLocList);

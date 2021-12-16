@@ -6,6 +6,7 @@ import com.snp.takealook.api.domain.cat.CatImage;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatImageRepository;
+import com.snp.takealook.api.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class CatImageService {
 
     private final CatImageRepository catImageRepository;
     private final SelectionRepository selectionRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public Long save(Long selectionId, String path) {
@@ -41,6 +43,10 @@ public class CatImageService {
     @Transactional
     public Long update(Long userId, Long catId, List<String> pathList) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+
+        for (CatImage catImage : mySelection.getCatImageList()) {
+            s3Uploader.fileDelete(catImage.getPath());
+        }
 
         catImageRepository.deleteAll(mySelection.getCatImageList());
         mySelection.getCatImageList().clear();
