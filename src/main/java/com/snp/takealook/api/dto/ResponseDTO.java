@@ -218,6 +218,7 @@ public class ResponseDTO {
     @Getter
     public static class PostResponse {
         private Board board;
+        private Long postId;
         private UserInfo writer;
         private String thumbnail;
         private String title;
@@ -229,6 +230,7 @@ public class ResponseDTO {
 
         public PostResponse(Post entity) {
             this.board = entity.getBoard();
+            this.postId = entity.getId();
             this.writer = new UserInfo(entity.getWriter());
             this.thumbnail = entity.getImgUrl();
             this.title = entity.getTitle();
@@ -239,27 +241,6 @@ public class ResponseDTO {
             this.commentListCount = commentList.size();
         }
     }
-
-//    @Getter
-//    public static class PostListResponse {
-//        private Board board;
-//        private UserInfo writer;
-//        private String title;
-//        private String content;
-//        private int postLike;
-//        private LocalDateTime modifiedAt;
-//        private int commentListCount;
-//
-//        public PostListResponse(Post entity) {
-//            this.board = entity.getBoard();
-//            this.writer = new UserInfo(entity.getWriter());
-//            this.title = entity.getTitle();
-//            this.content = entity.getContent();
-//            this.postLike = entity.getPostLikeList().size();
-//            this.modifiedAt = entity.getModifiedAt();
-//            this.commentListCount = entity.getCommentList().size();
-//        }
-//    }
 
     @Getter
     public static class CommentResponse {
