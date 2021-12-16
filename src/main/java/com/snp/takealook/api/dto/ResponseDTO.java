@@ -2,6 +2,7 @@ package com.snp.takealook.api.dto;
 
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.CatCare;
+import com.snp.takealook.api.domain.cat.CatImage;
 import com.snp.takealook.api.domain.cat.CatLocation;
 import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;

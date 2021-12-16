@@ -11,6 +11,7 @@ import com.snp.takealook.api.dto.cat.CatDTO;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
+import com.snp.takealook.api.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class CatService {
     private final CatRepository catRepository;
     private final UserRepository userRepository;
     private final SelectionRepository selectionRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public Long save(CatDTO.Create dto, String image) {
@@ -35,6 +37,8 @@ public class CatService {
     public Long update(Long userId, Long catId, CatDTO.Update dto, String image) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
+
+        s3Uploader.fileDelete(cat.getImage());
 
         return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getStatus(), dto.getPattern(), image).getId();
     }
@@ -68,6 +72,7 @@ public class CatService {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         if (cat.getSelectionList().size() == 0) {
+            s3Uploader.fileDelete(cat.getImage());
             catRepository.delete(cat);
         }
     }
