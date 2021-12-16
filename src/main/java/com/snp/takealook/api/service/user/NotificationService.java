@@ -30,7 +30,7 @@ public class NotificationService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void catSave(Long userId, Long catId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
@@ -62,7 +62,7 @@ public class NotificationService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void postSave(Long id, Long userId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
@@ -79,7 +79,7 @@ public class NotificationService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void commentSave(Long id, Long userId, Byte type) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
@@ -94,7 +94,7 @@ public class NotificationService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 

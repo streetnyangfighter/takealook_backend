@@ -33,7 +33,7 @@ public class UserService {
     }
 
     // 회원 가입 후 추가 정보 입력 (닉네임 변경, 휴대폰번호, 이미지)
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long updateLoginDetail(Long id, UserDTO.Update dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
@@ -44,6 +44,7 @@ public class UserService {
     }
 
     // 닉네임 중복 체크
+    @Transactional(readOnly = true)
     public boolean ckeckNickname(String nickname) {
         boolean result = false;
         User user = userRepository.findByNickname(nickname);
@@ -66,7 +67,7 @@ public class UserService {
     }
 
     // 회원 탈퇴
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long delete(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
@@ -74,15 +75,8 @@ public class UserService {
         return user.delete().getId();
     }
 
-//    @Transactional
-//    public void deleteHard(Long id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
-//        userRepository.delete(user);
-//    }
-
     // 회원 복구
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long restore(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));

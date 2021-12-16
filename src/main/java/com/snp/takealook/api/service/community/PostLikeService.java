@@ -14,13 +14,13 @@ public class PostLikeService extends BaseTimeEntity {
     private final PostLikeRepository postLikeRepository;
     
     // 게시글 추천
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void like(Long postId, PostLikeDTO.Like dto) {
         postLikeRepository.like(postId, dto.getUserId());
     }
 
     // 게시글 추천 취소
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void unlike(Long postId, PostLikeDTO.Like dto) {
         postLikeRepository.unLike(postId, dto.getUserId());
     }

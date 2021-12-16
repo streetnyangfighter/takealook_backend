@@ -30,7 +30,7 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
 
     // 게시글 등록
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long save(PostDTO.Create dto, String imgUrl) {
 
         Board board = boardRepository.findById(dto.getBoardId())
@@ -68,7 +68,7 @@ public class PostService {
     }
 
     // 게시글 수정
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long update(Long id, PostDTO.Update dto, String imgUrl) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
@@ -84,7 +84,7 @@ public class PostService {
     }
 
     // 게시글 삭제
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void delete(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
@@ -95,6 +95,7 @@ public class PostService {
     }
 
     // 내가 쓴 게시물 리스트
+    @Transactional(readOnly = true)
     public List<ResponseDTO.PostResponse> findAllByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
@@ -103,6 +104,7 @@ public class PostService {
     }
 
     // 내가 추천한 게시물 리스트
+    @Transactional(readOnly = true)
     public List<ResponseDTO.PostResponse> findAllByLikePosts(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
