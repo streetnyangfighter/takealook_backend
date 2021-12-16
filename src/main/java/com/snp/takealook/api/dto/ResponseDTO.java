@@ -23,9 +23,9 @@ public class ResponseDTO {
      * USER 관련 ResponseDTO
      */
     @AllArgsConstructor
-    public static class JwtTokenResponse<T> {
+    public static class JwtTokenResponse {
         private Boolean success;
-        private T token;
+        private String token;
     }
 
     @Getter

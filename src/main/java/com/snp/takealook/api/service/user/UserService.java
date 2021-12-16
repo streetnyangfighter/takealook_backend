@@ -91,7 +91,7 @@ public class UserService {
 
     // 소셜 로그인
     @Transactional(rollbackFor = Exception.class)
-    public UserDTO.LoginInfo login(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
+    public ResponseDTO.JwtTokenResponse lonin(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
 
         Boolean success = false;
 
@@ -128,6 +128,13 @@ public class UserService {
         }
 
         // 토큰 만들기
+//        String token = Jwts.builder()
+//                .setSubject("userId")
+//                .claim(AUTHORITIES_KEY, authorities) // payload
+//                .signWith(key, SignatureAlgorithm.HS512)
+//                .setExpiration(validity)
+//                .compact(); // 토큰 생성
 
-        return new ResponseDTO.JwtTokenResponse(success, token);
+        return new ResponseDTO.JwtTokenResponse(success, "token을 만들어 넣어라~");
+    }
 }
