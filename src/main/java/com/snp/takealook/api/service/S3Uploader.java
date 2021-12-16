@@ -28,7 +28,7 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException{
+    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         if (!Objects.equals(multipartFile.getContentType(), "image/jpeg")
                 && !Objects.equals(multipartFile.getContentType(), "image/png")
                 && !Objects.equals(multipartFile.getContentType(), "image/gif")
@@ -67,13 +67,14 @@ public class S3Uploader {
         File convertFile = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
         // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
         if (convertFile.createNewFile()) {
-            try { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
-                FileInputStream fin = new FileInputStream(convertFile);
-                FileOutputStream fout = new FileOutputStream(convertFile);
+            try (FileInputStream fin = (FileInputStream) multipartFile.getInputStream();
+                 FileOutputStream fout = new FileOutputStream(convertFile);)
+            { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
 
                 int content;
-                while ((content = fin.read()) != -1) {
-                    fout.write(content);
+                byte[] buffer = new byte[1024];
+                while ((content = fin.read(buffer)) > 0) {
+                    fout.write(buffer, 0, content);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
