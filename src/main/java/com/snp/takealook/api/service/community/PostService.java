@@ -30,7 +30,7 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
 
     // 게시글 등록
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long save(PostDTO.Create dto, String imgUrl) {
 
         Board board = boardRepository.findById(dto.getBoardId())
@@ -68,7 +68,7 @@ public class PostService {
     }
 
     // 게시글 수정
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long id, PostDTO.Update dto, String imgUrl) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
@@ -84,7 +84,7 @@ public class PostService {
     }
 
     // 게시글 삭제
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
