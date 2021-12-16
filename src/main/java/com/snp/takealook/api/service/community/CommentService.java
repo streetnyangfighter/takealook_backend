@@ -24,7 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     // 댓글 작성
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long save(Long postId, CommentDTO.Create dto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + " is not valid"));
@@ -45,7 +45,7 @@ public class CommentService {
     }
 
     // 댓글 수정
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public Long update(Long commentId, CommentDTO.Update dto) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment with id: " + commentId + " is not valid"));
@@ -56,7 +56,7 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    @Transactional
+    @Transactional(rollbackFor = {RuntimeException.class})
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Comment with id: " + id + " is not valid"));
