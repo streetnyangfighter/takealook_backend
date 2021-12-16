@@ -1,7 +1,5 @@
 package com.snp.takealook.api.dto.oauth;
 
-import com.snp.takealook.api.domain.user.ProviderType;
-
 import java.util.Map;
 
 public class KakaoUserInfo extends OAuth2UserInfo {
@@ -15,21 +13,21 @@ public class KakaoUserInfo extends OAuth2UserInfo {
 
     @Override
     public String getUsername() {
-        return "Kakao_" + (String)kakaoAccount.get("email");
+        return "Kakao_" + (String) kakaoAccount.get("email");
     }
 
     @Override
     public String getEmail() {
-        return (String)kakaoAccount.get("email");
+        return (String) kakaoAccount.get("email");
     }
 
     @Override
     public String getNickname() {
-        return (String)profile.get("nickname");
+        return (String) profile.get("nickname");
     }
 
     @Override
     public String getImage() {
-        return (String) profile.get("nickname");
+        return (String) profile.get("profile_image_url");
     }
 }

@@ -4,6 +4,7 @@ import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
+import com.snp.takealook.api.dto.oauth.NaverUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
@@ -41,7 +42,7 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
-        user.updateDetail(dto.getNickname(), dto.getPhone(), dto.getImage());
+        user.updateDetail(dto.getNickname(), dto.getImage());
 
         return id;
     }
@@ -88,7 +89,8 @@ public class UserService {
     }
 
     // 소셜 로그인
-    public UserDTO.LoginInfo longin(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseDTO.JwtTokenResponse lonin(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
 
         Boolean success = false;
 
@@ -125,6 +127,13 @@ public class UserService {
         }
 
         // 토큰 만들기
+//        String token = Jwts.builder()
+//                .setSubject("userId")
+//                .claim(AUTHORITIES_KEY, authorities) // payload
+//                .signWith(key, SignatureAlgorithm.HS512)
+//                .setExpiration(validity)
+//                .compact(); // 토큰 생성
 
-        return new ResponseDTO.JwtTokenResponse(success, token);
+        return new ResponseDTO.JwtTokenResponse(success, "token을 만들어 넣어라~");
+    }
 }
