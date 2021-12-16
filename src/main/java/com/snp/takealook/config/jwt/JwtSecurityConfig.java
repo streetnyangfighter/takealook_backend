@@ -15,11 +15,11 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 
     private final TokenProvider tokenProvider;
 
-
     @Override
     public void configure(HttpSecurity builder) throws Exception {
 
         JwtFilter jwtFilter = new JwtFilter(tokenProvider);
         builder.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        // addFilterBefore -> 지정된 필터 앞에 커스텀 필터를 추가 (UsernamePasswordAuthenticationFilter보다 먼저 실행)
     }
 }

@@ -4,13 +4,8 @@ import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.List;
-
-@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 public class UserController {

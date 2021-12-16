@@ -11,8 +11,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -70,11 +68,11 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<CommentLike> commentLikeListList;
+    private List<CommentLike> commentLikeList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<PostLike> postLikeListList;
+    private List<PostLike> postLikeList;
 
     @Builder
     public User(String loginId, String nickname, String phone, String image, String loginType, Role role) {

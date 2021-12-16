@@ -3,11 +3,12 @@ package com.snp.takealook.api.controller.user;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 public class NotificationController {

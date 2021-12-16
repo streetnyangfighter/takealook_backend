@@ -1,22 +1,17 @@
 package com.snp.takealook.api.dto;
 
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
-import com.snp.takealook.api.domain.cat.*;
+import com.snp.takealook.api.domain.cat.Cat;
+import com.snp.takealook.api.domain.cat.CatCare;
+import com.snp.takealook.api.domain.cat.CatLocation;
 import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;
-import com.snp.takealook.api.domain.community.CommentLike;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import org.hibernate.hql.internal.ast.tree.IntoClause;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ResponseDTO {
@@ -223,6 +218,7 @@ public class ResponseDTO {
     public static class PostResponse {
         private Board board;
         private UserInfo writer;
+        private String thumbnail;
         private String title;
         private String content;
         private LocalDateTime modifiedAt;
@@ -233,6 +229,7 @@ public class ResponseDTO {
         public PostResponse(Post entity) {
             this.board = entity.getBoard();
             this.writer = new UserInfo(entity.getWriter());
+            this.thumbnail = entity.getImgUrl();
             this.title = entity.getTitle();
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
@@ -242,28 +239,26 @@ public class ResponseDTO {
         }
     }
 
-    @Getter
-    public static class PostListResponse {
-        private Board board;
-        private String thumbnail;
-        private UserInfo writer;
-        private String title;
-        private String content;
-        private int postLike;
-        private LocalDateTime modifiedAt;
-        private int commentListCount;
-
-        public PostListResponse(Post entity) {
-            this.board = entity.getBoard();
-            this.thumbnail = entity.getImgUrl();
-            this.writer = new UserInfo(entity.getWriter());
-            this.title = entity.getTitle();
-            this.content = entity.getContent();
-            this.postLike = entity.getPostLikeList().size();
-            this.modifiedAt = entity.getModifiedAt();
-            this.commentListCount = entity.getCommentList().size();
-        }
-    }
+//    @Getter
+//    public static class PostListResponse {
+//        private Board board;
+//        private UserInfo writer;
+//        private String title;
+//        private String content;
+//        private int postLike;
+//        private LocalDateTime modifiedAt;
+//        private int commentListCount;
+//
+//        public PostListResponse(Post entity) {
+//            this.board = entity.getBoard();
+//            this.writer = new UserInfo(entity.getWriter());
+//            this.title = entity.getTitle();
+//            this.content = entity.getContent();
+//            this.postLike = entity.getPostLikeList().size();
+//            this.modifiedAt = entity.getModifiedAt();
+//            this.commentListCount = entity.getCommentList().size();
+//        }
+//    }
 
     @Getter
     public static class CommentResponse {
