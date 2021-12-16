@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
+    private final TokenProvider2 tokenProvider2;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 401 UnAuthorized 처리 (인증 실패)
                 .accessDeniedHandler(jwtAccessDeniedHandler) // 403 Forbidden 처리 (권한 불충분)
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider))
+                .apply(new JwtSecurityConfig(tokenProvider2))
 
                 .and()
                 .logout().logoutUrl("/").permitAll()
