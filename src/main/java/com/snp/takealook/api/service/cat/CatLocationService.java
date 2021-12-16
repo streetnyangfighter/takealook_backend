@@ -24,7 +24,7 @@ public class CatLocationService {
     private final CatLocationRepository catLocationRepository;
     private final SelectionRepository selectionRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long saveAll(Long selectionId, CatDTO.LocationList[] dtoList) {
         Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with id: " + selectionId + " is not valid"));
 
@@ -41,7 +41,7 @@ public class CatLocationService {
         return selectionId;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 

@@ -28,12 +28,12 @@ public class CatService {
     private final SelectionRepository selectionRepository;
     private final S3Uploader s3Uploader;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long save(CatDTO.Create dto, String image) {
         return catRepository.save(dto.toEntity(image)).getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, Long catId, CatDTO.Update dto, String image) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
@@ -43,7 +43,7 @@ public class CatService {
         return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getStatus(), dto.getPattern(), image).getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long changeStatus(Long userId, Long catId, Byte status) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
@@ -51,7 +51,7 @@ public class CatService {
         return cat.changeStatus(status).getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long changeDflag(Long userId, Long catId) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
@@ -59,7 +59,7 @@ public class CatService {
         return cat.sendCatStar().getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long changeAflag(Long userId, Long catId) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
@@ -67,7 +67,7 @@ public class CatService {
         return cat.adopt().getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long catId) {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 

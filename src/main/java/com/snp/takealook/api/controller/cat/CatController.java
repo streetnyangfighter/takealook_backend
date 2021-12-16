@@ -2,7 +2,6 @@ package com.snp.takealook.api.controller.cat;
 
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.cat.*;
 import com.snp.takealook.api.service.user.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -22,11 +19,10 @@ import java.util.List;
 public class CatController {
 
     private final CatService catService;
-    private final SelectionService selectionService;
+    private final SecondaryService secondaryService;
     private final CatLocationService catLocationService;
     private final CatImageService catImageService;
     private final NotificationService notificationService;
-    private final S3Uploader s3Uploader;
 
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long userId,
@@ -34,16 +30,8 @@ public class CatController {
                            @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
                            @RequestPart(value = "catMainImg") MultipartFile file,
                            @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        String mainImage = s3Uploader.upload(file, "static");
-        Long catId = catService.save(catInfo, mainImage);
-        Long selectionId = selectionService.save(userId, catId);
-        catLocationService.saveAll(selectionId, catLocList);
-        for (MultipartFile m : files) {
-            String path = s3Uploader.upload(m, "static");
-            catImageService.save(selectionId, path);
-        }
 
-        return catId;
+        return secondaryService.saveNewCat(userId, catInfo, catLocList, file, files);
     }
 
     @PostMapping(value = "/user/{userId}/cat/{catId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -53,18 +41,8 @@ public class CatController {
                        @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
                        @RequestPart(value = "catMainImg") MultipartFile file,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
-        String mainImage = s3Uploader.upload(file, "static");
-        catService.update(userId, catId, catInfo, mainImage);
-        catLocationService.update(userId, catId, catLocList);
-        List<String> pathList = new ArrayList<>();
-        for (MultipartFile m : files) {
-            String path = s3Uploader.upload(m, "static");
-            pathList.add(path);
-        }
-        catImageService.update(userId, catId, pathList);
-        notificationService.catSave(userId, catId, (byte) 1);
 
-        return catId;
+        return secondaryService.updateCat(userId, catId, catInfo, catLocList, file, files);
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}")
