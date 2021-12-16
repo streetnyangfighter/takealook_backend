@@ -30,6 +30,6 @@ public class KakaoUserInfo extends OAuth2UserInfo {
 
     @Override
     public String getImage() {
-        return (String) profile.get("nickname");
+        return (String) profile.get("profile_image_url");
     }
 }

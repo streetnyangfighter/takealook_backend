@@ -3,7 +3,9 @@ package com.snp.takealook.api.service.user;
 import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
+import com.snp.takealook.api.dto.oauth.GoogleUserInfo;
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
+import com.snp.takealook.api.dto.oauth.NaverUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
@@ -36,12 +38,12 @@ public class UserService {
     }
 
     // 회원 가입 후 추가 정보 입력 (닉네임 변경, 휴대폰번호, 이미지)
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long updateLoginDetail(Long id, UserDTO.Update dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
 
-        user.updateDetail(dto.getNickname(), dto.getPhone(), dto.getImage());
+        user.updateDetail(dto.getNickname(), dto.getImage());
 
         return id;
     }
@@ -70,7 +72,7 @@ public class UserService {
     }
 
     // 회원 탈퇴
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long delete(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
@@ -79,7 +81,7 @@ public class UserService {
     }
 
     // 회원 복구
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long restore(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
@@ -88,7 +90,8 @@ public class UserService {
     }
 
     // 소셜 로그인
-    public UserDTO.LoginInfo longin(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public UserDTO.LoginInfo login(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
 
         Boolean success = false;
 
