@@ -47,8 +47,8 @@ public class UserController {
 
     // 소셜 로그인, 회원 가입
     @PostMapping("/login")
-    public ResponseDTO.JwtTokenResponse login(@RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
-         return userService.login(data, provider);
+    public ResponseDTO.JwtTokenResponse login(@RequestBody Map<String, Object> data) throws Exception {
+         return userService.login(data, "Google");
     }
 
 }
