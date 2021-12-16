@@ -91,7 +91,7 @@ public class UserService {
 
     // 소셜 로그인
     @Transactional(rollbackFor = Exception.class)
-    public ResponseDTO.JwtTokenResponse lonin(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
+    public ResponseDTO.JwtTokenResponse login(Map<String, Object> data, String provider) {
 
         Boolean success = false;
 
