@@ -26,22 +26,23 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    private String loginId;
+    private String username;
 
     @NotNull
     private String password;
 
     @NotNull
-    private String nickname;
+    private String email;
 
-    private String phone;
+    @NotNull
+    private String nickname;
 
     @NotNull
     @Lob
     private String image;
 
     @NotNull
-    private String loginType;
+    private ProviderType providerType;
 
     @NotNull
     private Boolean dflag;
@@ -75,15 +76,15 @@ public class User extends BaseTimeEntity {
     private List<PostLike> postLikeList;
 
     @Builder
-    public User(String loginId, String nickname, String phone, String image, String loginType, Role role) {
-        this.loginId = loginId;
-        this.password = "NO_PASS";
+    public User(String username, String password, String email, String nickname, String image, ProviderType providerType) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
         this.nickname = nickname;
-        this.phone = phone;
         this.image = image;
-        this.loginType = loginType;
+        this.providerType = providerType;
         this.dflag = false;
-        this.role = role;
+        this.role = Role.USER;
     }
 
     public User update(String nickname, String image) {
@@ -93,9 +94,8 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public User updateDetail(String nickname, String phone, String image) {
+    public User updateDetail(String nickname, String image) {
         this.nickname = nickname;
-        this.phone = phone;
         this.image = image;
 
         return this;

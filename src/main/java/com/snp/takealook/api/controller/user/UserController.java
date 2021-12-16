@@ -1,10 +1,14 @@
 package com.snp.takealook.api.controller.user;
 
 import com.snp.takealook.api.domain.user.User;
+import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,12 +46,10 @@ public class UserController {
         return userService.restore(userId);
     }
 
+    // 소셜 로그인, 회원 가입
     @PostMapping("/login")
-    public UserDTO.LoginInfo userLogin(@RequestBody UserDTO.Login data) throws Exception {
-        System.out.println(data.toString());
-        UserDTO.LoginInfo result = userService.userLogin(data.getCode(), data.getProvider());
-
-        return result;
+    public ResponseDTO.JwtTokenResponse login(HttpServletResponse response, @RequestBody Map<String, Object> data) throws Exception {
+         return userService.login(response, data);
     }
 
 }

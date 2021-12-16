@@ -1,5 +1,6 @@
 package com.snp.takealook.api.dto.user;
 
+import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.Role;
 import com.snp.takealook.api.domain.user.User;
 import lombok.Builder;
@@ -9,10 +10,9 @@ import lombok.ToString;
 
 public class UserDTO {
 
-    @ToString
     @Getter
     public static class Login {
-        String code;
+        String token;
         String provider;
     }
 
@@ -22,19 +22,20 @@ public class UserDTO {
         String loginId;
         String nickname;
         String image;
-        String loginType;
+        ProviderType providerType;
 
         public User toEntity() {
             return User.builder()
                     .loginId(loginId)
                     .nickname(nickname)
                     .image(image)
-                    .loginType(loginType)
+                    .providerType(providerType)
                     .role(Role.USER)
                     .build();
         }
     }
 
+    //ResponseDTO로 빼기
     @Builder
     @Getter
     @Setter

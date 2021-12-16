@@ -1,20 +1,22 @@
 package com.snp.takealook.api.service.user;
 
+import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
-import com.snp.takealook.api.dto.oauth.OauthUserInfo;
+import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
+import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.lang.reflect.Method;
-import java.util.Objects;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -22,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
+    private final BCryptPasswordEncoder encoder;
 
     // 회원 idx로 찾기
     @Transactional(readOnly = true)
@@ -85,58 +88,43 @@ public class UserService {
     }
 
     // 소셜 로그인
-    public UserDTO.LoginInfo userLogin(String code, String provider) throws Exception {
-        OauthUserInfo oauthUserInfo = null;
-        UserDTO.Register userDTO = null;
-        UserDTO.LoginInfo result = null;
+    public UserDTO.LoginInfo longin(HttpServletResponse response, @RequestBody Map<String, Object> data, @RequestBody String provider) throws Exception {
 
-        try {
-            Class social = Class.forName("com.snp.takealook.api.service.user.Social");
-            Method method = social.getDeclaredMethod(provider, String.class);
-            oauthUserInfo = (OauthUserInfo) method.invoke(null, code);
+        Boolean success = false;
 
-            System.out.println(oauthUserInfo.getNickname());
-            System.out.println(oauthUserInfo.getLoginId());
-            System.out.println(oauthUserInfo.getImage());
-            System.out.println(oauthUserInfo.getLoginType());
+        OAuth2UserInfo userInfo = null;
+        ProviderType providerType = null;
 
-            userDTO = UserDTO.Register.builder()
-                    .loginId(oauthUserInfo.getLoginId())
-                    .nickname(oauthUserInfo.getNickname())
-                    .image(oauthUserInfo.getImage())
-                    .loginType(oauthUserInfo.getLoginType())
-                    .build();
-
-            System.out.println("-------------------------- userDTO");
-
-            User user = userRepository.findByLoginId(userDTO.getLoginId());
-
-            if (Objects.isNull(user)) {
-                user = userRepository.save(userDTO.toEntity());
-            }
-
-            result = UserDTO.LoginInfo.builder()
-                    .id(user.getId())
-                    .loginId(user.getLoginId())
-                    .nickname(user.getNickname())
-                    .build();
-
-            if (user.getPhone() == null) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(user.getId(), null, AuthorityUtils.createAuthorityList("USER"));
-
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                String jwt = tokenProvider.createToken(authentication);
-                result.setAccessToken(jwt);
-            }
-
-
-        } catch (Exception e) {
-
+        if (provider.equals("Google")) {
+            userInfo = new GoogleUserInfo(data);
+            providerType = ProviderType.GOOGLE;
+        } else if (provider.equals("Kakao")) {
+            userInfo = new KakaoUserInfo(data);
+            providerType = ProviderType.KAKAO;
+        } else if (provider.equals("Naver")) {
+            userInfo = new NaverUserInfo(data);
+            providerType = ProviderType.NAVER;
         }
 
-        return result;
-    }
+        User userEntity = userRepository.findByUsername(userInfo.getUsername());
+        UUID uuid = UUID.randomUUID();
+        String encPassword = encoder.encode(uuid.toString());
 
+        if (userEntity != null) {
+            User user = User.builder()
+                    .username(userInfo.getUsername())
+                    .password(encPassword)
+                    .email(userInfo.getEmail())
+                    .nickname(userInfo.getNickname())
+                    .image(userInfo.getImage())
+                    .providerType(providerType)
+                    .build();
+
+            userEntity = userRepository.save(user);
+            success = true;
+        }
+
+        // 토큰 만들기
+
+        return new ResponseDTO.JwtTokenResponse(success, token);
 }

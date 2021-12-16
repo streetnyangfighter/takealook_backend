@@ -8,7 +8,9 @@ import com.snp.takealook.api.domain.community.Board;
 import com.snp.takealook.api.domain.community.Comment;
 import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
+import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -17,23 +19,29 @@ import java.util.stream.Collectors;
 
 public class ResponseDTO {
 
-    /** USER 관련 ResponseDTO */
+    /**
+     * USER 관련 ResponseDTO
+     */
+    @AllArgsConstructor
+    public static class JwtTokenResponse<T> {
+        private Boolean success;
+        private T token;
+    }
+
     @Getter
     public static class UserResponse {
         private Long id;
-        private String loginId;
+        private String email;
         private String nickname;
-        private String phone;
         private String image;
-        private String loginType;
+        private ProviderType providerType;
 
         public UserResponse(User entity) {
             this.id = entity.getId();
-            this.loginId = entity.getLoginId();
+            this.email = entity.getEmail();
             this.nickname = entity.getNickname();
-            this.phone = entity.getPhone();
             this.image = entity.getImage();
-            this.loginType = entity.getLoginType();
+            this.providerType = entity.getProviderType();
         }
     }
 
