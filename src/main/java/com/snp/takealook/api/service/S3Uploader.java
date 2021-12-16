@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
@@ -58,8 +59,16 @@ public class S3Uploader {
         File convertFile = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
         // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
         if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
-                fos.write(multipartFile.getBytes());
+            try { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+                FileInputStream fin = new FileInputStream(convertFile);
+                FileOutputStream fout = new FileOutputStream(convertFile);
+
+                int content;
+                while ((content = fin.read()) != -1) {
+                    fout.write(content);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return Optional.of(convertFile);
         }
