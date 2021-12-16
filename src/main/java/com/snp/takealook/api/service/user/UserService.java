@@ -3,6 +3,7 @@ package com.snp.takealook.api.service.user;
 import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
+import com.snp.takealook.api.dto.oauth.GoogleUserInfo;
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
 import com.snp.takealook.api.dto.oauth.NaverUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
@@ -37,7 +38,7 @@ public class UserService {
     }
 
     // 회원 가입 후 추가 정보 입력 (닉네임 변경, 휴대폰번호, 이미지)
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long updateLoginDetail(Long id, UserDTO.Update dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
@@ -71,7 +72,7 @@ public class UserService {
     }
 
     // 회원 탈퇴
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long delete(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
@@ -80,7 +81,7 @@ public class UserService {
     }
 
     // 회원 복구
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = Exception.class)
     public Long restore(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
