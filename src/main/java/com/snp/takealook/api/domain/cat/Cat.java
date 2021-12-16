@@ -54,8 +54,7 @@ public class Cat extends BaseTimeEntity {
 //    @Column(name = "a_msg")
 //    private String aMsg;
 
-    @OneToOne(mappedBy = "cat", cascade = CascadeType.ALL)
-    private MainImage mainImage;
+    private String image;
 
     // 고양이를 삭제하면 간택 내역 - 연결된 정보 일괄 삭제 되도록 처리
     @OneToMany(mappedBy = "cat", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -63,7 +62,7 @@ public class Cat extends BaseTimeEntity {
     private List<Selection> selectionList;
 
     @Builder
-    public Cat(String name, Byte gender, Byte neutered, Byte status, Byte pattern) {
+    public Cat(String name, Byte gender, Byte neutered, Byte status, Byte pattern, String image) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
@@ -71,14 +70,16 @@ public class Cat extends BaseTimeEntity {
         this.pattern = pattern;
         this.dflag = false;
         this.aflag = false;
+        this.image = image;
     }
 
-    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status, Byte pattern) {
+    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status, Byte pattern, String image) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
         this.status = status;
         this.pattern = pattern;
+        this.image = image;
 
         return this;
     }
@@ -107,12 +108,6 @@ public class Cat extends BaseTimeEntity {
 
         this.aflag = true;
 //        this.aMsg = msg;
-
-        return this;
-    }
-
-    public Cat setMainImg(MainImage mainImage) {
-        this.mainImage = mainImage;
 
         return this;
     }

@@ -1,7 +1,7 @@
 package com.snp.takealook.api.controller.cat;
 
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.service.cat.MainImageService;
+import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.cat.SelectionService;
 import com.snp.takealook.api.service.cat.CatService;
 import com.snp.takealook.api.service.user.NotificationService;
@@ -18,8 +18,8 @@ public class SelectionController {
 
     private final SelectionService selectionService;
     private final CatService catService;
-    private final MainImageService mainImageService;
     private final NotificationService notificationService;
+    private final S3Uploader s3Uploader;
 
     @PostMapping("/user/{userId}/cat/{catId}/selection")
     public Long save(@PathVariable Long userId, @PathVariable Long catId) {
@@ -44,9 +44,9 @@ public class SelectionController {
     public Long updateNewCat(@PathVariable Long userId,
                              @PathVariable Long catId,
                              @RequestPart(value = "catInfo") CatDTO.Create catInfo,
-                             @RequestPart(value = "catImg") MultipartFile file) throws IOException {
-        Long newCatId = catService.save(catInfo);
-        mainImageService.save(newCatId, file);
+                             @RequestPart(value = "catMainImg") MultipartFile file) throws IOException {
+        String mainImage = s3Uploader.upload(file, "static");
+        Long newCatId = catService.save(catInfo, mainImage);
         selectionService.update(userId, catId, newCatId);
         notificationService.catSave(userId, catId, (byte) 5);
         return newCatId;

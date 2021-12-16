@@ -24,13 +24,14 @@ public class CatDTO {
             this.pattern = pattern;
         }
 
-        public Cat toEntity() {
+        public Cat toEntity(String image) {
             return Cat.builder()
                     .name(name)
                     .gender(gender)
                     .neutered(neutered)
                     .status(status)
                     .pattern(pattern)
+                    .image(image)
                     .build();
         }
     }

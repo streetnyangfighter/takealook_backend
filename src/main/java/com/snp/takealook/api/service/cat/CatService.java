@@ -8,7 +8,6 @@ import com.snp.takealook.api.domain.cat.CatLocation;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.repository.cat.MainImageRepository;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,19 +25,18 @@ public class CatService {
     private final CatRepository catRepository;
     private final UserRepository userRepository;
     private final SelectionRepository selectionRepository;
-    private final MainImageRepository mainImageRepository;
 
     @Transactional
-    public Long save(CatDTO.Create dto) {
-        return catRepository.save(dto.toEntity()).getId();
+    public Long save(CatDTO.Create dto, String image) {
+        return catRepository.save(dto.toEntity(image)).getId();
     }
 
     @Transactional
-    public Long update(Long userId, Long catId, CatDTO.Update dto) {
+    public Long update(Long userId, Long catId, CatDTO.Update dto, String image) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getStatus(), dto.getPattern()).getId();
+        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getStatus(), dto.getPattern(), image).getId();
     }
 
     @Transactional
@@ -71,17 +68,7 @@ public class CatService {
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
 
         if (cat.getSelectionList().size() == 0) {
-
-//            mainImageRepository.delete(cat.getMainImage());
-            File exist = new File(cat.getMainImage().getFilePath());
-            if (exist.exists()) {
-                exist.delete();
-            } else {
-                System.out.println("file not exists");
-            }
-            // selection 에 연결된 이미지도 다 지워줘야함
-
-            catRepository.delete(cat); //이거만 하면 됨
+            catRepository.delete(cat);
         }
     }
 

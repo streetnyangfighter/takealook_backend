@@ -93,7 +93,7 @@ public class ResponseDTO {
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<UserInfo> carers;
-        private String mainImagePath;
+        private String mainImage;
 
         public CatResponse(Cat entity, List<UserInfo> carers) {
             this.id = entity.getId();
@@ -109,8 +109,7 @@ public class ResponseDTO {
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
             this.carers = carers;
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
-//            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
+            this.mainImage = entity.getImage();
         }
     }
 
@@ -121,15 +120,14 @@ public class ResponseDTO {
         private Byte status;
         private List<CatCareListResponse> recentCares;
         private CatLocationResponse recentLocation;
-        private String mainImagePath;
+        private String mainImage;
 
         public CatListResponse(Cat entity, List<CatCareListResponse> recentCares) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.status = entity.getStatus();
             this.recentCares = recentCares;
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
-//            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
+            this.mainImage = entity.getImage();
         }
 
         public CatListResponse(Cat entity, CatLocationResponse recentLocation) {
@@ -137,8 +135,7 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.status = entity.getStatus();
             this.recentLocation = recentLocation;
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
-//            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
+            this.mainImage = entity.getImage();
         }
     }
 
@@ -147,14 +144,13 @@ public class ResponseDTO {
         private Long id;
         private String name;
 //        private String dMsg;
-        private String mainImagePath;
+        private String mainImage;
 
         public CatStarResponse(Cat entity) {
             this.id = entity.getId();
             this.name = entity.getName();
 //            this.dMsg = entity.getDMsg();
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
-//            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
+            this.mainImage = entity.getImage();
         }
     }
 
@@ -163,14 +159,13 @@ public class ResponseDTO {
         private Long id;
         private String name;
 //        private String aMsg;
-        private String mainImagePath;
+        private String mainImage;
 
         public CatAdoptedResponse(Cat entity) {
             this.id = entity.getId();
             this.name = entity.getName();
 //            this.aMsg = entity.getAMsg();
-            this.mainImagePath = entity.getMainImage().getFilePath().replace(System.getProperty("user.dir"), "") + entity.getMainImage().getContentType();
-//            this.mainImagePath = entity.getMainImage().getFilePath().replace("/home/ec2-user/app/takealook/", "");
+            this.mainImage = entity.getImage();
         }
     }
 
@@ -207,6 +202,20 @@ public class ResponseDTO {
             this.createdAt = entity.getCreatedAt();
         }
     }
+
+    @Getter
+    public static class CatImageListResponse {
+        private Long id;
+        private String userNamae;
+        private String path;
+
+        public CatImageListResponse(CatImage entity) {
+            this.id = entity.getId();
+            this.userNamae = entity.getSelection().getUser().getNickname();
+            this.path = entity.getPath();
+        }
+    }
+
 
 
     /** COMMUNITY 관련 ResponseDTO */

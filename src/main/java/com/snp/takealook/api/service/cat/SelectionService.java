@@ -3,7 +3,6 @@ package com.snp.takealook.api.service.cat;
 import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.user.User;
-import com.snp.takealook.api.repository.cat.MainImageRepository;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
@@ -20,7 +19,6 @@ public class SelectionService {
     private final SelectionRepository selectionRepository;
     private final UserRepository userRepository;
     private final CatRepository catRepository;
-    private final MainImageRepository mainImageRepository;
 
     // 간택 추가하기
     @Transactional
