@@ -2,7 +2,7 @@ package com.snp.takealook.api.service.user;
 
 
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
-import com.snp.takealook.api.dto.oauth.OauthUserInfo;
+import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class Social {
 
-    public static OauthUserInfo kakao (String code) {
+    public static OAuth2UserInfo kakao (String code) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -50,9 +50,9 @@ public class Social {
                 JSONObject.class
         );
 
-        OauthUserInfo oauthUserInfo = new KakaoUserInfo(response.getBody());
+        OAuth2UserInfo OAuth2UserInfo = new KakaoUserInfo(response.getBody());
 
 
-        return oauthUserInfo;
+        return OAuth2UserInfo;
     }
 }
