@@ -7,7 +7,7 @@ public class GoogleUserInfo extends OAuth2UserInfo{
 
     @Override
     public String getUsername() {
-        return "Google_" + String.valueOf(attributes.get("email"));
+        return "Google_" + (String) attributes.get("email");
     }
 
     @Override

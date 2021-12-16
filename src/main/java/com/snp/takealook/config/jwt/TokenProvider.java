@@ -4,6 +4,8 @@ import com.snp.takealook.api.domain.user.User;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -13,7 +15,13 @@ import java.util.Date;
 @Component
 public class TokenProvider {
 
-    private Key key;
+    private final String secret;
+    private final Key key;
+
+    public TokenProvider(@Value("${jwt.secret}") String secret) {
+        this.secret = secret;
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String createToken(User userEntity) {
         Date now = new Date();
@@ -24,4 +32,5 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 }
