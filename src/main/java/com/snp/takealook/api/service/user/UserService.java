@@ -10,7 +10,6 @@ import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.TokenProvider;
-import com.snp.takealook.config.jwt.TokenProvider2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
     // 회원 idx로 찾기
@@ -109,13 +107,11 @@ public class UserService {
         }
 
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
-        UUID uuid = UUID.randomUUID();
-        String encPassword = encoder.encode(uuid.toString());
 
         if (userEntity != null) {
             User user = User.builder()
                     .username(userInfo.getUsername())
-                    .password(encPassword)
+                    .password("NO_PASSWORD")
                     .email(userInfo.getEmail())
                     .nickname(userInfo.getNickname())
                     .image(userInfo.getImage())
