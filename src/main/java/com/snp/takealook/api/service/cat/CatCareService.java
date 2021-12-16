@@ -28,14 +28,14 @@ public class CatCareService {
     private final CatRepository catRepository;
     private final SelectionRepository selectionRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long save(Long userId, Long catId, CatCareDTO.Create dto) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         return catCareRepository.save(dto.toEntity(mySelection)).getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, Long catId, Long catcareId, CatCareDTO.Update dto) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));
@@ -46,7 +46,7 @@ public class CatCareService {
         return catCare.update(dto.getType(), dto.getMessage()).getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long userId, Long catId, Long catcareId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         CatCare catCare = catCareRepository.findById(catcareId).orElseThrow(() -> new IllegalArgumentException("CatCare with id: " + catcareId + " is not valid"));

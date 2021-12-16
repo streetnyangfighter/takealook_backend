@@ -21,7 +21,7 @@ public class SelectionService {
     private final CatRepository catRepository;
 
     // 간택 추가하기
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long save(Long userId, Long catId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         Cat cat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
@@ -38,7 +38,7 @@ public class SelectionService {
     }
 
     // 간택 정보 업데이트
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, Long catId, Long newCatId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         Cat pastCat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
@@ -50,7 +50,7 @@ public class SelectionService {
     }
 
     // 간택 소프트 딜리트
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void softDelete(Long userId, Long catId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
         mySelection.delete();

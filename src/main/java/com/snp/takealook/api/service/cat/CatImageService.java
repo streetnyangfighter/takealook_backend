@@ -1,6 +1,5 @@
 package com.snp.takealook.api.service.cat;
 
-import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.cat.CatImage;
 import com.snp.takealook.api.dto.ResponseDTO;
@@ -10,14 +9,7 @@ import com.snp.takealook.api.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +22,7 @@ public class CatImageService {
     private final SelectionRepository selectionRepository;
     private final S3Uploader s3Uploader;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long save(Long selectionId, String path) {
         Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with id: " + selectionId + " is not valid"));
 
@@ -40,7 +32,7 @@ public class CatImageService {
                 .build()).getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, Long catId, List<String> pathList) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
