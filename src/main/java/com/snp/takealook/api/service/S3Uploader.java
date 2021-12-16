@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +29,13 @@ public class S3Uploader {
     private String bucket;
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException{
+        if (!Objects.equals(multipartFile.getContentType(), "image/jpeg")
+                && !Objects.equals(multipartFile.getContentType(), "image/png")
+                && !Objects.equals(multipartFile.getContentType(), "image/gif")
+                && !Objects.equals(multipartFile.getContentType(), "image/bmp")) {
+            throw new IllegalArgumentException("지원하지 않는 확장자입니다.");
+        }
+
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
 
         return upload(uploadFile, dirName);
