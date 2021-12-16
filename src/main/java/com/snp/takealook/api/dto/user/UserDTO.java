@@ -68,13 +68,11 @@ public class UserDTO {
     @Getter
     public static class Update {
         private String nickname;
-        private String phone;
         private String image;
 
         @Builder
-        public Update(String nickname, String phone, String image) {
+        public Update(String nickname, String image) {
             this.nickname = nickname;
-            this.phone = phone;
             this.image = image;
         }
     }
