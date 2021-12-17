@@ -11,7 +11,6 @@ import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
     // 회원 idx로 찾기
@@ -107,13 +105,13 @@ public class UserService {
             providerType = ProviderType.NAVER;
         }
 
-        System.out.println(userInfo.getUsername());
+//        System.out.println(userInfo.getUsername());
         System.out.println(provider);
         System.out.println(providerType);
 
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
-        UUID uuid = UUID.randomUUID();
-        String encPassword = encoder.encode(uuid.toString());
+//        UUID uuid = UUID.randomUUID();
+//        String encPassword = encoder.encode(uuid.toString());
 
 //        System.out.println("*** " + userEntity.getId());
 
@@ -122,7 +120,7 @@ public class UserService {
 
             User user = User.builder()
                     .username(userInfo.getUsername())
-                    .password(encPassword)
+                    .password("NO_PASS")
                     .email(userInfo.getEmail())
                     .nickname(userInfo.getNickname())
                     .image(userInfo.getImage())
