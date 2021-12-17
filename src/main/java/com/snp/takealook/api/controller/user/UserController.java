@@ -3,12 +3,16 @@ package com.snp.takealook.api.controller.user;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.user.UserDTO;
+import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.boot.model.source.spi.JdbcDataType;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -24,13 +28,17 @@ public class UserController {
     }
 
     // 회원정보 수정
-//    @PatchMapping("/user/{userId}")
-//    public
+    @PostMapping(value = "/user/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Long update(@PathVariable Long userId,
+                       @RequestPart(value = "userInfo") UserDTO.Update dto,
+                       @RequestPart(value = "profileImg") MultipartFile file) throws IOException {
+        return userService.update(userId, dto, file);
+    }
 
     // 회원정보 조회
-    @GetMapping("/user/{id}")
-    public User getInfo(@PathVariable Long id) {
-        return userService.getInfo(id);
+    @GetMapping("/user/{userId}")
+    public ResponseDTO.UserResponse findOne(@PathVariable Long userId) {
+        return userService.findOne(userId);
     }
 
     // 회원 삭제

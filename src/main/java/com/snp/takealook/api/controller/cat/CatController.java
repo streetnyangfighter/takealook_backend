@@ -26,10 +26,10 @@ public class CatController {
 
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@PathVariable Long userId,
-                           @RequestPart(value = "catInfo") CatDTO.Create catInfo,
-                           @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
-                           @RequestPart(value = "catMainImg") MultipartFile file,
-                           @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
+                     @RequestPart(value = "catInfo") CatDTO.Create catInfo,
+                     @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
+                     @RequestPart(value = "catMainImg") MultipartFile file,
+                     @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
 
         return secondaryService.saveNewCat(userId, catInfo, catLocList, file, java.util.Optional.ofNullable(files));
     }
