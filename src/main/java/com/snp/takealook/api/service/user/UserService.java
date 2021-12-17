@@ -1,5 +1,7 @@
 package com.snp.takealook.api.service.user;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
@@ -9,19 +11,23 @@ import com.snp.takealook.api.dto.oauth.NaverUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
-import com.snp.takealook.config.jwt.TokenProvider;
+import com.snp.takealook.config.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final TokenProvider tokenProvider;
+    private final PasswordEncoder encoder;
 
     // 회원 idx로 찾기
     @Transactional(readOnly = true)
@@ -86,38 +92,39 @@ public class UserService {
 
     // 소셜 로그인
     @Transactional(rollbackFor = Exception.class)
-    public ResponseDTO.JwtTokenResponse login(Map<String, Object> data, String provider) {
+    public ResponseDTO.UserResponse login(HttpServletResponse response, Map<String, Object> data, String provider) {
 
         Boolean success = false;
 
         OAuth2UserInfo userInfo = null;
         ProviderType providerType = null;
 
-        if (provider.equals("Google")) {
-            userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
-            providerType = ProviderType.GOOGLE;
-        } else if (provider.equals("Kakao")) {
-            userInfo = new KakaoUserInfo(data);
-            providerType = ProviderType.KAKAO;
-        } else if (provider.equals("Naver")) {
-            userInfo = new NaverUserInfo(data);
-            providerType = ProviderType.NAVER;
-        }
+        userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
+        providerType = ProviderType.GOOGLE;
 
-//        System.out.println(userInfo.getUsername());
-        System.out.println(provider);
+//        if (provider.equals("Google")) {
+//            userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
+//            providerType = ProviderType.GOOGLE;
+//        } else if (provider.equals("Kakao")) {
+//            userInfo = new KakaoUserInfo(data);
+//            providerType = ProviderType.KAKAO;
+//        } else if (provider.equals("Naver")) {
+//            userInfo = new NaverUserInfo(data);
+//            providerType = ProviderType.NAVER;
+//        }
+
+        System.out.println(userInfo.getUsername());
         System.out.println(providerType);
 
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
-//        UUID uuid = UUID.randomUUID();
-//        String encPassword = encoder.encode(uuid.toString());
+        UUID uuid = UUID.randomUUID();
+        String encPassword = encoder.encode(uuid.toString());
 
-        if (userEntity == null) {
-            // 최초 로그인 -> 회원가입
+        if (userEntity == null) { // 최초 로그인 -> 회원가입
 
             User user = User.builder()
                     .username(userInfo.getUsername())
-                    .password("NO_PASS")
+                    .password(encPassword)
                     .email(userInfo.getEmail())
                     .nickname(userInfo.getNickname())
                     .image(userInfo.getImage())
@@ -129,10 +136,18 @@ public class UserService {
         }
 
         // 토큰 만들기
-        String token = tokenProvider.createToken(userEntity);
-        System.out.println("*** " + token);
-        System.out.println("*** " + success);
+        String jwtToken = JWT.create()
+                .withSubject(userEntity.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
+                .withClaim("id", userEntity.getId()) //인증에 필요한 정보
+                .withClaim("username", userEntity.getPassword())
+                .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
-        return new ResponseDTO.JwtTokenResponse(success, token);
+        response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
+        System.out.println("*** " + jwtToken);
+        System.out.println("*** " + success);
+        System.out.println(response);
+
+        return new ResponseDTO.UserResponse(userEntity);
     }
 }
