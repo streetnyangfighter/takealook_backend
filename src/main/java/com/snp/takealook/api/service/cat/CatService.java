@@ -1,10 +1,7 @@
 package com.snp.takealook.api.service.cat;
 
 import com.snp.takealook.api.domain.BaseTimeEntity;
-import com.snp.takealook.api.domain.cat.Selection;
-import com.snp.takealook.api.domain.cat.Cat;
-import com.snp.takealook.api.domain.cat.CatCare;
-import com.snp.takealook.api.domain.cat.CatLocation;
+import com.snp.takealook.api.domain.cat.*;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
@@ -40,7 +37,7 @@ public class CatService {
 
         s3Uploader.fileDelete(cat.getImage());
 
-        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getStatus(), dto.getPattern(), image).getId();
+        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getPattern(), image).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -91,6 +88,22 @@ public class CatService {
         }
 
         return new ResponseDTO.CatResponse(mySelection.getCat(), carers);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseDTO.CatInfoResponse findCatInfoForUpdate(Long userId, Long catId) {
+        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+
+        List<String> userUploadImages = new ArrayList<>();
+        for (CatImage image : mySelection.getCatImageList()) {
+            userUploadImages.add(image.getPath());
+        }
+        List<ResponseDTO.CatLocationResponse> userUploadLocations = mySelection.getCatLocationList().stream()
+                .map(ResponseDTO.CatLocationResponse::new)
+                .collect(Collectors.toList());
+
+        return new ResponseDTO.CatInfoResponse(mySelection.getCat(), userUploadLocations, userUploadImages);
     }
 
     @Transactional(readOnly = true)

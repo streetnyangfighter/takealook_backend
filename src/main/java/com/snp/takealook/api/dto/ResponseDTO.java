@@ -10,7 +10,6 @@ import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -89,10 +88,10 @@ public class ResponseDTO {
 //        private String dMsg;
         private Boolean aflag;
 //        private String aMsg;
+        private String mainImage;
+        private List<UserInfo> carers;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private List<UserInfo> carers;
-        private String mainImage;
 
         public CatResponse(Cat entity, List<UserInfo> carers) {
             this.id = entity.getId();
@@ -105,12 +104,36 @@ public class ResponseDTO {
 //            this.dMsg = entity.getDMsg();
             this.aflag = entity.getAflag();
 //            this.aMsg = entity.getAMsg();
+            this.mainImage = entity.getImage();
+            this.carers = carers;
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
-            this.carers = carers;
-            this.mainImage = entity.getImage();
         }
     }
+
+    @Getter
+    public static class CatInfoResponse {
+        private Long id;
+        private String name;
+        private Byte gender;
+        private Byte neutered;
+        private Byte pattern;
+        private String mainImage;
+        private List<CatLocationResponse> userUploadLocations;
+        private List<String> userUploadImages;
+
+        public CatInfoResponse(Cat entity, List<CatLocationResponse> userUploadLocations, List<String> userUploadImages) {
+            this.id = entity.getId();
+            this.name = entity.getName();
+            this.gender = entity.getGender();
+            this.neutered = entity.getNeutered();
+            this.pattern = entity.getPattern();
+            this.mainImage = entity.getImage();
+            this.userUploadLocations = userUploadLocations;
+            this.userUploadImages = userUploadImages;
+        }
+    }
+
 
     @Getter
     public static class CatListResponse {
