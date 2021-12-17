@@ -230,6 +230,7 @@ public class ResponseDTO {
         private String thumbnail;
         private String title;
         private String content;
+        private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private int postLike;
         private List<CommentResponse> commentList;
@@ -242,6 +243,7 @@ public class ResponseDTO {
             this.thumbnail = entity.getImgUrl();
             this.title = entity.getTitle();
             this.content = entity.getContent();
+            this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
             this.postLike = entity.getPostLikeList().size();
             this.commentList = entity.getCommentList().stream().map(CommentResponse::new).collect(Collectors.toList());
@@ -252,12 +254,14 @@ public class ResponseDTO {
     @Getter
     public static class CommentResponse {
         private UserInfo writer;
+        private Long commentId;
         private String content;
         private LocalDateTime modifiedAt;
         private int commentLike;
 
         public CommentResponse(Comment entity) {
             this.writer = new UserInfo(entity.getWriter());
+            this.commentId = entity.getId();
             this.content = entity.getContent();
             this.modifiedAt = entity.getModifiedAt();
             this.commentLike = entity.getCommentLikeList().size();

@@ -12,6 +12,7 @@ import com.snp.takealook.api.repository.community.PostRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.api.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +47,7 @@ public class PostService {
     // 게시글 리스트 조회 (게시판 구분 x)
     @Transactional(readOnly = true)
     public List<ResponseDTO.PostResponse> findAllPosts() {
-        return postRepository.findAll().stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
+        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
     }
 
     // 게시글 리스트 조회 (게시판별)
