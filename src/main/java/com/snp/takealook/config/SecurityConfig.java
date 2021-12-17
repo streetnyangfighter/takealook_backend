@@ -1,6 +1,7 @@
 package com.snp.takealook.config;
 
 import com.snp.takealook.config.jwt.*;
+import com.snp.takealook.config.jwt.handler.JwtAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +22,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider2 tokenProvider2;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+//    private final TokenProvider2 tokenProvider2;
+//    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+//    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     /** cors 설정 추가  */
     @Bean
@@ -48,41 +49,75 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         /** cors 설정 추가  */
         http.cors().configurationSource(corsConfigurationSource());
 
-        http
-                .csrf().disable() // 개발 편의성을 위해 CSRF 프로텍션을 비활성화
+        http.
+                cors().configurationSource(corsConfigurationSource())
+                .and()
+                .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .httpBasic().disable() // HTTP 기본 인증 비활성화
-                .formLogin().disable() // 폼 기반 인증 비활성화
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // stateless한 세션 정책 설정
-
-                .and()
-                .authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 
+                //statefull stateless 방식의 차이.. 저희가 자바스크립트 사이드,
+                //jsp 로 시큐리티를 jsession을 자바스크립트,
 
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 401 UnAuthorized 처리 (인증 실패)
-                .accessDeniedHandler(jwtAccessDeniedHandler) // 403 Forbidden 처리 (권한 불충분)
-                .and()
-                .apply(new JwtSecurityConfig(tokenProvider2))
 
-                .and()
-                .logout().logoutUrl("/").permitAll()
+//                .addFilter(jwtLoginFilter())
+//                .addFilter(new JWTAuthorizationFilter(authenticationManager(), userRepository, session))
 
-                .and()
-                .oauth2Login().userInfoEndpoint()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+//                .accessDeniedHandler(new JwtAceessDeniedHandler())
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+//                .anyRequest().permitAll()
+//                .and()
+//                .logout()
+//                .logoutUrl("/mylogout")
+//                .logoutSuccessHandler(new JwtLogoutSuccessHandler())
+//                .and()
+//                .oauth2Login()
+//                .userInfoEndpoint()
 
-        ;
-
-//                // OAuth2 설정 진입, userInfoEndpoint() -> 로그인 성공 이후 사용자 정보 가져올 때의 설정 담당
-//                // userService -> UserService 인터페이스 구현체 등록
+//        http
+//                .csrf().disable() // 개발 편의성을 위해 CSRF 프로텍션을 비활성화
+//                .headers().frameOptions().disable()
+//                .and()
+//                .httpBasic().disable() // HTTP 기본 인증 비활성화
+//                .formLogin().disable() // 폼 기반 인증 비활성화
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // stateless한 세션 정책 설정
+//
+//                .and()
+//                .authorizeRequests()
+////                .antMatchers(HttpMethod.POST, "/login").permitAll()
+//                .antMatchers("/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//
+//
+//
+////                .exceptionHandling()
+////                .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 401 UnAuthorized 처리 (인증 실패)
+////                .accessDeniedHandler(jwtAccessDeniedHandler) // 403 Forbidden 처리 (권한 불충분)
 ////                .and()
-////                .oauth2Login().userInfoEndpoint().userService(customOAuth2UserService);
+////                .apply(new JwtSecurityConfig(tokenProvider2))
+//
+////                .and()
+//                .logout().logoutUrl("/").permitAll()
+//
+//                .and()
+//                .oauth2Login().userInfoEndpoint()
+//
+//        ;
+//
+////                // OAuth2 설정 진입, userInfoEndpoint() -> 로그인 성공 이후 사용자 정보 가져올 때의 설정 담당
+////                // userService -> UserService 인터페이스 구현체 등록
+//////                .and()
+//////                .oauth2Login().userInfoEndpoint().userService(customOAuth2UserService);
     }
 
     @Bean

@@ -41,7 +41,7 @@ public class CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + " is not valid"));
 
-        return commentRepository.findAllByPost(post).stream().map(ResponseDTO.CommentResponse::new).collect(Collectors.toList());
+        return commentRepository.findAllByPostOrderByCreatedAtAsc(post).stream().map(ResponseDTO.CommentResponse::new).collect(Collectors.toList());
     }
 
     // 댓글 수정

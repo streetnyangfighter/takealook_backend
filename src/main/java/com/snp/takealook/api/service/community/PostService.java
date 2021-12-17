@@ -56,7 +56,7 @@ public class PostService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board with id: " + boardId + " is not valid"));
 
-        return postRepository.findAllByBoard(board).stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
+        return postRepository.findAllByBoardOrderByCreatedAtDesc(board).stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
     }
 
     // 게시글 상세 조회
