@@ -8,14 +8,18 @@ import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.oauth.GoogleUserInfo;
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
+import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
+import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.config.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +30,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final S3Uploader s3Uploader;
 
     // 소셜 로그인
     @Transactional(rollbackFor = Exception.class)
@@ -94,22 +99,25 @@ public class UserService {
         return new ResponseDTO.UserResponse(userEntity);
     }
 
-    // 회원 idx로 찾기
-    @Transactional(readOnly = true)
-    public ResponseDTO.UserResponse findById(Long id) {
-        User entity = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with id: " + id + " is not valid"));
+    // 회원정보 수정
+    @Transactional(rollbackFor = Exception.class)
+    public Long update(Long userId, UserDTO.Update dto, MultipartFile file) throws IOException {
+        String profileImage = s3Uploader.upload(file, "static");
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
-        return new ResponseDTO.UserResponse(entity);
+        if (user.getImage().startsWith("https://takealook-bucket")) {
+            s3Uploader.fileDelete(user.getImage());
+        }
+
+        return user.update(dto.getNickname(), profileImage).getId();
     }
 
     // 회원정보 조회
     @Transactional(readOnly = true)
-    public User getInfo(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("유저 ID가 없습니다."));
+    public ResponseDTO.UserResponse findOne(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
-        return user;
+        return new ResponseDTO.UserResponse(user);
     }
 
     // 회원 탈퇴
