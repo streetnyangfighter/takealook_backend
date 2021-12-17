@@ -16,17 +16,15 @@ public class UserController {
 
     private final UserService userService;
 
-    // 회원 가입 후 추가 정보 입력
-    @PutMapping("/user/initial/{id}")
-    public Long updateLoginDetail(@PathVariable Long id, @RequestBody UserDTO.Update dto) {
-        return userService.updateLoginDetail(id, dto);
+    // 소셜 로그인, 회원 가입
+    @PostMapping("/login")
+    public ResponseDTO.UserResponse login(HttpServletResponse response, @RequestBody Map<String, Object> data, String provider) {
+        return userService.login(response, data, provider);
     }
 
-    // 닉네임 중복체크
-    @PostMapping("/user/check")
-    public boolean check(@RequestBody UserDTO.Check dto) {
-        return userService.ckeckNickname(dto.getNickname());
-    }
+    // 회원정보 수정
+//    @PatchMapping("/user/{userId}")
+//    public
 
     // 회원정보 조회
     @GetMapping("/user/{id}")
@@ -44,12 +42,6 @@ public class UserController {
     @PatchMapping("/user/{userId}/restore")
     public Long restore(@PathVariable Long userId) {
         return userService.restore(userId);
-    }
-
-    // 소셜 로그인, 회원 가입
-    @PostMapping("/login")
-    public ResponseDTO.UserResponse login(HttpServletResponse response, @RequestBody Map<String, Object> data, String provider) {
-         return userService.login(response, data, provider);
     }
 
 }
