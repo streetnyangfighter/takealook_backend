@@ -6,8 +6,6 @@ import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.oauth.GoogleUserInfo;
-import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
-import com.snp.takealook.api.dto.oauth.NaverUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
