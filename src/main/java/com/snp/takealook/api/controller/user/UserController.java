@@ -5,6 +5,7 @@ import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.model.source.spi.JdbcDataType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +19,8 @@ public class UserController {
 
     // 소셜 로그인, 회원 가입
     @PostMapping("/login")
-    public ResponseDTO.UserResponse login(HttpServletResponse response, @RequestBody Map<String, Object> data, String provider) {
-        return userService.login(response, data, provider);
+    public ResponseDTO.UserResponse login(HttpServletResponse response, @RequestBody Map<String, Object> data) {
+        return userService.login(response, data, (String) data.get("provider"));
     }
 
     // 회원정보 수정

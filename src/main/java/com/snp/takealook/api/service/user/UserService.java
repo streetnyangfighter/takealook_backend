@@ -6,8 +6,8 @@ import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.oauth.GoogleUserInfo;
+import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
-import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
@@ -36,19 +36,25 @@ public class UserService {
         OAuth2UserInfo userInfo = null;
         ProviderType providerType = null;
 
-        userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
-        providerType = ProviderType.GOOGLE;
+//        userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
+//        providerType = ProviderType.GOOGLE;
 
-//        if (provider.equals("Google")) {
-//            userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
-//            providerType = ProviderType.GOOGLE;
-//        } else if (provider.equals("Kakao")) {
-//            userInfo = new KakaoUserInfo(data);
-//            providerType = ProviderType.KAKAO;
-//        } else if (provider.equals("Naver")) {
-//            userInfo = new NaverUserInfo(data);
-//            providerType = ProviderType.NAVER;
-//        }
+        System.out.println("*** " + data);
+        System.out.println();
+        Map<String, Object> aaa = (Map<String, Object>) data.get("object");
+        System.out.println("*** " + aaa);
+        System.out.println();
+        System.out.println("*** " + (Map<String, Object>) aaa.get("profile"));
+
+        if (provider.equals("google")) {
+            Map<String, Object> info = (Map<String, Object>) data.get("object");
+            userInfo = new GoogleUserInfo((Map<String, Object>) info.get("profileObj"));
+            providerType = ProviderType.GOOGLE;
+        } else if (provider.equals("kakao")) {
+            Map<String, Object> info = (Map<String, Object>) data.get("object");
+            userInfo = new KakaoUserInfo((Map<String, Object>) info.get("profile"));
+            providerType = ProviderType.KAKAO;
+        }
 
         System.out.println(userInfo.getUsername());
         System.out.println(providerType);

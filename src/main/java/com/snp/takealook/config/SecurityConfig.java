@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 
@@ -55,12 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         /** cors 설정 추가  */
-        http.cors().configurationSource(corsConfigurationSource());
+        http.
+                cors().configurationSource(corsConfigurationSource());
 
         http.
-                cors().configurationSource(corsConfigurationSource())
-                .and()
-                .csrf().disable()
+                csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
                 .formLogin().disable()

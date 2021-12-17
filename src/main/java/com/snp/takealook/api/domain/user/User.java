@@ -37,7 +37,6 @@ public class User extends BaseTimeEntity {
     @NotNull
     private String nickname;
 
-    @NotNull
     @Lob
     private String image;
 
