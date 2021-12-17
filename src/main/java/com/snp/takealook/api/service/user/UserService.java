@@ -11,16 +11,19 @@ import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
     // 회원 idx로 찾기
@@ -94,7 +97,7 @@ public class UserService {
         ProviderType providerType = null;
 
         if (provider.equals("Google")) {
-            userInfo = new GoogleUserInfo(data);
+            userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
             providerType = ProviderType.GOOGLE;
         } else if (provider.equals("Kakao")) {
             userInfo = new KakaoUserInfo(data);
@@ -109,14 +112,15 @@ public class UserService {
         System.out.println(providerType);
 
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
-
-//         System.out.println("*** " + userEntity.getId());
+        UUID uuid = UUID.randomUUID();
+        String encPassword = encoder.encode(uuid.toString());
 
         if (userEntity == null) {
             // 최초 로그인 -> 회원가입
+
             User user = User.builder()
                     .username(userInfo.getUsername())
-                    .password("NO_PASSWORD")
+                    .password(encPassword)
                     .email(userInfo.getEmail())
                     .nickname(userInfo.getNickname())
                     .image(userInfo.getImage())
