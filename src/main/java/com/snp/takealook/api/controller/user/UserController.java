@@ -7,6 +7,7 @@ import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -47,8 +48,8 @@ public class UserController {
 
     // 소셜 로그인, 회원 가입
     @PostMapping("/login")
-    public ResponseDTO.JwtTokenResponse login(@RequestBody Map<String, Object> data) {
-         return userService.login(data, "Google");
+    public ResponseDTO.UserResponse login(HttpServletResponse response, @RequestBody Map<String, Object> data, String provider) {
+         return userService.login(response, data, provider);
     }
 
 }

@@ -33,9 +33,11 @@ public class SecondaryService {
         Long catId = catService.save(catInfo, mainImage);
         Long selectionId = selectionService.save(userId, catId);
         catLocationService.saveAll(selectionId, catLocList);
-        for (MultipartFile m : files) {
-            String path = s3Uploader.upload(m, "static");
-            catImageService.save(selectionId, path);
+        if (files.size() != 0) {
+            for (MultipartFile m : files) {
+                String path = s3Uploader.upload(m, "static");
+                catImageService.save(selectionId, path);
+            }
         }
 
         return catId;
