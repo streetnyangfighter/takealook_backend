@@ -35,11 +35,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        log.info("시큐리티 사용하면, 권헌이 필요한 요청이 들어옴" );
+        log.info("시큐리티 사용하면, 권한이 필요한 요청이 들어옴");
 
         String header = request.getHeader(JwtProperties.TOKEN_HAEDER);
 
-        log.info("token=>{}", header);
+        log.info("token => {} ", header);
 
         if(header == null || !header.startsWith(JwtProperties.TOKEN_PRIFIX)){
 
@@ -53,7 +53,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         Long userId = JWT.require(Algorithm.HMAC256(JwtProperties.SECRET)).build().verify(token)
                 .getClaim("id").asLong();
 
-        log.info("userId=>{}",userId);
+        log.info("userId => {}",userId);
 
 
         //토큰의 유효기간이 만료되었을 때 refresh cookie를 어떻게 활용할지, 교차검증은 어떻게 할지, 메모리 db를 쓸지, rdbms를 쓸지 한 번 알아서 공부해서 구현해보시는 거 추천
@@ -83,7 +83,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     );
 
             SecurityContextHolder.getContext().setAuthentication(authentication); //인증 되었다는 거에요.
-
 
         }
 

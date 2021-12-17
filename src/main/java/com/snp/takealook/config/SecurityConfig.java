@@ -40,53 +40,48 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader(JwtProperties.TOKEN_HAEDER);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return source;
-    }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-        web.ignoring().mvcMatchers("/login");
-        // 메인 추가
+        return source;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         /** cors 설정 추가  */
-        http.cors().configurationSource(corsConfigurationSource());
+        http.
+                cors().configurationSource(corsConfigurationSource());
 
         http.
-                cors().configurationSource(corsConfigurationSource())
-                .and()
-                .csrf().disable()
+                csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
-
-                .exceptionHandling()
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                .accessDeniedHandler(new JwtAceessDeniedHandler())
-
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint();
+//                .and()
+//                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
+//
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+//                .accessDeniedHandler(new JwtAceessDeniedHandler())
+//
+//                .and()
+//                .authorizeRequests()
+////                .anyRequest().authenticated()
+//                .antMatchers("/**").permitAll()
+//
+//                .and()
+//                .oauth2Login()
+//                .userInfoEndpoint();
+        ;
 
     }
 }
