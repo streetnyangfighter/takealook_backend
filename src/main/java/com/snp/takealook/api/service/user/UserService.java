@@ -104,9 +104,16 @@ public class UserService {
             providerType = ProviderType.NAVER;
         }
 
+        System.out.println(userInfo.getUsername());
+        System.out.println(provider);
+        System.out.println(providerType);
+
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
 
+        System.out.println("*** " + userEntity.getId());
+
         if (userEntity == null) {
+            // 최초 로그인 -> 회원가입
             User user = User.builder()
                     .username(userInfo.getUsername())
                     .password("NO_PASSWORD")
@@ -122,6 +129,8 @@ public class UserService {
 
         // 토큰 만들기
         String token = tokenProvider.createToken(userEntity);
+        System.out.println("*** " + token);
+        System.out.println("*** " + success);
 
         return new ResponseDTO.JwtTokenResponse(success, token);
     }

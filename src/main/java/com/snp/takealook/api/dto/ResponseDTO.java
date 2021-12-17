@@ -210,16 +210,15 @@ public class ResponseDTO {
     @Getter
     public static class CatImageListResponse {
         private Long id;
-        private String userNamae;
+        private String userName;
         private String path;
 
         public CatImageListResponse(CatImage entity) {
             this.id = entity.getId();
-            this.userNamae = entity.getSelection().getUser().getNickname();
+            this.userName = entity.getSelection().getUser().getNickname();
             this.path = entity.getPath();
         }
     }
-
 
 
     /** COMMUNITY 관련 ResponseDTO */
