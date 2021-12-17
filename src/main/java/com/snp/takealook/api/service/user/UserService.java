@@ -110,7 +110,7 @@ public class UserService {
 
         User userEntity = userRepository.findByUsername(userInfo.getUsername());
 
-        System.out.println("*** " + userEntity.getId());
+//         System.out.println("*** " + userEntity.getId());
 
         if (userEntity == null) {
             // 최초 로그인 -> 회원가입
