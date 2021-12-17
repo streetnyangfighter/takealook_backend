@@ -40,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://3.35.129.119:3000/");
+        config.addAllowedOrigin("http://localhost:3000/");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader(JwtProperties.TOKEN_HAEDER);
@@ -72,16 +73,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .exceptionHandling()
 //                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 //                .accessDeniedHandler(new JwtAceessDeniedHandler())
-//
-//                .and()
-//                .authorizeRequests()
-////                .anyRequest().authenticated()
-//                .antMatchers("/**").permitAll()
-//
+
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**").permitAll();
+//                .anyRequest().authenticated()
+
 //                .and()
 //                .oauth2Login()
 //                .userInfoEndpoint();
-        ;
 
     }
 }
