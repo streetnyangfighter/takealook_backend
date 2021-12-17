@@ -115,8 +115,6 @@ public class UserService {
         UUID uuid = UUID.randomUUID();
         String encPassword = encoder.encode(uuid.toString());
 
-//        System.out.println("*** " + userEntity.getId());
-
         if (userEntity == null) {
             // 최초 로그인 -> 회원가입
 
