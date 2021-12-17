@@ -7,9 +7,7 @@ import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.oauth.GoogleUserInfo;
 import com.snp.takealook.api.dto.oauth.KakaoUserInfo;
-import com.snp.takealook.api.dto.oauth.NaverUserInfo;
 import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
-import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
@@ -41,16 +39,21 @@ public class UserService {
 //        userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
 //        providerType = ProviderType.GOOGLE;
 
+        System.out.println("*** " + data);
+        System.out.println();
+        Map<String, Object> aaa = (Map<String, Object>) data.get("object");
+        System.out.println("*** " + aaa);
+        System.out.println();
+        System.out.println("*** " + (Map<String, Object>) aaa.get("profile"));
+
         if (provider.equals("google")) {
             Map<String, Object> info = (Map<String, Object>) data.get("object");
             userInfo = new GoogleUserInfo((Map<String, Object>) info.get("profileObj"));
             providerType = ProviderType.GOOGLE;
         } else if (provider.equals("kakao")) {
-            userInfo = new KakaoUserInfo(data);
+            Map<String, Object> info = (Map<String, Object>) data.get("object");
+            userInfo = new KakaoUserInfo((Map<String, Object>) info.get("profile"));
             providerType = ProviderType.KAKAO;
-        } else if (provider.equals("naver")) {
-            userInfo = new NaverUserInfo(data);
-            providerType = ProviderType.NAVER;
         }
 
         System.out.println(userInfo.getUsername());
