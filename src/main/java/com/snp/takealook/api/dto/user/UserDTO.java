@@ -1,7 +1,9 @@
 package com.snp.takealook.api.dto.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class UserDTO {
 
@@ -17,15 +19,9 @@ public class UserDTO {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Update {
         private String nickname;
-        private String image;
-
-        @Builder
-        public Update(String nickname, String image) {
-            this.nickname = nickname;
-            this.image = image;
-        }
     }
 
     @Getter
