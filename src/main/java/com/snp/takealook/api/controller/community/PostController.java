@@ -36,6 +36,11 @@ public class PostController {
         return postId;
     }
 
+    @PostMapping(value = "/post/photo", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public String savePhoto(@RequestPart(value= "file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        return s3Uploader.upload(file, "static");
+    }
+
     // 게시글 리스트 조회 (게시판 구분 x)
     @GetMapping("/posts")
     public List<ResponseDTO.PostResponse> findAllPosts() {
