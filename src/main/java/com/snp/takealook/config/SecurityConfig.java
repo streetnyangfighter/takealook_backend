@@ -51,13 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-        web.ignoring().mvcMatchers("/login");
-        // 메인 추가
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         /** cors 설정 추가  */
@@ -73,20 +66,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
-
-                .exceptionHandling()
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                .accessDeniedHandler(new JwtAceessDeniedHandler())
+//                .and()
+//                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
+//
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+//                .accessDeniedHandler(new JwtAceessDeniedHandler())
 
                 .and()
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/**").permitAll();
+//                .anyRequest().authenticated()
 
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint();
+//                .and()
+//                .oauth2Login()
+//                .userInfoEndpoint();
 
     }
 }
