@@ -73,11 +73,10 @@ public class Cat extends BaseTimeEntity {
         this.image = image;
     }
 
-    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte status, Byte pattern, String image) {
+    public Cat updateInfo(String name, Byte gender, Byte neutered, Byte pattern, String image) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
-        this.status = status;
         this.pattern = pattern;
         this.image = image;
 

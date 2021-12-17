@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,13 +29,13 @@ public class SecondaryService {
                            CatDTO.Create catInfo,
                            CatDTO.LocationList[] catLocList,
                            MultipartFile file,
-                           List<MultipartFile> files) throws IOException {
+                           Optional<List<MultipartFile>> files) throws IOException {
         String mainImage = s3Uploader.upload(file, "static");
         Long catId = catService.save(catInfo, mainImage);
         Long selectionId = selectionService.save(userId, catId);
         catLocationService.saveAll(selectionId, catLocList);
-        if (files.size() != 0) {
-            for (MultipartFile m : files) {
+        if (files.isPresent()) {
+            for (MultipartFile m : files.get()) {
                 String path = s3Uploader.upload(m, "static");
                 catImageService.save(selectionId, path);
             }
@@ -49,16 +50,18 @@ public class SecondaryService {
                           CatDTO.Update catInfo,
                           CatDTO.LocationList[] catLocList,
                           MultipartFile file,
-                          List<MultipartFile> files) throws IOException {
+                          Optional<List<MultipartFile>> files) throws IOException {
         String mainImage = s3Uploader.upload(file, "static");
         catService.update(userId, catId, catInfo, mainImage);
         catLocationService.update(userId, catId, catLocList);
         List<String> pathList = new ArrayList<>();
-        for (MultipartFile m : files) {
-            String path = s3Uploader.upload(m, "static");
-            pathList.add(path);
+        if (files.isPresent()) {
+            for (MultipartFile m : files.get()) {
+                String path = s3Uploader.upload(m, "static");
+                pathList.add(path);
+            }
+            catImageService.update(userId, catId, pathList);
         }
-        catImageService.update(userId, catId, pathList);
         notificationService.catSave(userId, catId, (byte) 1);
 
         return catId;

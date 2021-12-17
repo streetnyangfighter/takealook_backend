@@ -31,7 +31,7 @@ public class CatController {
                            @RequestPart(value = "catMainImg") MultipartFile file,
                            @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
 
-        return secondaryService.saveNewCat(userId, catInfo, catLocList, file, files);
+        return secondaryService.saveNewCat(userId, catInfo, catLocList, file, java.util.Optional.ofNullable(files));
     }
 
     @PostMapping(value = "/user/{userId}/cat/{catId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -42,7 +42,7 @@ public class CatController {
                        @RequestPart(value = "catMainImg") MultipartFile file,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
 
-        return secondaryService.updateCat(userId, catId, catInfo, catLocList, file, files);
+        return secondaryService.updateCat(userId, catId, catInfo, catLocList, file, java.util.Optional.ofNullable(files));
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}")
@@ -69,6 +69,11 @@ public class CatController {
     @GetMapping("/user/{userId}/cat/{catId}")
     public ResponseDTO.CatResponse findOne(@PathVariable Long userId, @PathVariable Long catId) {
         return catService.findOne(userId, catId);
+    }
+
+    @GetMapping("/user/{userId}/cat/{catId}/past-info")
+    public ResponseDTO.CatInfoResponse findCatInfoForUpdate(@PathVariable Long userId, @PathVariable Long catId) {
+        return catService.findCatInfoForUpdate(userId, catId);
     }
 
     @GetMapping("/user/{userId}/cats")
