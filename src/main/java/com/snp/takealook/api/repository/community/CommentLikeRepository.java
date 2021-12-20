@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> {
-    void deleteLikesByComment(Comment comment);
-
     @Modifying
     @Query(value = "INSERT INTO comment_like(comment_id, user_id, created_at, modified_at) VALUES(:commentId, :userId, now(), now())", nativeQuery = true)
     void like(long commentId, long userId);

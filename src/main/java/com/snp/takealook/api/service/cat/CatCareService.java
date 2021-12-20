@@ -43,7 +43,7 @@ public class CatCareService {
         if (!Objects.equals(catCare.getSelection().getId(), mySelection.getId())) {
             throw new IllegalStateException("only can update my catcare");
         }
-        return catCare.update(dto.getType(), dto.getMessage()).getId();
+        return catCare.update(dto.getType(), dto.getMessage()).getSelection().getCat().getId();
     }
 
     @Transactional(rollbackFor = Exception.class)
