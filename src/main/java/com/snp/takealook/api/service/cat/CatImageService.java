@@ -41,8 +41,8 @@ public class CatImageService {
             for (String url : deletedImgUrl.get()) {
                 s3Uploader.fileDelete(url);
                 CatImage deleteImg = catImageRepository.findByPath(url);
-                catImageRepository.delete(deleteImg);
                 mySelection.getCatImageList().remove(deleteImg);
+                catImageRepository.delete(deleteImg);
             }
         }
 

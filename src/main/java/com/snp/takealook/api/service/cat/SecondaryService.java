@@ -72,7 +72,7 @@ public class SecondaryService {
             catImageService.update(userId, catId, deletedImgUrl, Optional.of(pathList));
         }
 
-        if (deletedImgUrl.isPresent()) {
+        if (!files.isPresent() && deletedImgUrl.isPresent()) {
             catImageService.update(userId, catId, deletedImgUrl, java.util.Optional.empty());
         }
 
