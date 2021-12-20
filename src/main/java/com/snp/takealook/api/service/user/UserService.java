@@ -25,12 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
+    static String[] words = {"행복한", "사랑스러운", "배고픈", "피곤한", "즐거운", "따뜻한", "기쁜", "상냥한"};
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
@@ -39,8 +41,6 @@ public class UserService {
     // 소셜 로그인
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO.UserResponse login(HttpServletResponse response, Map<String, Object> data, String provider) {
-
-        Boolean success = false;
 
         OAuth2UserInfo userInfo = null;
         ProviderType providerType = null;
@@ -63,18 +63,32 @@ public class UserService {
         String encPassword = encoder.encode(uuid.toString());
 
         if (userEntity == null) { // 최초 로그인 -> 회원가입
+            User sameNickname = userRepository.findByNickname(userInfo.getNickname());
+            User user = null;
 
-            User user = User.builder()
-                    .username(userInfo.getUsername())
-                    .password(encPassword)
-                    .email(userInfo.getEmail())
-                    .nickname(userInfo.getNickname())
-                    .image(userInfo.getImage())
-                    .providerType(providerType)
-                    .build();
+            if (sameNickname != null) { // 닉네임이 겹치면
+                Random rnd = new Random();
+
+                user = User.builder()
+                        .username(userInfo.getUsername())
+                        .password(encPassword)
+                        .email(userInfo.getEmail())
+                        .nickname(words[rnd.nextInt(words.length-1)] + userInfo.getNickname())
+                        .image(userInfo.getImage())
+                        .providerType(providerType)
+                        .build();
+            } else {
+                user = User.builder()
+                        .username(userInfo.getUsername())
+                        .password(encPassword)
+                        .email(userInfo.getEmail())
+                        .nickname(userInfo.getNickname())
+                        .image(userInfo.getImage())
+                        .providerType(providerType)
+                        .build();
+            }
 
             userEntity = userRepository.save(user);
-            success = true;
         }
 
         // 토큰 만들기
