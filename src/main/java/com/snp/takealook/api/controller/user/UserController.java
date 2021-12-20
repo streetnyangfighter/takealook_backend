@@ -32,6 +32,12 @@ public class UserController {
         return userService.loadUser(response, principal, resp);
     }
 
+    // 닉네임 중복체크
+    @PostMapping("/user/check")
+    public boolean check(@RequestBody UserDTO.Check dto) {
+        return userService.ckeckNickname(dto.getNickname());
+    }
+
     // 회원정보 수정
     @PostMapping(value = "/user/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long update(@PathVariable Long userId,
