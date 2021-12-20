@@ -8,8 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CatCareRepository extends JpaRepository<CatCare, Long> {
-
-    List<CatCare> findCatCaresByModifiedAtBefore(LocalDateTime dateTime);
-
     List<CatCare> findCatCaresBySelectionAndCreatedAtBetween(Selection selection, LocalDateTime dayStart, LocalDateTime dayEnd);
 }

@@ -23,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -109,12 +106,11 @@ public class UserService {
     public ResponseDTO.UserResponse loadUser(HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
         User user = principal.getUser();
 
-        if (user == null) { //세션이 만료된 거에요.
+        if (user == null) {
             log.info("user가 null이면");
             resp.sendRedirect("/logout");
         }
         log.info("유저정보 유지" + user);
-        //resp.addHeader("");
 
         // 토큰 만들기
         String jwtToken = JWT.create()
@@ -126,22 +122,26 @@ public class UserService {
 
         response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
 
-
         assert user != null;
         return new ResponseDTO.UserResponse(user);
     }
 
     // 회원정보 수정
     @Transactional(rollbackFor = Exception.class)
-    public Long update(Long userId, UserDTO.Update dto, MultipartFile file) throws IOException {
-        String profileImage = s3Uploader.upload(file, "static");
+    public Long update(Long userId, UserDTO.Update dto, Optional<MultipartFile> file) throws IOException {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
-        if (user.getImage().startsWith("https://takealook-bucket")) {
-            s3Uploader.fileDelete(user.getImage());
+        if (file.isPresent()) {
+            String profileImage = s3Uploader.upload(file.get(), "static");
+
+            if (user.getImage().startsWith("https://takealook-bucket")) {
+                s3Uploader.fileDelete(user.getImage());
+            }
+
+            user.updateImage(profileImage);
         }
 
-        return user.update(dto.getNickname(), profileImage).getId();
+        return user.updateInfo(dto.getNickname()).getId();
     }
 
     // 회원정보 조회

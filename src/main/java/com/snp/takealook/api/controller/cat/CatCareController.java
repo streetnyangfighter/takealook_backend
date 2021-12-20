@@ -1,10 +1,13 @@
 package com.snp.takealook.api.controller.cat;
 
+import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatCareDTO;
 import com.snp.takealook.api.service.cat.CatCareService;
 import com.snp.takealook.api.service.user.NotificationService;
+import com.snp.takealook.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,20 +22,26 @@ public class CatCareController {
     private final NotificationService notificationService;
 
     @PostMapping("/user/{userId}/cat/{catId}/catcare")
-    public Long save(@PathVariable Long userId, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
-        Long saveId = catCareService.save(userId, catId, dto);
-        notificationService.catSave(userId, catId, (byte) 0);
-        return saveId;
+    public Long save(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
+        User user = principal.getUser();
+        Long saveId = catCareService.save(user.getId(), catId, dto);
+        notificationService.catSave(user.getId(), catId, (byte) 0);
+
+        return catId;
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}/catcare/{catcareId}")
-    public Long update(@PathVariable Long userId, @PathVariable Long catId, @PathVariable Long catcareId, @RequestBody CatCareDTO.Update dto) {
-        return catCareService.update(userId, catId, catcareId, dto);
+    public Long update(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId, @PathVariable Long catcareId, @RequestBody CatCareDTO.Update dto) {
+        User user = principal.getUser();
+
+        return catCareService.update(user.getId(), catId, catcareId, dto);
     }
 
     @DeleteMapping("/user/{userId}/cat/{catId}/catcare/{catcareId}")
-    public void delete(@PathVariable Long userId, @PathVariable Long catId, @PathVariable Long catcareId) {
-        catCareService.delete(userId, catId, catcareId);
+    public void delete(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId, @PathVariable Long catcareId) {
+        User user = principal.getUser();
+
+        catCareService.delete(user.getId(), catId, catcareId);
     }
 
     @GetMapping("/user/{userId}/cat/{catId}/monthly-catcares")
