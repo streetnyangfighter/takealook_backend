@@ -70,9 +70,9 @@ public class PostService {
 
     // 게시글 수정
     @Transactional(rollbackFor = Exception.class)
-    public Long update(Long id, PostDTO.Update dto, String imgUrl) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+    public Long update(Long postId, Long userId, PostDTO.Update dto, String imgUrl) {
+        Post post = postRepository.findByIdAndWriter(postId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + "and User with id: " + userId + " is not valid"));
 
         post.update(dto.getTitle(), dto.getContent());
 
@@ -81,14 +81,14 @@ public class PostService {
             post.updateThumbnail(imgUrl);
         }
 
-        return id;
+        return postId;
     }
 
     // 게시글 삭제
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+    public void delete(Long postId, Long userId) {
+        Post post = postRepository.findByIdAndWriter(postId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + "and User with id: " + userId + " is not valid"));
 
         s3Uploader.fileDelete(post.getImgUrl());
 

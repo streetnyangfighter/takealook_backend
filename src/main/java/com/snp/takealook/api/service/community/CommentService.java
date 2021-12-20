@@ -46,9 +46,9 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional(rollbackFor = Exception.class)
-    public Long update(Long commentId, CommentDTO.Update dto) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment with id: " + commentId + " is not valid"));
+    public Long update(Long commentId, Long userId, CommentDTO.Update dto) {
+        Comment comment = commentRepository.findByIdAndWriter(commentId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment with id: " + commentId + "and User with id: " + userId + " is not valid"));
 
         comment.update(dto.getContent());
 
@@ -57,9 +57,9 @@ public class CommentService {
 
     // 댓글 삭제
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Comment with id: " + id + " is not valid"));
+    public void delete(Long commentId, Long userId) {
+        Comment comment = commentRepository.findByIdAndWriter(commentId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment with id: " + commentId + "and User with id: " + userId + " is not valid"));
 
         commentRepository.delete(comment);
     }

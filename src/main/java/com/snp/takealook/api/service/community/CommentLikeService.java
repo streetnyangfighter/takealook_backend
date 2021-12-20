@@ -20,13 +20,8 @@ public class CommentLikeService {
 
     // 댓글 추천 취소
     @Transactional(rollbackFor = Exception.class)
-    public void unlike(Long commentId, CommentLikeDTO.Like dto) {
-        commentLikeRepository.unLike(commentId, dto.getUserId());
+    public void unlike(Long commentId, Long userId) {
+        commentLikeRepository.unLike(commentId, userId);
     }
 
-    // 댓글별 추천 카운트
-    @Transactional(readOnly = true)
-    public Long countLike(Long commentId) {
-        return commentLikeRepository.findAllByCommentId(commentId).stream().count();
-    }
 }

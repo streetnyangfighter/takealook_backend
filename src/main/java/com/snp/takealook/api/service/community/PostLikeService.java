@@ -21,13 +21,8 @@ public class PostLikeService extends BaseTimeEntity {
 
     // 게시글 추천 취소
     @Transactional(rollbackFor = Exception.class)
-    public void unlike(Long postId, PostLikeDTO.Like dto) {
-        postLikeRepository.unLike(postId, dto.getUserId());
+    public void unlike(Long postId, Long userId) {
+        postLikeRepository.unLike(postId, userId);
     }
 
-    // 게시글별 추천 카운트
-    @Transactional(readOnly = true)
-    public Long countLike(Long postId) {
-        return postLikeRepository.findAllByPostId(postId).stream().count();
-    }
 }
