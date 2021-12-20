@@ -81,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessHandler(new JwtLogoutSuccessHandler())
 
                 .and()

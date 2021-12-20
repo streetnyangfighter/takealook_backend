@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -33,21 +34,25 @@ public class CatImageService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long update(Long userId, Long catId, List<String> pathList) {
+    public Long update(Long userId, Long catId, Optional<String[]> deletedImgUrl, Optional<List<String>> pathList) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
-        for (CatImage catImage : mySelection.getCatImageList()) {
-            s3Uploader.fileDelete(catImage.getPath());
+        if (deletedImgUrl.isPresent()) {
+            for (String url : deletedImgUrl.get()) {
+                s3Uploader.fileDelete(url);
+                CatImage deleteImg = catImageRepository.findByPath(url);
+                mySelection.getCatImageList().remove(deleteImg);
+                catImageRepository.delete(deleteImg);
+            }
         }
 
-        catImageRepository.deleteAll(mySelection.getCatImageList());
-        mySelection.getCatImageList().clear();
-
-        for (String path : pathList) {
-            save(mySelection.getId(), path);
+        if (pathList.isPresent()) {
+            for (String path : pathList.get()) {
+                save(mySelection.getId(), path);
+            }
         }
 
-        return mySelection.getId();
+        return mySelection.getCat().getId();
     }
 
     @Transactional(readOnly = true)

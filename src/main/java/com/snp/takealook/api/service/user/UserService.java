@@ -45,16 +45,6 @@ public class UserService {
         OAuth2UserInfo userInfo = null;
         ProviderType providerType = null;
 
-//        userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
-//        providerType = ProviderType.GOOGLE;
-
-        System.out.println("*** " + data);
-        System.out.println();
-        Map<String, Object> aaa = (Map<String, Object>) data.get("object");
-        System.out.println("*** " + aaa);
-        System.out.println();
-        System.out.println("*** " + (Map<String, Object>) aaa.get("profile"));
-
         if (provider.equals("google")) {
             Map<String, Object> info = (Map<String, Object>) data.get("object");
             userInfo = new GoogleUserInfo((Map<String, Object>) info.get("profileObj"));
@@ -96,15 +86,13 @@ public class UserService {
                 .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
-        System.out.println("*** " + jwtToken);
-        System.out.println("*** " + success);
         System.out.println(response);
 
         return new ResponseDTO.UserResponse(userEntity);
     }
 
     // 로그인 갱신
-    public ResponseDTO.UserResponse loadUser(@AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
+    public ResponseDTO.UserResponse loadUser(HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
         User user = principal.getUser();
 
         if (user == null) { //세션이 만료된 거에요.
@@ -113,6 +101,17 @@ public class UserService {
         }
         log.info("유저정보 유지" + user);
         //resp.addHeader("");
+
+        // 토큰 만들기
+        String jwtToken = JWT.create()
+                .withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
+                .withClaim("id", user.getId()) //인증에 필요한 정보
+                .withClaim("nickname", user.getNickname())
+                .sign(Algorithm.HMAC256(JwtProperties.SECRET));
+
+        response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
+
 
         assert user != null;
         return new ResponseDTO.UserResponse(user);
