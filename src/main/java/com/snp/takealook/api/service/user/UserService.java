@@ -170,4 +170,16 @@ public class UserService {
         return user.restore().getId();
     }
 
+    // 닉네임 중복 체크
+    public boolean ckeckNickname(String nickname) {
+        boolean result = false;
+        User user = userRepository.findByNickname(nickname);
+
+        if(user == null) {
+            result = true;
+        }
+
+        // 닉네임 중복 : false, 사용가능 : true
+        return result;
+    }
 }

@@ -1,13 +1,10 @@
 package com.snp.takealook.api.controller.user;
 
-import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.user.UserDTO;
-import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.user.UserService;
 import com.snp.takealook.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.model.source.spi.JdbcDataType;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +30,12 @@ public class UserController {
     @GetMapping("/loadUser")
     public ResponseDTO.UserResponse loadUser(HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
         return userService.loadUser(response, principal, resp);
+    }
+
+    // 닉네임 중복체크
+    @PostMapping("/user/check")
+    public boolean check(@RequestBody UserDTO.Check dto) {
+        return userService.ckeckNickname(dto.getNickname());
     }
 
     // 회원정보 수정
