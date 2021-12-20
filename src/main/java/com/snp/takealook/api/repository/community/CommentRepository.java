@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByPostOrderByCreatedAtAsc(Post post);
-    Optional<Comment> findByIdAndUser_Id(Long commentId, Long userId);
+    Optional<Comment> findByIdAndWriter(Long commentId, Long userId);
 }
