@@ -118,7 +118,6 @@ public class UserService {
         return new ResponseDTO.UserResponse(user);
     }
 
-
     // 회원정보 수정
     @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, UserDTO.Update dto, MultipartFile file) throws IOException {

@@ -29,6 +29,7 @@ public class UserController {
         return userService.login(response, data, (String) data.get("provider"));
     }
 
+    // 로그인 갱신
     @GetMapping("/loadUser")
     public ResponseDTO.UserResponse loadUser(@AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
         return userService.loadUser(principal, resp);
