@@ -104,7 +104,7 @@ public class UserService {
     }
 
     // 로그인 갱신
-    public ResponseDTO.UserResponse loadUser(@AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
+    public ResponseDTO.UserResponse loadUser(HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
         User user = principal.getUser();
 
         if (user == null) { //세션이 만료된 거에요.
@@ -113,6 +113,17 @@ public class UserService {
         }
         log.info("유저정보 유지" + user);
         //resp.addHeader("");
+
+        // 토큰 만들기
+        String jwtToken = JWT.create()
+                .withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
+                .withClaim("id", user.getId()) //인증에 필요한 정보
+                .withClaim("nickname", user.getNickname())
+                .sign(Algorithm.HMAC256(JwtProperties.SECRET));
+
+        response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
+
 
         assert user != null;
         return new ResponseDTO.UserResponse(user);

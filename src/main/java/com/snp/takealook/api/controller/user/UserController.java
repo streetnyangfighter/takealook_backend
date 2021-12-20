@@ -31,8 +31,8 @@ public class UserController {
 
     // 로그인 갱신
     @GetMapping("/loadUser")
-    public ResponseDTO.UserResponse loadUser(@AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
-        return userService.loadUser(principal, resp);
+    public ResponseDTO.UserResponse loadUser(HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
+        return userService.loadUser(response, principal, resp);
     }
 
     // 회원정보 수정

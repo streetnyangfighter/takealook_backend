@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,19 +50,32 @@ public class SecondaryService {
                           Long catId,
                           CatDTO.Update catInfo,
                           CatDTO.LocationList[] catLocList,
-                          MultipartFile file,
+                          Optional<MultipartFile> file,
+                          Optional<String[]> deletedImgUrl,
                           Optional<List<MultipartFile>> files) throws IOException {
-        String mainImage = s3Uploader.upload(file, "static");
-        catService.update(userId, catId, catInfo, mainImage);
+
+        catService.updateInfo(userId, catId, catInfo);
+
+        if (file.isPresent()) {
+            String mainImage = s3Uploader.upload(file.get(), "static");
+            catService.updateImage(userId, catId, mainImage);
+        }
+
         catLocationService.update(userId, catId, catLocList);
-        List<String> pathList = new ArrayList<>();
+
         if (files.isPresent()) {
+            List<String> pathList = new ArrayList<>();
             for (MultipartFile m : files.get()) {
                 String path = s3Uploader.upload(m, "static");
                 pathList.add(path);
             }
-            catImageService.update(userId, catId, pathList);
+            catImageService.update(userId, catId, deletedImgUrl, Optional.of(pathList));
         }
+
+        if (deletedImgUrl.isPresent()) {
+            catImageService.update(userId, catId, deletedImgUrl, java.util.Optional.empty());
+        }
+
         notificationService.catSave(userId, catId, (byte) 1);
 
         return catId;

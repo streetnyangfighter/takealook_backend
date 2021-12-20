@@ -31,13 +31,21 @@ public class CatService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long update(Long userId, Long catId, CatDTO.Update dto, String image) {
+    public Long updateInfo(Long userId, Long catId, CatDTO.Update dto) {
+        Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
+
+        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getPattern()).getId();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Long updateImage(Long userId, Long catId, String image) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
         s3Uploader.fileDelete(cat.getImage());
 
-        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getPattern(), image).getId();
+        return cat.updateImage(image).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)
