@@ -45,16 +45,6 @@ public class UserService {
         OAuth2UserInfo userInfo = null;
         ProviderType providerType = null;
 
-//        userInfo = new GoogleUserInfo((Map<String, Object>) data.get("profileObj"));
-//        providerType = ProviderType.GOOGLE;
-
-        System.out.println("*** " + data);
-        System.out.println();
-        Map<String, Object> aaa = (Map<String, Object>) data.get("object");
-        System.out.println("*** " + aaa);
-        System.out.println();
-        System.out.println("*** " + (Map<String, Object>) aaa.get("profile"));
-
         if (provider.equals("google")) {
             Map<String, Object> info = (Map<String, Object>) data.get("object");
             userInfo = new GoogleUserInfo((Map<String, Object>) info.get("profileObj"));
@@ -96,8 +86,6 @@ public class UserService {
                 .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
-        System.out.println("*** " + jwtToken);
-        System.out.println("*** " + success);
         System.out.println(response);
 
         return new ResponseDTO.UserResponse(userEntity);
