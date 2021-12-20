@@ -135,4 +135,9 @@ public class CatController {
 
         return catImageService.findImagesByCatId(user.getId(), catId);
     }
+
+    @GetMapping("/test")
+    public List<ResponseDTO.CatLocationResponse> findLocationInMap() {
+        return catLocationService.getNearByCats(37.4901548250937, 127.030767490957,1.0);
+    }
 }
