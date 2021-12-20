@@ -55,7 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        /** cors 설정 추가  */
         http.
                 cors().configurationSource(corsConfigurationSource());
 
@@ -67,16 +66,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-//                .and()
-//                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
-//
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-//                .accessDeniedHandler(new JwtAceessDeniedHandler())
+                .and()
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
+
+                .exceptionHandling()
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .accessDeniedHandler(new JwtAceessDeniedHandler())
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/", "/login", "/favicon.ico").permitAll()
+                .anyRequest().authenticated()
+
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint();
 //                .anyRequest().authenticated()
 
 //                .and()
