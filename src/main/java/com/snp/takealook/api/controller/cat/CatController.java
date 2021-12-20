@@ -29,6 +29,11 @@ public class CatController {
     private final CatImageService catImageService;
     private final NotificationService notificationService;
 
+    @GetMapping("/user/{userId}/cat/recommendation")
+    public List<ResponseDTO.CatListResponse> findRecommendCats(@RequestParam double latitude, @RequestParam double longitude) {
+        return catService.findRecommendCats(latitude, longitude);
+    }
+
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@AuthenticationPrincipal PrincipalDetails principal,
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,
@@ -136,8 +141,4 @@ public class CatController {
         return catImageService.findImagesByCatId(user.getId(), catId);
     }
 
-    @GetMapping("/test")
-    public List<ResponseDTO.CatLocationResponse> findLocationInMap() {
-        return catLocationService.getNearByCats(37.4901548250937, 127.030767490957,1.0);
-    }
 }

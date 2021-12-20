@@ -5,6 +5,7 @@ import com.snp.takealook.api.domain.cat.*;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
+import com.snp.takealook.api.repository.cat.CatLocationRepository;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.repository.cat.CatRepository;
 import com.snp.takealook.api.repository.user.UserRepository;
@@ -23,7 +24,33 @@ public class CatService {
     private final CatRepository catRepository;
     private final UserRepository userRepository;
     private final SelectionRepository selectionRepository;
+    private final CatLocationRepository catLocationRepository;
     private final S3Uploader s3Uploader;
+
+    @Transactional
+    public List<ResponseDTO.CatListResponse> findRecommendCats(double latitude, double longitude) {
+        Double oneKillometer = 1 / 6400 * 2 * 3.14 / 360;
+        Double latitude_start = latitude - oneKillometer;
+        Double latitude_end = latitude + oneKillometer;
+        Double longitude_start = longitude - oneKillometer;
+        Double longitude_end = longitude + oneKillometer;
+        List<CatLocation> locationList = catLocationRepository.findCatLocationsByLatitudeBetweenAndLongitudeBetween(
+                latitude_start, latitude_end, longitude_start, longitude_end
+        );
+
+        Set<Cat> catSet = new HashSet<>();
+        for (CatLocation location : locationList) {
+            catSet.add(location.getSelection().getCat());
+        }
+
+        List<ResponseDTO.CatListResponse> result = new ArrayList<>();
+        Iterator<Cat> iterator = catSet.iterator();
+        while (iterator.hasNext()) {
+            result.add(new ResponseDTO.CatListResponse(iterator.next()));
+        }
+
+        return result;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public Long save(CatDTO.Create dto, String image) {

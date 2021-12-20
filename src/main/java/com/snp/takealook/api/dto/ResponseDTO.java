@@ -134,12 +134,14 @@ public class ResponseDTO {
         }
     }
 
-
     @Getter
     public static class CatListResponse {
         private Long id;
         private String name;
+        private Byte gender;
+        private Byte neutered;
         private Byte status;
+        private Byte pattern;
         private List<CatCareListResponse> recentCares;
         private CatLocationResponse recentLocation;
         private String mainImage;
@@ -157,6 +159,16 @@ public class ResponseDTO {
             this.name = entity.getName();
             this.status = entity.getStatus();
             this.recentLocation = recentLocation;
+            this.mainImage = entity.getImage();
+        }
+
+        public CatListResponse(Cat entity) {
+            this.id = entity.getId();
+            this.name = entity.getName();
+            this.gender = entity.getGender();
+            this.neutered = entity.getNeutered();
+            this.status = entity.getStatus();
+            this.pattern = entity.getPattern();
             this.mainImage = entity.getImage();
         }
     }
