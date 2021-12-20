@@ -6,13 +6,11 @@ import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
 import com.snp.takealook.api.repository.cat.CatLocationRepository;
 import com.snp.takealook.api.repository.cat.SelectionRepository;
-import com.snp.takealook.api.service.GeometryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -79,25 +77,4 @@ public class CatLocationService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<ResponseDTO.CatLocationResponse> getNearByCats(Double latitude, Double longitude, Double distance) {
-
-        Location northEast = GeometryUtil.calculate(latitude, longitude, distance, Direction.NORTHEAST.getBearing());
-        Location southWest = GeometryUtil.calculate(latitude, longitude, distance, Direction.SOUTHWEST.getBearing());
-
-        double x1 = northEast.getLatitude();
-        double y1 = northEast.getLongitude();
-        double x2 = southWest.getLatitude();
-        double y2 = southWest.getLongitude();
-
-        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
-        Query query = em.createNativeQuery("SELECT c.id, c.created_at, c.modified_at, "
-                        + "c.aflag, c.dflag, c.gender, c.image, c.name, c.neutered, c.pattern, c.status"
-                        + "FROM cat AS c "
-                        + "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", c.point)", Cat.class)
-                .setMaxResults(10);
-
-        List<ResponseDTO.CatLocationResponse> cats = query.getResultList();
-        return cats;
-    }
 }

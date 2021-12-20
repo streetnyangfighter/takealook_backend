@@ -63,6 +63,9 @@ public class Cat extends BaseTimeEntity {
 
     @Builder
     public Cat(String name, Byte gender, Byte neutered, Byte status, Byte pattern, String image) {
+        if (status != (byte) 0 && status != (byte) 1) {
+            throw new IllegalStateException("존재하지 않는 상태입니다.");
+        }
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
@@ -89,6 +92,9 @@ public class Cat extends BaseTimeEntity {
     }
 
     public Cat changeStatus(Byte status) {
+        if (status != (byte) 0 && status != (byte) 1) {
+            throw new IllegalStateException("존재하지 않는 상태입니다.");
+        }
         this.status = status;
 
         return this;
