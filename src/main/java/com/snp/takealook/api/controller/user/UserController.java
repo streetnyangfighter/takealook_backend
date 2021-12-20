@@ -1,12 +1,9 @@
 package com.snp.takealook.api.controller.user;
 
-import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.user.UserDTO;
-import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.model.source.spi.JdbcDataType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

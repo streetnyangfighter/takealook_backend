@@ -88,7 +88,7 @@ public class UserService {
                 .withSubject(userEntity.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
                 .withClaim("id", userEntity.getId()) //인증에 필요한 정보
-                .withClaim("username", userEntity.getPassword())
+                .withClaim("username", userEntity.getNickname())
                 .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);

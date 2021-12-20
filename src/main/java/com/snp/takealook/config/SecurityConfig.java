@@ -11,13 +11,19 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Configuration
 @RequiredArgsConstructor
@@ -42,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         config.addAllowedOrigin("http://3.35.129.119:3000/");
         config.addAllowedOrigin("http://localhost:3000/");
+        config.addAllowedOrigin("http://52.79.175.212:3000/");
+        config.addAllowedOrigin("http://takealook.ekg.kr/");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader(JwtProperties.TOKEN_HAEDER);
@@ -67,21 +75,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-//                .and()
-//                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
-//
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-//                .accessDeniedHandler(new JwtAceessDeniedHandler())
+                .and()
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, session))
+
+                .exceptionHandling()
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .accessDeniedHandler(new JwtAceessDeniedHandler())
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll();
-//                .anyRequest().authenticated()
+                .antMatchers("/", "/login", "/favicon.ico").permitAll()
+                .anyRequest().authenticated()
 
 //                .and()
-//                .oauth2Login()
-//                .userInfoEndpoint();
+//                .logout()
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/login")
+//                .addLogoutHandler(new LogoutHandler() {
+//                    @Override
+//                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+//                        HttpSession session = request.getSession();
+//                        session.invalidate();
+//                    }
+//                })
+//                .logoutSuccessHandler(new LogoutSuccessHandler() {
+//                    @Override
+//                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+//                        response.sendRedirect("/");
+//                    }
+//                })
+
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint();
 
     }
+
 }
