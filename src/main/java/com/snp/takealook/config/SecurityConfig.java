@@ -63,7 +63,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        /** cors 설정 추가  */
         http.
                 cors().configurationSource(corsConfigurationSource());
 
@@ -86,24 +85,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
-
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login")
-//                .addLogoutHandler(new LogoutHandler() {
-//                    @Override
-//                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-//                        HttpSession session = request.getSession();
-//                        session.invalidate();
-//                    }
-//                })
-//                .logoutSuccessHandler(new LogoutSuccessHandler() {
-//                    @Override
-//                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-//                        response.sendRedirect("/");
-//                    }
-//                })
 
                 .and()
                 .oauth2Login()

@@ -11,8 +11,11 @@ import com.snp.takealook.api.dto.oauth.OAuth2UserInfo;
 import com.snp.takealook.api.dto.user.UserDTO;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.api.service.S3Uploader;
+import com.snp.takealook.config.auth.PrincipalDetails;
 import com.snp.takealook.config.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -88,7 +92,7 @@ public class UserService {
                 .withSubject(userEntity.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
                 .withClaim("id", userEntity.getId()) //인증에 필요한 정보
-                .withClaim("username", userEntity.getNickname())
+                .withClaim("nickname", userEntity.getNickname())
                 .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
@@ -98,6 +102,22 @@ public class UserService {
 
         return new ResponseDTO.UserResponse(userEntity);
     }
+
+    // 로그인 갱신
+    public ResponseDTO.UserResponse loadUser(@AuthenticationPrincipal PrincipalDetails principal, HttpServletResponse resp) throws IOException {
+        User user = principal.getUser();
+
+        if (user == null) { //세션이 만료된 거에요.
+            log.info("user가 null이면");
+            resp.sendRedirect("/logout");
+        }
+        log.info("유저정보 유지" + user);
+        //resp.addHeader("");
+
+        assert user != null;
+        return new ResponseDTO.UserResponse(user);
+    }
+
 
     // 회원정보 수정
     @Transactional(rollbackFor = Exception.class)
