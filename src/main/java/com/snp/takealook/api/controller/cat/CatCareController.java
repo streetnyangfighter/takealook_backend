@@ -24,7 +24,7 @@ public class CatCareController {
     @PostMapping("/user/{userId}/cat/{catId}/catcare")
     public Long save(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId, @RequestBody CatCareDTO.Create dto) {
         User user = principal.getUser();
-        Long saveId = catCareService.save(user.getId(), catId, dto);
+        catCareService.save(user.getId(), catId, dto);
         notificationService.catSave(user.getId(), catId, (byte) 0);
 
         return catId;
