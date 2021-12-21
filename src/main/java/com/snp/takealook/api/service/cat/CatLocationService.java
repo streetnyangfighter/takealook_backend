@@ -26,27 +26,8 @@ public class CatLocationService {
     private final EntityManager em;
 
     @Transactional(rollbackFor = Exception.class)
-    public Long saveAll(Long selectionId, CatDTO.LocationList[] dtoList) {
-        Selection selection = selectionRepository.findById(selectionId).orElseThrow(() -> new IllegalArgumentException("Selection with id: " + selectionId + " is not valid"));
-
-        List<CatLocation> list = Arrays.stream(dtoList)
-                .map(v -> CatLocation.builder()
-                        .selection(selection)
-                        .latitude(v.getLatitude())
-                        .longitude(v.getLongitude())
-                        .build())
-                .collect(Collectors.toList());
-
-        catLocationRepository.saveAll(list);
-
-        return selectionId;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
+    public Long saveAll(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
-
-        catLocationRepository.deleteAll(mySelection.getCatLocationList());
 
         List<CatLocation> list = Arrays.stream(dtoList)
                 .map(v -> CatLocation.builder()
@@ -56,8 +37,27 @@ public class CatLocationService {
                         .build())
                 .collect(Collectors.toList());
 
-        return mySelection.updateCatLocationList(list).getId();
+        catLocationRepository.saveAll(list);
+
+        return mySelection.getId();
     }
+
+//    @Transactional(rollbackFor = Exception.class)
+//    public Long update(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
+//        Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
+//
+//        catLocationRepository.deleteAll(mySelection.getCatLocationList());
+//
+//        List<CatLocation> list = Arrays.stream(dtoList)
+//                .map(v -> CatLocation.builder()
+//                        .selection(mySelection)
+//                        .latitude(v.getLatitude())
+//                        .longitude(v.getLongitude())
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        return mySelection.updateCatLocationList(list).getId();
+//    }
 
     @Transactional(readOnly = true)
     public List<ResponseDTO.CatLocationResponse> findLocationsByCatId(Long userId, Long catId) {
@@ -70,7 +70,7 @@ public class CatLocationService {
             catLocationList.addAll(selection.getCatLocationList());
         }
 
-        catLocationList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
+//        catLocationList.sort(Comparator.comparing(BaseTimeEntity::getCreatedAt));
 
         return catLocationList.stream()
                 .map(ResponseDTO.CatLocationResponse::new)

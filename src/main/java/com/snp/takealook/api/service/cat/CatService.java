@@ -141,11 +141,18 @@ public class CatService {
         for (CatImage image : mySelection.getCatImageList()) {
             userUploadImages.add(image.getPath());
         }
-        List<ResponseDTO.CatLocationResponse> userUploadLocations = mySelection.getCatLocationList().stream()
+
+        List<Selection> selectionList = mySelection.getCat().getSelectionList();
+        List<CatLocation> catLocationList = new ArrayList<>();
+        for (Selection selection : selectionList) {
+            catLocationList.addAll(selection.getCatLocationList());
+        }
+
+        List<ResponseDTO.CatLocationResponse> catLocations = catLocationList.stream()
                 .map(ResponseDTO.CatLocationResponse::new)
                 .collect(Collectors.toList());
 
-        return new ResponseDTO.CatInfoResponse(mySelection.getCat(), userUploadLocations, userUploadImages);
+        return new ResponseDTO.CatInfoResponse(mySelection.getCat(), catLocations, userUploadImages);
     }
 
     @Transactional(readOnly = true)

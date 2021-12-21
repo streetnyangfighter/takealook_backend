@@ -121,17 +121,17 @@ public class ResponseDTO {
         private Byte neutered;
         private Byte pattern;
         private String mainImage;
-        private List<CatLocationResponse> userUploadLocations;
+        private List<CatLocationResponse> catLocations;
         private List<String> userUploadImages;
 
-        public CatInfoResponse(Cat entity, List<CatLocationResponse> userUploadLocations, List<String> userUploadImages) {
+        public CatInfoResponse(Cat entity, List<CatLocationResponse> catLocations, List<String> userUploadImages) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
             this.neutered = entity.getNeutered();
             this.pattern = entity.getPattern();
             this.mainImage = entity.getImage();
-            this.userUploadLocations = userUploadLocations;
+            this.catLocations = catLocations;
             this.userUploadImages = userUploadImages;
         }
     }

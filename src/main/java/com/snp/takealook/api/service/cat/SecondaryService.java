@@ -34,7 +34,7 @@ public class SecondaryService {
         String mainImage = s3Uploader.upload(file, "static");
         Long catId = catService.save(catInfo, mainImage);
         Long selectionId = selectionService.save(userId, catId);
-        catLocationService.saveAll(selectionId, catLocList);
+        catLocationService.saveAll(userId, catId, catLocList);
 
         if (files.isPresent()) {
             for (MultipartFile m : files.get()) {
@@ -62,7 +62,7 @@ public class SecondaryService {
             catService.updateImage(userId, catId, mainImage);
         }
 
-        catLocationService.update(userId, catId, catLocList);
+        catLocationService.saveAll(userId, catId, catLocList);
 
         if (files.isPresent()) {
             List<String> pathList = new ArrayList<>();
