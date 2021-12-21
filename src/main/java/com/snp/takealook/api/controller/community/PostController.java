@@ -91,6 +91,12 @@ public class PostController {
         return postId;
     }
 
+    // 게시글 제목 검색
+    @GetMapping("/post/search")
+    public List<ResponseDTO.PostResponse> search(@RequestParam("search") String search) {
+        return postService.searchTitle(search);
+    }
+
     // Post Like ------------------------------------------------------------------------
     // 게시글 추천
     @PostMapping("/post/{id}/like")

@@ -129,4 +129,10 @@ public class PostService {
 
         return result;
     }
+
+    // 게시글 제목 검색
+    @Transactional(readOnly = true)
+    public List<ResponseDTO.PostResponse> searchTitle(String title) {
+        return postRepository.findByTitleContaining(title).stream().map(ResponseDTO.PostResponse::new).collect(Collectors.toList());
+    }
 }
