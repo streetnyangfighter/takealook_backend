@@ -138,10 +138,7 @@ public class ResponseDTO {
     public static class CatListResponse {
         private Long id;
         private String name;
-        private Byte gender;
-        private Byte neutered;
         private Byte status;
-        private Byte pattern;
         private List<CatCareListResponse> recentCares;
         private CatLocationResponse recentLocation;
         private String mainImage;
@@ -162,7 +159,20 @@ public class ResponseDTO {
             this.mainImage = entity.getImage();
         }
 
-        public CatListResponse(Cat entity) {
+    }
+
+    @Getter
+    public static class CatRecommendListResponse {
+        private Long id;
+        private String name;
+        private Byte gender;
+        private Byte neutered;
+        private Byte status;
+        private Byte pattern;
+        private String mainImage;
+        private List<CatLocationResponse> recentLocationList;
+
+        public CatRecommendListResponse(Cat entity, List<CatLocationResponse> recentLocationList) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
@@ -170,8 +180,10 @@ public class ResponseDTO {
             this.status = entity.getStatus();
             this.pattern = entity.getPattern();
             this.mainImage = entity.getImage();
+            this.recentLocationList = recentLocationList;
         }
     }
+
 
     @Getter
     public static class CatStarResponse {

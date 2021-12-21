@@ -30,7 +30,7 @@ public class CatController {
     private final NotificationService notificationService;
 
     @GetMapping("/user/{userId}/cat/recommendation")
-    public List<ResponseDTO.CatListResponse> findRecommendCats(@RequestParam double latitude, @RequestParam double longitude) {
+    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(@RequestParam double latitude, @RequestParam double longitude) {
         return catService.findRecommendCats(latitude, longitude);
     }
 
@@ -70,7 +70,7 @@ public class CatController {
     @PatchMapping("/user/{userId}/cat/{catId}/cat-star")
     public Long changeDflag(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId, @RequestBody String msg) {
         User user = principal.getUser();
-        Long updateId = catService.changeDflag(user.getId(), catId);
+        Long updateId = catService.changeDflag(user.getId(), catId, msg);
         notificationService.catSave(user.getId(), catId, (byte) 6);
 
         return updateId;
@@ -79,7 +79,7 @@ public class CatController {
     @PatchMapping("/user/{userId}/cat/{catId}/adoptation")
     public Long changeAflag(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId, @RequestBody String msg) {
         User user = principal.getUser();
-        Long updateId = catService.changeAflag(user.getId(), catId);
+        Long updateId = catService.changeAflag(user.getId(), catId, msg);
         notificationService.catSave(user.getId(), catId, (byte) 7);
 
         return updateId;

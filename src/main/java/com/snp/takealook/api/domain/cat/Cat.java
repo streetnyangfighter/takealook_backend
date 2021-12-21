@@ -44,15 +44,15 @@ public class Cat extends BaseTimeEntity {
     private Boolean dflag;
     // 사망 여부
 
-//    @Column(name = "dmsg")
-//    private String dMsg;
+    @Column(name = "dmsg")
+    private String dMsg;
 
     @NotNull
     private Boolean aflag;
     // 입양 여부
 
-//    @Column(name = "a_msg")
-//    private String aMsg;
+    @Column(name = "a_msg")
+    private String aMsg;
 
     private String image;
 
@@ -100,24 +100,24 @@ public class Cat extends BaseTimeEntity {
         return this;
     }
 
-    public Cat sendCatStar() {
+    public Cat sendCatStar(String msg) {
         if (this.dflag) {
             throw new IllegalStateException("이미 고양이 별에 간 고양이입니다.");
         }
 
         this.dflag = true;
-//        this.dMsg = msg;
+        this.dMsg = msg;
 
         return this;
     }
 
-    public Cat adopt() {
+    public Cat adopt(String msg) {
         if (this.aflag) {
             throw new IllegalStateException("이미 입양된 고양이입니다.");
         }
 
         this.aflag = true;
-//        this.aMsg = msg;
+        this.aMsg = msg;
 
         return this;
     }
