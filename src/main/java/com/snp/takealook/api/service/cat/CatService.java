@@ -44,12 +44,13 @@ public class CatService {
         Iterator<Cat> iterator = catSet.iterator();
         while (iterator.hasNext()) {
             List<CatLocation> recentLocationList = new ArrayList<>();
-            List<Selection> sameCatSelectionList = selectionRepository.findSelectionsByCat(iterator.next());
+            Cat cat = iterator.next();
+            List<Selection> sameCatSelectionList = selectionRepository.findSelectionsByCat(cat);
             for (Selection selection : sameCatSelectionList) {
                 recentLocationList.addAll(selection.getCatLocationList());
             }
 
-            result.add(new ResponseDTO.CatRecommendListResponse(iterator.next(), recentLocationList.stream().map(ResponseDTO.CatLocationResponse::new).collect(Collectors.toList())));
+            result.add(new ResponseDTO.CatRecommendListResponse(cat, recentLocationList.stream().map(ResponseDTO.CatLocationResponse::new).collect(Collectors.toList())));
         }
 
         return result;

@@ -28,6 +28,7 @@ public class ResponseDTO {
         private String email;
         private String nickname;
         private String image;
+        private Boolean dflag;
         private ProviderType providerType;
 
         public UserResponse(User entity) {
@@ -35,6 +36,7 @@ public class ResponseDTO {
             this.email = entity.getEmail();
             this.nickname = entity.getNickname();
             this.image = entity.getImage();
+            this.dflag = entity.getDflag();
             this.providerType = entity.getProviderType();
         }
     }
