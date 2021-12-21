@@ -69,9 +69,13 @@ public class PostService {
     }
 
     // 게시글 수정
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public Long update(Long postId, Long userId, PostDTO.Update dto, String imgUrl) {
-        Post post = postRepository.findByIdAndWriter(postId, userId)
+        System.out.println(userId);
+        User writer = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        Post post = postRepository.findByIdAndWriter(postId, writer)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + "and User with id: " + userId + " is not valid"));
 
         post.update(dto.getTitle(), dto.getContent());
@@ -79,6 +83,8 @@ public class PostService {
         if(imgUrl != null) {
             s3Uploader.fileDelete(post.getImgUrl());
             post.updateThumbnail(imgUrl);
+        } else {
+            post.updateThumbnail(post.getImgUrl());
         }
 
         return postId;
@@ -87,7 +93,10 @@ public class PostService {
     // 게시글 삭제
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long postId, Long userId) {
-        Post post = postRepository.findByIdAndWriter(postId, userId)
+        User writer = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
+        Post post = postRepository.findByIdAndWriter(postId, writer)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + postId + "and User with id: " + userId + " is not valid"));
 
         s3Uploader.fileDelete(post.getImgUrl());
