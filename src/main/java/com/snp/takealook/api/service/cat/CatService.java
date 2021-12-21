@@ -28,13 +28,16 @@ public class CatService {
     private final S3Uploader s3Uploader;
 
     @Transactional(readOnly = true)
-    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(double latitude, double longitude) {
+    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(Long userId, double latitude, double longitude) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
         System.out.println("********111 " + locationList.size());
 
         Set<Cat> catSet = new HashSet<>();
         for (CatLocation location : locationList) {
-            if (!location.getSelection().getCat().getDflag() && !location.getSelection().getCat().getAflag()) {
+            if (!location.getSelection().getCat().getDflag()
+                    && !location.getSelection().getCat().getAflag()
+                    && location.getSelection().getUser() != user) {
                 catSet.add(location.getSelection().getCat());
             }
         }
@@ -43,8 +46,8 @@ public class CatService {
         List<ResponseDTO.CatRecommendListResponse> result = new ArrayList<>();
         Iterator<Cat> iterator = catSet.iterator();
         while (iterator.hasNext()) {
-            List<CatLocation> recentLocationList = new ArrayList<>();
             Cat cat = iterator.next();
+            List<CatLocation> recentLocationList = new ArrayList<>();
             List<Selection> sameCatSelectionList = selectionRepository.findSelectionsByCat(cat);
             for (Selection selection : sameCatSelectionList) {
                 recentLocationList.addAll(selection.getCatLocationList());
@@ -138,11 +141,18 @@ public class CatService {
         for (CatImage image : mySelection.getCatImageList()) {
             userUploadImages.add(image.getPath());
         }
-        List<ResponseDTO.CatLocationResponse> userUploadLocations = mySelection.getCatLocationList().stream()
+
+        List<Selection> selectionList = mySelection.getCat().getSelectionList();
+        List<CatLocation> catLocationList = new ArrayList<>();
+        for (Selection selection : selectionList) {
+            catLocationList.addAll(selection.getCatLocationList());
+        }
+
+        List<ResponseDTO.CatLocationResponse> catLocations = catLocationList.stream()
                 .map(ResponseDTO.CatLocationResponse::new)
                 .collect(Collectors.toList());
 
-        return new ResponseDTO.CatInfoResponse(mySelection.getCat(), userUploadLocations, userUploadImages);
+        return new ResponseDTO.CatInfoResponse(mySelection.getCat(), catLocations, userUploadImages);
     }
 
     @Transactional(readOnly = true)

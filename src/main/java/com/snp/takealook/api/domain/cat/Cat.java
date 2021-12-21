@@ -66,6 +66,9 @@ public class Cat extends BaseTimeEntity {
         if (status != (byte) 0 && status != (byte) 1) {
             throw new IllegalStateException("존재하지 않는 상태입니다.");
         }
+        if (name.equals("")) {
+            throw new IllegalStateException("이름은 공백일 수 없습니다.");
+        }
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
@@ -77,6 +80,9 @@ public class Cat extends BaseTimeEntity {
     }
 
     public Cat updateInfo(String name, Byte gender, Byte neutered, Byte pattern) {
+        if (name.equals("")) {
+            throw new IllegalStateException("이름은 공백일 수 없습니다.");
+        }
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
