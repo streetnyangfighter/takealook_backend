@@ -28,25 +28,28 @@ public class CatService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public List<ResponseDTO.CatListResponse> findRecommendCats(double latitude, double longitude) {
-        Double oneKillometer = 1 / 6400 * 2 * 3.14 / 360;
-        Double latitude_start = latitude - oneKillometer;
-        Double latitude_end = latitude + oneKillometer;
-        Double longitude_start = longitude - oneKillometer;
-        Double longitude_end = longitude + oneKillometer;
-        List<CatLocation> locationList = catLocationRepository.findCatLocationsByLatitudeBetweenAndLongitudeBetween(
-                latitude_start, latitude_end, longitude_start, longitude_end
-        );
+    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(double latitude, double longitude) {
+        List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
+        System.out.println("********111 " + locationList.size());
 
         Set<Cat> catSet = new HashSet<>();
         for (CatLocation location : locationList) {
-            catSet.add(location.getSelection().getCat());
+            if (!location.getSelection().getCat().getDflag() && !location.getSelection().getCat().getAflag()) {
+                catSet.add(location.getSelection().getCat());
+            }
         }
+        System.out.println("********222 " + catSet.size());
 
-        List<ResponseDTO.CatListResponse> result = new ArrayList<>();
+        List<ResponseDTO.CatRecommendListResponse> result = new ArrayList<>();
         Iterator<Cat> iterator = catSet.iterator();
         while (iterator.hasNext()) {
-            result.add(new ResponseDTO.CatListResponse(iterator.next()));
+            List<CatLocation> recentLocationList = new ArrayList<>();
+            List<Selection> sameCatSelectionList = selectionRepository.findSelectionsByCat(iterator.next());
+            for (Selection selection : sameCatSelectionList) {
+                recentLocationList.addAll(selection.getCatLocationList());
+            }
+
+            result.add(new ResponseDTO.CatRecommendListResponse(iterator.next(), recentLocationList.stream().map(ResponseDTO.CatLocationResponse::new).collect(Collectors.toList())));
         }
 
         return result;
@@ -84,19 +87,19 @@ public class CatService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long changeDflag(Long userId, Long catId) {
+    public Long changeDflag(Long userId, Long catId, String msg) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.sendCatStar().getId();
+        return cat.sendCatStar(msg).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long changeAflag(Long userId, Long catId) {
+    public Long changeAflag(Long userId, Long catId, String msg) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.adopt().getId();
+        return cat.adopt(msg).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)

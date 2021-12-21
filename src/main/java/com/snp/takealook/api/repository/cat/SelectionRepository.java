@@ -12,4 +12,5 @@ public interface SelectionRepository extends JpaRepository<Selection, Long> {
     Optional<Selection> findSelectionByUser_IdAndCat_Id(Long userId, Long catId);
     List<Selection> findSelectionsByUserAndDflagFalse(User user);
     List<Selection> findSelectionsByCatAndDflagFalse(Cat cat);
+    List<Selection> findSelectionsByCat(Cat cat);
 }
