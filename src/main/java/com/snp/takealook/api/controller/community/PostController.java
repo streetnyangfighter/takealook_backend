@@ -68,11 +68,11 @@ public class PostController {
     public Long update(@PathVariable Long postId,
                        @AuthenticationPrincipal PrincipalDetails principal,
                        @RequestPart(value = "postText") PostDTO.Update dto,
-                       @RequestPart(value = "postImage") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+                       @RequestPart(value = "postImage", required = false) MultipartFile file) throws IOException, NoSuchAlgorithmException {
 
         User user = principal.getUser();
 
-        if (file.getSize() != 0) {
+        if (file != null) {
             String imgUrl = s3Uploader.upload(file, "static");
             return postService.update(postId, user.getId(), dto, imgUrl);
         } else {
