@@ -26,10 +26,10 @@ public class SelectionController {
     @PostMapping("/user/{userId}/cat/{catId}/selection")
     public Long save(@AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long catId) {
         User user = principal.getUser();
-        Long saveId = selectionService.save(user.getId(), catId);
+        selectionService.save(user.getId(), catId);
         notificationService.catSave(user.getId(), catId, (byte) 2);
 
-        return saveId;
+        return catId;
     }
 
     //간택 정보 수정 - 기존 고양이 간택 + 자신이 작성한 정보 함께 이동

@@ -29,7 +29,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    static String[] words = {"행복한", "사랑스러운", "배고픈", "피곤한", "즐거운", "따뜻한", "기쁜", "상냥한"};
+    static String[] words = {"행복한", "사랑스러운", "배고픈", "피곤한", "즐거운", "따뜻한", "기쁜", "상냥한", "만족스러운"};
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
@@ -60,20 +60,27 @@ public class UserService {
         String encPassword = encoder.encode(uuid.toString());
 
         if (userEntity == null) { // 최초 로그인 -> 회원가입
-            User sameNickname = userRepository.findByNickname(userInfo.getNickname());
+
+            User sameNicknameUser = userRepository.findByNickname(userInfo.getNickname());
             User user = null;
 
-            if (sameNickname != null) { // 닉네임이 겹치면
-                Random rnd = new Random();
+            if (sameNicknameUser != null) {
+                String randomNickname = null;
+                while (sameNicknameUser != null) { // 닉네임이 겹치면
+                    Random rnd = new Random();
+                    randomNickname = words[rnd.nextInt(words.length - 1)] + userInfo.getNickname();
+                    sameNicknameUser = userRepository.findByNickname(randomNickname);
+                }
 
                 user = User.builder()
                         .username(userInfo.getUsername())
                         .password(encPassword)
                         .email(userInfo.getEmail())
-                        .nickname(words[rnd.nextInt(words.length-1)] + userInfo.getNickname())
+                        .nickname(randomNickname)
                         .image(userInfo.getImage())
                         .providerType(providerType)
                         .build();
+
             } else {
                 user = User.builder()
                         .username(userInfo.getUsername())

@@ -41,7 +41,6 @@ public class SelectionService {
     @Transactional(rollbackFor = Exception.class)
     public Long update(Long userId, Long catId, Long newCatId) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
-        Cat pastCat = catRepository.findById(catId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + catId + " is not valid"));
         Cat newCat = catRepository.findById(newCatId).orElseThrow(() -> new IllegalArgumentException("Cat with id: " + newCatId + " is not valid"));
 
         mySelection.update(newCat);

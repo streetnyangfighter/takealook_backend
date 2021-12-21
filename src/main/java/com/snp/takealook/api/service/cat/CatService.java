@@ -27,7 +27,7 @@ public class CatService {
     private final CatLocationRepository catLocationRepository;
     private final S3Uploader s3Uploader;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(double latitude, double longitude) {
         List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
         System.out.println("********111 " + locationList.size());
