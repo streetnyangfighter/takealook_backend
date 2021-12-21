@@ -75,7 +75,7 @@ public class NotificationService {
         }
 
         if(!Objects.equals(user.getNickname(), post.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type, id));
+            notificationRepository.save(new Notification(post.getWriter(), message, type, id));
         }
     }
 
@@ -90,7 +90,7 @@ public class NotificationService {
         }
 
         if(!Objects.equals(user.getNickname(), comment.getWriter().getNickname())) {
-            notificationRepository.save(new Notification(user, message, type, comment.getPost().getId()));
+            notificationRepository.save(new Notification(comment.getWriter(), message, type, comment.getPost().getId()));
         }
     }
 
