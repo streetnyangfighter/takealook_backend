@@ -1,6 +1,5 @@
 package com.snp.takealook.api.service.cat;
 
-import com.snp.takealook.api.domain.BaseTimeEntity;
 import com.snp.takealook.api.domain.cat.*;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +24,7 @@ public class CatLocationService {
     private final EntityManager em;
 
     @Transactional(rollbackFor = Exception.class)
-    public Long saveAll(Long userId, Long catId, CatDTO.LocationList[] dtoList) {
+    public Long saveAll(Long userId, Long catId, CatDTO.Location[] dtoList) {
         Selection mySelection = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId).orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid"));
 
         List<CatLocation> list = Arrays.stream(dtoList)

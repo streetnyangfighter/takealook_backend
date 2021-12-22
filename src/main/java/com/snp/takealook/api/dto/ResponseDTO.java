@@ -10,6 +10,8 @@ import com.snp.takealook.api.domain.community.Post;
 import com.snp.takealook.api.domain.user.Notification;
 import com.snp.takealook.api.domain.user.ProviderType;
 import com.snp.takealook.api.domain.user.User;
+import com.snp.takealook.api.dto.cat.CatDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -19,9 +21,46 @@ import java.util.stream.Collectors;
 public class ResponseDTO {
 
     /**
+     * Flask 통신 후 보내는 ResponseDTO
+     */
+    @Getter
+    @AllArgsConstructor
+    public static class AiImgResponse {
+        private String dstUrl;
+        private String orgUrl;
+        private CatDTO.CatPoint catPoint;
+    }
+
+    @Getter
+    public static class RecommendedCatInfo {
+        private Long id;
+        private String image;
+        private Double leftEarX;
+        private Double leftEarY;
+        private Double rightEarX;
+        private Double rightEarY;
+        private Double leftEyeX;
+        private Double leftEyeY;
+        private Double rightEyeX;
+        private Double rightEyeY;
+
+        public RecommendedCatInfo(Cat entity) {
+            this.id = entity.getId();
+            this.image = entity.getImage();
+            this.leftEarX = entity.getLeftEarX();
+            this.leftEarY = entity.getLeftEarY();
+            this.rightEarX = entity.getLeftEarX();
+            this.rightEarY = entity.getRightEarY();
+            this.leftEyeX = entity.getLeftEyeX();
+            this.leftEyeY = entity.getLeftEyeY();
+            this.rightEyeX = entity.getRightEyeX();
+            this.rightEyeY = entity.getRightEyeY();
+        }
+    }
+
+    /**
      * USER 관련 ResponseDTO
      */
-
     @Getter
     public static class UserResponse {
         private Long id;
@@ -173,8 +212,9 @@ public class ResponseDTO {
         private Byte pattern;
         private String mainImage;
         private List<CatLocationResponse> recentLocationList;
+        private Double score;
 
-        public CatRecommendListResponse(Cat entity, List<CatLocationResponse> recentLocationList) {
+        public CatRecommendListResponse(Cat entity, List<CatLocationResponse> recentLocationList, Double score) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();
@@ -183,6 +223,7 @@ public class ResponseDTO {
             this.pattern = entity.getPattern();
             this.mainImage = entity.getImage();
             this.recentLocationList = recentLocationList;
+            this.score = score;
         }
     }
 

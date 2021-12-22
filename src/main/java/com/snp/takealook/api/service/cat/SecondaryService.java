@@ -1,5 +1,6 @@
 package com.snp.takealook.api.service.cat;
 
+import com.snp.takealook.api.domain.cat.Cat;
 import com.snp.takealook.api.dto.cat.CatDTO;
 import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.user.NotificationService;
@@ -27,12 +28,13 @@ public class SecondaryService {
     @Transactional(rollbackFor = Exception.class)
     public Long saveNewCat(Long userId,
                            CatDTO.Create catInfo,
-                           CatDTO.LocationList[] catLocList,
+                           CatDTO.CatPoint catPoints,
+                           CatDTO.Location[] catLocList,
                            MultipartFile file,
                            Optional<List<MultipartFile>> files) throws IOException {
 
         String mainImage = s3Uploader.upload(file, "static");
-        Long catId = catService.save(catInfo, mainImage);
+        Long catId = catService.save(catInfo, catPoints, mainImage);
         Long selectionId = selectionService.save(userId, catId);
         catLocationService.saveAll(userId, catId, catLocList);
 
@@ -50,12 +52,13 @@ public class SecondaryService {
     public Long updateCat(Long userId,
                           Long catId,
                           CatDTO.Update catInfo,
-                          CatDTO.LocationList[] catLocList,
+                          CatDTO.CatPoint catPoints,
+                          CatDTO.Location[] catLocList,
                           Optional<MultipartFile> file,
                           Optional<String[]> deletedImgUrl,
                           Optional<List<MultipartFile>> files) throws IOException {
 
-        catService.updateInfo(userId, catId, catInfo);
+        catService.updateInfo(userId, catId, catInfo, catPoints);
 
         if (file.isPresent()) {
             String mainImage = s3Uploader.upload(file.get(), "static");
@@ -96,9 +99,10 @@ public class SecondaryService {
     public Long updateSelectionWithNewCat(Long userId,
                                           Long catId,
                                           CatDTO.Create catInfo,
+                                          CatDTO.CatPoint catPoints,
                                           MultipartFile file) throws IOException {
         String mainImage = s3Uploader.upload(file, "static");
-        Long newCatId = catService.save(catInfo, mainImage);
+        Long newCatId = catService.save(catInfo, catPoints, mainImage);
         selectionService.update(userId, catId, newCatId);
         notificationService.catSave(userId, catId, (byte) 5);
 
