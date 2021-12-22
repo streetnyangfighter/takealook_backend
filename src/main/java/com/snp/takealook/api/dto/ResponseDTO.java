@@ -276,6 +276,7 @@ public class ResponseDTO {
         private String content;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+        private Boolean checkLike;
         private int postLike;
         private List<CommentResponse> commentList;
         private int commentListCount;
@@ -289,6 +290,7 @@ public class ResponseDTO {
             this.content = entity.getContent();
             this.createdAt = entity.getCreatedAt();
             this.modifiedAt = entity.getModifiedAt();
+            this.checkLike = entity.getCheckLike();
             this.postLike = entity.getPostLikeList().size();
             this.commentList = entity.getCommentList().stream().map(CommentResponse::new).collect(Collectors.toList());
             this.commentListCount = commentList.size();

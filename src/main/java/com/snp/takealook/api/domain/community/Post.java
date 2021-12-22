@@ -38,6 +38,9 @@ public class Post extends BaseTimeEntity {
     @NotNull
     private String imgUrl;
 
+    @NotNull
+    private Boolean checkLike;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Comment> commentList;
@@ -53,6 +56,7 @@ public class Post extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.imgUrl = imgUrl;
+        this.checkLike = false;
     }
 
     public Post update(String title, String content) {
@@ -64,6 +68,12 @@ public class Post extends BaseTimeEntity {
 
     public Post updateThumbnail(String imgUrl) {
         this.imgUrl = imgUrl;
+
+        return this;
+    }
+
+    public Post checkLike(Boolean checkLike) {
+        this.checkLike = checkLike;
 
         return this;
     }
