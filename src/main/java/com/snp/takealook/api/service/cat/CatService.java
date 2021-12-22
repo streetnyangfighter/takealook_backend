@@ -27,9 +27,11 @@ public class CatService {
     private final CatLocationRepository catLocationRepository;
     private final S3Uploader s3Uploader;
 
+    // 삭제해야할 메소드
     @Transactional(readOnly = true)
-    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(Long userId, double latitude, double longitude) {
+    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(Long userId, Double latitude, Double longitude) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        System.out.println("************");
         List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
         System.out.println("********111 " + locationList.size());
 
@@ -44,32 +46,50 @@ public class CatService {
         System.out.println("********222 " + catSet.size());
 
         List<ResponseDTO.CatRecommendListResponse> result = new ArrayList<>();
-        Iterator<Cat> iterator = catSet.iterator();
-        while (iterator.hasNext()) {
-            Cat cat = iterator.next();
+        for (Cat cat : catSet) {
             List<CatLocation> recentLocationList = new ArrayList<>();
             List<Selection> sameCatSelectionList = selectionRepository.findSelectionsByCat(cat);
             for (Selection selection : sameCatSelectionList) {
                 recentLocationList.addAll(selection.getCatLocationList());
             }
 
-            result.add(new ResponseDTO.CatRecommendListResponse(cat, recentLocationList.stream().map(ResponseDTO.CatLocationResponse::new).collect(Collectors.toList())));
+//            result.add(new ResponseDTO.CatRecommendListResponse(cat, recentLocationList.stream().map(ResponseDTO.CatLocationResponse::new).collect(Collectors.toList())));
         }
 
         return result;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Long save(CatDTO.Create dto, String image) {
-        return catRepository.save(dto.toEntity(image)).getId();
+    @Transactional(readOnly = true)
+    public Set<Cat> findRecommendCats2(Long userId, Double latitude, Double longitude) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+        System.out.println("************");
+        List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
+        System.out.println("********111 " + locationList.size());
+
+        Set<Cat> catSet = new HashSet<>();
+        for (CatLocation location : locationList) {
+            if (!location.getSelection().getCat().getDflag()
+                    && !location.getSelection().getCat().getAflag()
+                    && location.getSelection().getUser() != user) {
+                catSet.add(location.getSelection().getCat());
+            }
+        }
+        System.out.println("********222 " + catSet.size());
+
+        return catSet;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long updateInfo(Long userId, Long catId, CatDTO.Update dto) {
+    public Long save(CatDTO.Create catInfo, CatDTO.CatPoint catPoints, String image) {
+        return catRepository.save(catInfo.toEntity(image, catPoints)).getId();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Long updateInfo(Long userId, Long catId, CatDTO.Update catInfo, CatDTO.CatPoint catPoints) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.updateInfo(dto.getName(), dto.getGender(), dto.getNeutered(), dto.getPattern()).getId();
+        return cat.updateInfo(catInfo, catPoints).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)

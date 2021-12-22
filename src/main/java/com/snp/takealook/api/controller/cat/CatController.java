@@ -1,6 +1,5 @@
 package com.snp.takealook.api.controller.cat;
 
-import com.amazonaws.services.ec2.model.UpdateSecurityGroupRuleDescriptionsIngressRequest;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
@@ -8,7 +7,6 @@ import com.snp.takealook.api.service.cat.*;
 import com.snp.takealook.api.service.user.NotificationService;
 import com.snp.takealook.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ReactiveAdapterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -41,25 +39,27 @@ public class CatController {
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@AuthenticationPrincipal PrincipalDetails principal,
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,
-                     @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
+                     @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
+                     @RequestPart(value = "catLoc") CatDTO.Location[] catLocList,
                      @RequestPart(value = "catMainImg") MultipartFile file,
                      @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         User user = principal.getUser();
 
-        return secondaryService.saveNewCat(user.getId(), catInfo, catLocList, file, java.util.Optional.ofNullable(files));
+        return secondaryService.saveNewCat(user.getId(), catInfo, catPoints, catLocList, file, java.util.Optional.ofNullable(files));
     }
 
     @PostMapping(value = "/user/{userId}/cat/{catId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long update(@AuthenticationPrincipal PrincipalDetails principal,
                        @PathVariable Long catId,
                        @RequestPart(value = "catInfo") CatDTO.Update catInfo,
-                       @RequestPart(value = "catLoc") CatDTO.LocationList[] catLocList,
+                       @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
+                       @RequestPart(value = "catLoc") CatDTO.Location[] catLocList,
                        @RequestPart(value = "catMainImg", required = false) MultipartFile file,
                        @RequestPart(value = "deletedImgUrl", required = false) String[] deletedImgUrl,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         User user = principal.getUser();
 
-        return secondaryService.updateCat(user.getId(), catId, catInfo, catLocList, java.util.Optional.ofNullable(file), java.util.Optional.ofNullable(deletedImgUrl), java.util.Optional.ofNullable(files));
+        return secondaryService.updateCat(user.getId(), catId, catInfo, catPoints, catLocList, java.util.Optional.ofNullable(file), java.util.Optional.ofNullable(deletedImgUrl), java.util.Optional.ofNullable(files));
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}")

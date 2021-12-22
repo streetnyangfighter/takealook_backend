@@ -1,7 +1,7 @@
 package com.snp.takealook.api.dto.cat;
 
 import com.snp.takealook.api.domain.cat.Cat;
-import com.snp.takealook.api.domain.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,7 +24,7 @@ public class CatDTO {
             this.pattern = pattern;
         }
 
-        public Cat toEntity(String image) {
+        public Cat toEntity(String image, CatPoint catPoints) {
             return Cat.builder()
                     .name(name)
                     .gender(gender)
@@ -32,6 +32,14 @@ public class CatDTO {
                     .status(status)
                     .pattern(pattern)
                     .image(image)
+                    .leftEarX(catPoints.getLeftEarX())
+                    .leftEarY(catPoints.getLeftEarY())
+                    .rightEarX(catPoints.getRightEarX())
+                    .rightEarY(catPoints.getRightEarY())
+                    .leftEyeX(catPoints.getLeftEyeX())
+                    .leftEyeY(catPoints.getLeftEyeY())
+                    .rightEyeX(catPoints.getRightEyeX())
+                    .rightEyeY(catPoints.getRightEyeY())
                     .build();
         }
     }
@@ -46,9 +54,22 @@ public class CatDTO {
     }
 
     @Getter
-    public static class LocationList {
-        private double latitude;
-        private double longitude;
+    public static class Location {
+        private Double latitude;
+        private Double longitude;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CatPoint {
+        private Double leftEarX;
+        private Double leftEarY;
+        private Double rightEarX;
+        private Double rightEarY;
+        private Double leftEyeX;
+        private Double leftEyeY;
+        private Double rightEyeX;
+        private Double rightEyeY;
     }
 
 }

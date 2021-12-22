@@ -45,10 +45,11 @@ public class SelectionController {
     public Long updateNewCat(@AuthenticationPrincipal PrincipalDetails principal,
                              @PathVariable Long catId,
                              @RequestPart(value = "catInfo") CatDTO.Create catInfo,
+                             @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
                              @RequestPart(value = "catMainImg") MultipartFile file) throws IOException {
         User user = principal.getUser();
 
-        return secondaryService.updateSelectionWithNewCat(user.getId(), catId, catInfo, file);
+        return secondaryService.updateSelectionWithNewCat(user.getId(), catId, catInfo, catPoints, file);
     }
 
     //간택 삭제(내가 작성한 정보 남김)
