@@ -25,15 +25,6 @@ public class NotificationController {
         return notificationService.findAllByUserId(user.getId());
     }
 
-    @GetMapping("user/{userId}/unchecked-notifications")
-    public Boolean hasUncheckedNotifation(@AuthenticationPrincipal PrincipalDetails principal) {
-        User user = principal.getUser();
-
-        return notificationService.hasUncheckedNotifation(user.getId());
-        // 결과값이 true 이면 확인하지 않은 알림이 있음
-        // 결과값이 fasle 이면 확인하지 않은 알림이 없음
-    }
-
     @GetMapping("/user/{userId}/notification/{notiId}")
     public Boolean clickNotification(@PathVariable Long notiId) {
         return notificationService.checkNotification(notiId);

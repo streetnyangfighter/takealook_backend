@@ -98,22 +98,9 @@ public class NotificationService {
     public List<ResponseDTO.NotificationListResponse> findAllByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
-        // GET 되어 회원에게 조회되면 읽음(check) 처리
-        // 를 해주었는데, 아래 hasUncheckedNotification 에서 아래 수정사항이 반영되지 않음ㅜ
-        for (Notification notification : user.getNotificationList()) {
-            notification.check();
-        }
-
         return user.getNotificationList().stream()
                 .map(ResponseDTO.NotificationListResponse::new)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public Boolean hasUncheckedNotifation(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
-
-        return notificationRepository.findNotificationsByUserAndCheckedFalse(user).size() != 0;
     }
 
     @Transactional(rollbackFor = Exception.class)
