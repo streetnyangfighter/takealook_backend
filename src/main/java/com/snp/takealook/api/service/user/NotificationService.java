@@ -117,6 +117,6 @@ public class NotificationService {
     public Long getUncheckedNotifications(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
-        return user.getNotificationList().stream().map(n -> n.getChecked()==true).count();
+        return user.getNotificationList().stream().filter(n -> n.getChecked()!=true).count();
     }
 }
