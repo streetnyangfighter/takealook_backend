@@ -33,7 +33,6 @@ public class PostService {
     // 게시글 등록
     @Transactional(rollbackFor = Exception.class)
     public Long save(PostDTO.Create dto, String imgUrl) {
-
         Board board = boardRepository.findById(dto.getBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("Board with id: " + dto.getBoardId() + " is not valid"));
 
@@ -61,9 +60,20 @@ public class PostService {
 
     // 게시글 상세 조회
     @Transactional(readOnly = true)
-    public ResponseDTO.PostResponse getPost(Long id) {
+    public ResponseDTO.PostResponse getPost(Long id, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " is not valid"));
+
+        List<PostLike> postLikeList = post.getPostLikeList();
+
+        for(PostLike postLike : postLikeList) {
+            if(postLike.getUser().getId() == user.getId()) {
+                post.checkLike(true);
+            }
+        }
 
         return new ResponseDTO.PostResponse(post);
     }
@@ -71,7 +81,6 @@ public class PostService {
     // 게시글 수정
     @Transactional
     public Long update(Long postId, Long userId, PostDTO.Update dto, String imgUrl) {
-        System.out.println(userId);
         User writer = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 

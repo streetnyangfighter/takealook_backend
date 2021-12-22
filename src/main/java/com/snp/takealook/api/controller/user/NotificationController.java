@@ -33,4 +33,16 @@ public class NotificationController {
         // 결과값이 true 이면 확인하지 않은 알림이 있음
         // 결과값이 fasle 이면 확인하지 않은 알림이 없음
     }
+
+    @GetMapping("/user/{userId}/notification/{notiId}")
+    public Boolean clickNotification(@PathVariable Long notiId) {
+        return notificationService.checkNotification(notiId);
+    }
+
+    @GetMapping("/user/{userId}/notification/unchecked")
+    public Long getUncheckedNotifications(@AuthenticationPrincipal PrincipalDetails principal) {
+        User user = principal.getUser();
+
+        return notificationService.getUncheckedNotifications(user.getId());
+    }
 }

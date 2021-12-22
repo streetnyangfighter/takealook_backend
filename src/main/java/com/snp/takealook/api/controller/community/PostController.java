@@ -1,5 +1,6 @@
 package com.snp.takealook.api.controller.community;
 
+import com.amazonaws.services.ec2.model.PriceSchedule;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.community.PostDTO;
@@ -59,8 +60,9 @@ public class PostController {
 
     // 게시글 상세 조회
     @GetMapping("/post/{id}")
-    public ResponseDTO.PostResponse getPost(@PathVariable Long id) {
-        return postService.getPost(id);
+    public ResponseDTO.PostResponse getPost(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principal) {
+        User user = principal.getUser();
+        return postService.getPost(id, user.getId());
     }
 
     // 게시글 수정
