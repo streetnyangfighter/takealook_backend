@@ -63,7 +63,7 @@ public class CatRecommendationController {
         });
 
         ResponseEntity<JSONObject> response = restTemplate.postForEntity(
-                "http://localhost:5000/cat/face-identify",
+                "http://15.164.213.69:5000/cat/face-identify",
                 request,
                 JSONObject.class
         );
@@ -147,7 +147,7 @@ public class CatRecommendationController {
         });
 
         ResponseEntity<JSONObject> response = restTemplate.postForEntity(
-                "http://localhost:5000/cat/similarity-scoring",
+                "http://15.164.213.69:5000/cat/similarity-scoring",
                 request,
                 JSONObject.class
         );
