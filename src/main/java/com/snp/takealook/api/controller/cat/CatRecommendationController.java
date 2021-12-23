@@ -11,7 +11,6 @@ import com.snp.takealook.api.service.cat.CatService;
 import com.snp.takealook.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
