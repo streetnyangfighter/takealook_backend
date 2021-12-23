@@ -79,7 +79,7 @@ public class PostService {
     }
 
     // 게시글 수정
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long update(Long postId, Long userId, PostDTO.Update dto, String imgUrl) {
         User writer = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));

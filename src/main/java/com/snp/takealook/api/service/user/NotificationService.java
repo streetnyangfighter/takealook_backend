@@ -113,7 +113,7 @@ public class NotificationService {
         return notification.getChecked();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Long getUncheckedNotifications(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
 
