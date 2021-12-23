@@ -17,6 +17,5 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         log.info("권한이 없는 접근");
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-
     }
 }

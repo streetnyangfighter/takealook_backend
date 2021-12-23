@@ -1,6 +1,5 @@
 package com.snp.takealook.config.auth;
 
-import com.snp.takealook.api.domain.user.Role;
 import com.snp.takealook.api.domain.user.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +15,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
     private Map<String, Object> attributes;
-//    private boolean oAuth = false;
 
     public PrincipalDetails(User user) {
         this.user = user;
@@ -36,17 +34,17 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return attributes;
     }
 
-    @Override// 계정이 만료되지 않았는 지 리턴한다. (true: 만료안됨)
+    @Override// 계정이 만료되지 않았는 지 리턴 (true: 만료안됨)
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override// 계정이 잠겨있지 않았는 지 리턴한다. (true: 잠기지 않음)
+    @Override// 계정이 잠겨있지 않았는 지 리턴 (true: 잠기지 않음)
     public boolean isAccountNonLocked() { //예를 들어 아이디 3번 시도했는데 실패했으면 락인한다든가.. 그런 로직
         return true;
     }
 
-    @Override// 비밀번호가 만료되지 않았는 지 리턴한다. (true: 만료안됨)
+    @Override// 비밀번호가 만료되지 않았는 지 리턴 (true: 만료안됨)
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -56,7 +54,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
-    @Override// 계정이 갖고있는 권한 목록을 리턴한다. (권한이 여러개 있을 수 있어서 루프를 돌아야 하는데 우리는 한개만)
+    @Override// 계정이 갖고있는 권한 목록 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {
         System.out.println("Role 검증 하는 중");
         Collection<GrantedAuthority> collectors = new ArrayList<>();

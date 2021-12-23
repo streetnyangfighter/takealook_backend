@@ -27,15 +27,6 @@ public class CatController {
     private final CatImageService catImageService;
     private final NotificationService notificationService;
 
-    @GetMapping("/user/{userId}/cat/recommendation")
-    public List<ResponseDTO.CatRecommendListResponse> findRecommendCats(@AuthenticationPrincipal PrincipalDetails principal,
-                                                                        @RequestParam double latitude,
-                                                                        @RequestParam double longitude) {
-        User user = principal.getUser();
-
-        return catService.findRecommendCats(user.getId(), latitude, longitude);
-    }
-
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@AuthenticationPrincipal PrincipalDetails principal,
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,

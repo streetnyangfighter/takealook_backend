@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jboss.jandex.Main;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
