@@ -98,8 +98,8 @@ public class UserService {
         // 토큰 만들기
         String jwtToken = JWT.create()
                 .withSubject(userEntity.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
-                .withClaim("id", userEntity.getId()) //인증에 필요한 정보
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME))
+                .withClaim("id", userEntity.getId())
                 .withClaim("nickname", userEntity.getNickname())
                 .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
@@ -122,14 +122,13 @@ public class UserService {
         // 토큰 만들기
         String jwtToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME)) //토큰의 유효기간 현재시간으로부터 1시간
-                .withClaim("id", user.getId()) //인증에 필요한 정보
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRE_TIME))
+                .withClaim("id", user.getId())
                 .withClaim("nickname", user.getNickname())
                 .sign(Algorithm.HMAC256(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.TOKEN_HAEDER, JwtProperties.TOKEN_PRIFIX + jwtToken);
 
-        assert user != null;
         return new ResponseDTO.UserResponse(user);
     }
 

@@ -19,15 +19,14 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override // AuthenticationManager 가 보내줌
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.info("username=>{}",username);
+        log.info("username => {}",username);
 
-        //AuthenticationFilter 가 일로 보내줌
+        //AuthenticationFilter 가 여기로 보내줌
         User principal = userRepository.findByUsername(username);
 
         if (principal == null) {
             return null;
         } else {
-
             return new PrincipalDetails(principal);
         }
     }

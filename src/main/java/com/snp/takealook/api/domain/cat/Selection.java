@@ -34,15 +34,15 @@ public class Selection extends BaseTimeEntity {
     @NotNull
     private Boolean dflag;
 
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CatCare> catCareList;
 
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CatImage> catImageList;
 
-    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<CatLocation> catLocationList;
 

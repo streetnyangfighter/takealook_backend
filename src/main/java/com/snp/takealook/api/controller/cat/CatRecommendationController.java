@@ -6,12 +6,12 @@ import com.snp.takealook.api.domain.cat.Selection;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.dto.ResponseDTO;
 import com.snp.takealook.api.dto.cat.CatDTO;
-import com.snp.takealook.api.repository.cat.SelectionRepository;
 import com.snp.takealook.api.service.S3Uploader;
 import com.snp.takealook.api.service.cat.CatService;
 import com.snp.takealook.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,17 +28,15 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
-public class FlaskController {
+public class CatRecommendationController {
 
     private final S3Uploader s3Uploader;
     private final CatService catService;
-    private final SelectionRepository selectionRepository;
 
-    @PostMapping(value = "/user/{userId}/test", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/user/{userId}/cat/face-identify", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseDTO.AiImgResponse getImgAndPoints(@RequestPart(value = "image") MultipartFile file) throws IOException {
         String orgImg = s3Uploader.upload(file, "catImg");
 
-        System.out.println(orgImg);
         JSONObject response = flaskSendImg(orgImg);
 
         return new ResponseDTO.AiImgResponse(response.get("url").toString(),
@@ -67,7 +64,7 @@ public class FlaskController {
         });
 
         ResponseEntity<JSONObject> response = restTemplate.postForEntity(
-                "http://localhost:5000/test",
+                "http://localhost:5000/cat/face-identify",
                 request,
                 JSONObject.class
         );
@@ -75,22 +72,17 @@ public class FlaskController {
         JSONObject responseBody = response.getBody();
         headers.clear();
 
-        System.out.println("*******  " + response);
-        System.out.println("*******  " + responseBody);
-
         return responseBody;
     }
 
-    @PostMapping(value = "/user/{userId}/test2", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public List<ResponseDTO.CatRecommendListResponse> getCatrecommendList(@AuthenticationPrincipal PrincipalDetails principal,
+    @PostMapping(value = "/user/{userId}/cat/recommendation", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public List<ResponseDTO.CatRecommendListResponse> getCatRecommendList(@AuthenticationPrincipal PrincipalDetails principal,
                                                                      @RequestPart(value = "catImgUrl") String url,
+                                                                     @RequestPart(value = "catPattern") Byte pattern,
                                                                      @RequestPart(value = "catPoints") CatDTO.CatPoint pDto,
                                                                      @RequestPart(value = "catLoc") CatDTO.Location lDto) {
-        System.out.println("********** " + url);
-        System.out.println("********** " + pDto.getLeftEarX());
-        System.out.println("********** " + lDto.getLatitude());
         User user = principal.getUser();
-        Set<Cat> catEntitySet = catService.findRecommendCats2(user.getId(), lDto.getLatitude(), lDto.getLongitude());
+        Set<Cat> catEntitySet = catService.findRecommendCats(user.getId(), pattern, lDto.getLatitude(), lDto.getLongitude());
 
         if (catEntitySet.size() == 0) {
             return new ArrayList<>();
@@ -113,7 +105,7 @@ public class FlaskController {
         List<ResponseDTO.CatRecommendListResponse> result = new ArrayList<>();
         for (Cat cat : catNscore.keySet()) {
             List<CatLocation> recentLocationList = new ArrayList<>();
-            List<Selection> sameCatSelectionList = selectionRepository.findSelectionsByCat(cat);
+            List<Selection> sameCatSelectionList = cat.getSelectionList();
             for (Selection selection : sameCatSelectionList) {
                 recentLocationList.addAll(selection.getCatLocationList());
             }
@@ -156,16 +148,12 @@ public class FlaskController {
         });
 
         ResponseEntity<JSONObject> response = restTemplate.postForEntity(
-                "http://localhost:5000/test2",
+                "http://localhost:5000/cat/similarity-scoring",
                 request,
                 JSONObject.class
         );
 
         JSONObject responseBody = response.getBody();
-
-        System.out.println(responseBody.get("sortedDict"));
-        System.out.println(">>>>>>>>>>>>>>>>>" + responseBody.get("sortedDict").getClass().getName());
-
         headers.clear();
 
         return responseBody;

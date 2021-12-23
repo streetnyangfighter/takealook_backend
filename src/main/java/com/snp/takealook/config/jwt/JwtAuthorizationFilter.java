@@ -34,14 +34,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("시큐리티 사용하면, 권한이 필요한 요청이 들어옴");
+        log.info("권한이 필요한 요청이 들어옴");
 
         String header = request.getHeader(JwtProperties.TOKEN_HAEDER);
 
         log.info("token => {} ", header);
 
         if(header == null || !header.startsWith(JwtProperties.TOKEN_PRIFIX)){
-            log.info("check");
             chain.doFilter(request,response);
             return;
         }
@@ -55,11 +54,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if(userId != null){
 
-            log.info("잘 갖고왔다!!");
-
-            User user = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException("유효하지 않은 User"));
+            User user = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException("유효하지 않은 User 입니다."));
             PrincipalDetails principalDetails = new PrincipalDetails(user);
-            session.setAttribute("principal", principalDetails); //필요할 수도 있고 안 필요할 수도 있는데
+            session.setAttribute("principal", principalDetails);
 
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -68,7 +65,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                             principalDetails.getAuthorities()
                     );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication); //인증 되었다는 거에요.
+            SecurityContextHolder.getContext().setAuthentication(authentication); //인증 완료 =
         }
 
         chain.doFilter(request, response);
