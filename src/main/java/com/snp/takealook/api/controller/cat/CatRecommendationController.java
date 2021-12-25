@@ -77,7 +77,7 @@ public class CatRecommendationController {
     @PostMapping(value = "/user/{userId}/cat/recommendation", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public List<ResponseDTO.CatRecommendListResponse> getCatRecommendList(@AuthenticationPrincipal PrincipalDetails principal,
                                                                      @RequestPart(value = "catImgUrl") String url,
-                                                                     @RequestPart(value = "catPattern") Byte pattern,
+                                                                     @RequestPart(value = "catPattern") String pattern,
                                                                      @RequestPart(value = "catPoints") CatDTO.CatPoint pDto,
                                                                      @RequestPart(value = "catLoc") CatDTO.Location lDto) {
         User user = principal.getUser();
