@@ -28,7 +28,7 @@ public class CatService {
     private final S3Uploader s3Uploader;
 
     @Transactional(readOnly = true)
-    public Set<Cat> findRecommendCats(Long userId, Byte pattern, Double latitude, Double longitude) {
+    public Set<Cat> findRecommendCats(Long userId, String pattern, Double latitude, Double longitude) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
 
@@ -37,7 +37,7 @@ public class CatService {
             if (!location.getSelection().getCat().getDflag()
                     && !location.getSelection().getCat().getAflag()
                     && location.getSelection().getUser() != user
-                    && Objects.equals(location.getSelection().getCat().getPattern(), pattern)) {
+                    && Objects.equals((String) location.getSelection().getCat().getPattern(), pattern)) {
                 catSet.add(location.getSelection().getCat());
             }
         }
