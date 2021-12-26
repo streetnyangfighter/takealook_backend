@@ -212,9 +212,9 @@ public class ResponseDTO {
         private Byte pattern;
         private String mainImage;
         private List<CatLocationResponse> recentLocationList;
-        private Double score;
+        private Long score;
 
-        public CatRecommendListResponse(Cat entity, List<CatLocationResponse> recentLocationList, Double score) {
+        public CatRecommendListResponse(Cat entity, List<CatLocationResponse> recentLocationList, Long score) {
             this.id = entity.getId();
             this.name = entity.getName();
             this.gender = entity.getGender();

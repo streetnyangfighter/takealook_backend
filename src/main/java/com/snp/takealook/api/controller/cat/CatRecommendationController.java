@@ -65,8 +65,7 @@ public class CatRecommendationController {
         });
 
         ResponseEntity<JSONObject> response = restTemplate.postForEntity(
-                "http://192.168.75.26:5000/cat/face-identify",
-//                "http://15.164.213.69:5000/cat/face-identify",
+                "http://15.164.213.69:5000/cat/face-identify",
                 request,
                 JSONObject.class
         );
@@ -97,12 +96,12 @@ public class CatRecommendationController {
 
         Map<String, Double> sortedMap = (Map<String, Double>) response.get("sortedDict");
 
-        LinkedHashMap<Cat, Double> catNscore = new LinkedHashMap<>();
+        LinkedHashMap<Cat, Long> catNscore = new LinkedHashMap<>();
         for (String str : sortedMap.keySet()) {
             Long id = Long.parseLong(str);
             for (Cat cat : catEntitySet) {
                 if (Objects.equals(cat.getId(), id)) {
-                    catNscore.put(cat, sortedMap.get(str));
+                    catNscore.put(cat, Math.round(sortedMap.get(str)));
                 }
             }
         }

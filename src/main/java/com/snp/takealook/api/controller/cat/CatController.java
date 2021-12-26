@@ -30,9 +30,9 @@ public class CatController {
     @PostMapping(value = "/user/{userId}/cat/selection", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Long save(@AuthenticationPrincipal PrincipalDetails principal,
                      @RequestPart(value = "catInfo") CatDTO.Create catInfo,
-                     @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
                      @RequestPart(value = "catLoc") CatDTO.Location[] catLocList,
                      @RequestPart(value = "catMainImg") MultipartFile file,
+                     @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
                      @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         User user = principal.getUser();
 

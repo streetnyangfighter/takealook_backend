@@ -100,11 +100,21 @@ public class SecondaryService {
     public Long updateSelectionWithNewCat(Long userId,
                                           Long catId,
                                           CatDTO.Create catInfo,
+                                          CatDTO.Location[] catLocList,
+                                          MultipartFile file,
                                           CatDTO.CatPoint catPoints,
-                                          MultipartFile file) throws IOException {
+                                          Optional<List<MultipartFile>> files) throws IOException {
         String mainImage = s3Uploader.upload(file, "static");
         Long newCatId = catService.save(catInfo, catPoints, mainImage);
-        selectionService.update(userId, catId, newCatId);
+        Long selectionId = selectionService.update(userId, catId, newCatId);
+        catLocationService.saveAll(userId, newCatId, catLocList);
+        if (files.isPresent()) {
+            for (MultipartFile m : files.get()) {
+                String path = s3Uploader.upload(m, "static");
+                catImageService.save(selectionId, path);
+            }
+        }
+
         notificationService.catSave(userId, catId, (byte) 5);
 
         return newCatId;

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -45,11 +46,13 @@ public class SelectionController {
     public Long updateNewCat(@AuthenticationPrincipal PrincipalDetails principal,
                              @PathVariable Long catId,
                              @RequestPart(value = "catInfo") CatDTO.Create catInfo,
+                             @RequestPart(value = "catLoc") CatDTO.Location[] catLocList,
+                             @RequestPart(value = "catMainImg") MultipartFile file,
                              @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
-                             @RequestPart(value = "catMainImg") MultipartFile file) throws IOException {
+                             @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException {
         User user = principal.getUser();
 
-        return secondaryService.updateSelectionWithNewCat(user.getId(), catId, catInfo, catPoints, file);
+        return secondaryService.updateSelectionWithNewCat(user.getId(), catId, catInfo, catLocList, file, catPoints, java.util.Optional.ofNullable(files));
     }
 
     //간택 삭제(내가 작성한 정보 남김)

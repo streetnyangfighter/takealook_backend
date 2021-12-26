@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.snp.takealook.api.domain.user.User;
 import com.snp.takealook.api.repository.user.UserRepository;
 import com.snp.takealook.config.auth.PrincipalDetails;
-import com.snp.takealook.config.jwt.JwtProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

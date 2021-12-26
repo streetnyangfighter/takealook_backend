@@ -32,15 +32,12 @@ public class CatService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " is not valid"));
         List<CatLocation> locationList = catLocationRepository.findNearCatLocations(latitude, longitude);
 
-        System.out.println("******* " + Byte.parseByte(pattern));
-
         Set<Cat> catSet = new HashSet<>();
         for (CatLocation location : locationList) {
             if (!location.getSelection().getCat().getDflag()
                     && !location.getSelection().getCat().getAflag()
                     && location.getSelection().getUser() != user
                     && Objects.equals(location.getSelection().getCat().getPattern(), Byte.parseByte(pattern))) {
-                System.out.println("******* " + location.getSelection().getCat().getPattern().toString());
                 catSet.add(location.getSelection().getCat());
             }
         }
