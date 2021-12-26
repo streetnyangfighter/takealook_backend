@@ -37,7 +37,7 @@ public class CatService {
             if (!location.getSelection().getCat().getDflag()
                     && !location.getSelection().getCat().getAflag()
                     && location.getSelection().getUser() != user
-                    && Objects.equals((String) location.getSelection().getCat().getPattern(), pattern)) {
+                    && Objects.equals(location.getSelection().getCat().getPattern(), Byte.parseByte(pattern))) {
                 catSet.add(location.getSelection().getCat());
             }
         }
