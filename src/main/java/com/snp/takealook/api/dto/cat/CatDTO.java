@@ -72,10 +72,4 @@ public class CatDTO {
         private Double rightEyeY;
     }
 
-    @Getter
-    public static class RecommendationInfo {
-        private String orgImgUrl;
-        private Byte pattern;
-    }
-
 }
