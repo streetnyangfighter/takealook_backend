@@ -52,17 +52,18 @@ public class SecondaryService {
     public Long updateCat(Long userId,
                           Long catId,
                           CatDTO.Update catInfo,
-                          CatDTO.CatPoint catPoints,
                           CatDTO.Location[] catLocList,
                           Optional<MultipartFile> file,
+                          Optional<CatDTO.CatPoint> catPoints,
                           Optional<String[]> deletedImgUrl,
                           Optional<List<MultipartFile>> files) throws IOException {
 
-        catService.updateInfo(userId, catId, catInfo, catPoints);
+        catService.updateInfo(userId, catId, catInfo);
 
-        if (file.isPresent()) {
+        if (file.isPresent() && catPoints.isPresent()) {
             String mainImage = s3Uploader.upload(file.get(), "static");
             catService.updateImage(userId, catId, mainImage);
+            catService.updateCatPoints(userId, catId, catPoints.get());
         }
 
         catLocationService.saveAll(userId, catId, catLocList);

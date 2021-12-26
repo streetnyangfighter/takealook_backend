@@ -43,14 +43,14 @@ public class CatController {
     public Long update(@AuthenticationPrincipal PrincipalDetails principal,
                        @PathVariable Long catId,
                        @RequestPart(value = "catInfo") CatDTO.Update catInfo,
-                       @RequestPart(value = "catPoints") CatDTO.CatPoint catPoints,
                        @RequestPart(value = "catLoc") CatDTO.Location[] catLocList,
                        @RequestPart(value = "catMainImg", required = false) MultipartFile file,
+                       @RequestPart(value = "catPoints", required = false) CatDTO.CatPoint catPoints,
                        @RequestPart(value = "deletedImgUrl", required = false) String[] deletedImgUrl,
                        @RequestPart(value = "catImg", required = false) List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
         User user = principal.getUser();
 
-        return secondaryService.updateCat(user.getId(), catId, catInfo, catPoints, catLocList, java.util.Optional.ofNullable(file), java.util.Optional.ofNullable(deletedImgUrl), java.util.Optional.ofNullable(files));
+        return secondaryService.updateCat(user.getId(), catId, catInfo, catLocList, java.util.Optional.ofNullable(file), java.util.Optional.ofNullable(catPoints), java.util.Optional.ofNullable(deletedImgUrl), java.util.Optional.ofNullable(files));
     }
 
     @PatchMapping("/user/{userId}/cat/{catId}")

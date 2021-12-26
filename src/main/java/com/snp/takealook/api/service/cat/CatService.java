@@ -54,11 +54,19 @@ public class CatService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Long updateInfo(Long userId, Long catId, CatDTO.Update catInfo, CatDTO.CatPoint catPoints) {
+    public Long updateInfo(Long userId, Long catId, CatDTO.Update catInfo) {
         Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
                 .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
 
-        return cat.updateInfo(catInfo, catPoints).getId();
+        return cat.updateInfo(catInfo).getId();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Long updateCatPoints(Long userId, Long catId, CatDTO.CatPoint catPoints) {
+        Cat cat = selectionRepository.findSelectionByUser_IdAndCat_Id(userId, catId)
+                .orElseThrow(() -> new IllegalArgumentException("Selection with userId: " + userId + " and catId: " + catId + " is not valid")).getCat();
+
+        return cat.updateCatPoints(catPoints).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -115,7 +115,7 @@ public class Cat extends BaseTimeEntity {
         this.rightEyeY = rightEyeY;
     }
 
-    public Cat updateInfo(CatDTO.Update catInfo, CatDTO.CatPoint catPoints) {
+    public Cat updateInfo(CatDTO.Update catInfo) {
         if (name.equals("")) {
             throw new IllegalStateException("이름은 공백일 수 없습니다.");
         }
@@ -123,6 +123,11 @@ public class Cat extends BaseTimeEntity {
         this.gender = catInfo.getGender();
         this.neutered = catInfo.getNeutered();
         this.pattern = catInfo.getPattern();
+
+        return this;
+    }
+
+    public Cat updateCatPoints(CatDTO.CatPoint catPoints) {
         this.leftEarX = catPoints.getLeftEarX();
         this.leftEarY = catPoints.getLeftEarY();
         this.rightEarX = catPoints.getRightEarX();
