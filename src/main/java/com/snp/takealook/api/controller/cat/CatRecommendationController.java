@@ -80,6 +80,9 @@ public class CatRecommendationController {
                                                                      @RequestPart(value = "catPattern") String pattern,
                                                                      @RequestPart(value = "catPoints") CatDTO.CatPoint pDto,
                                                                      @RequestPart(value = "catLoc") CatDTO.Location lDto) {
+        url = url.substring(1, url.length() - 1);
+        pattern = pattern.substring(1, pattern.length() - 1);
+
         User user = principal.getUser();
         Set<Cat> catEntitySet = catService.findRecommendCats(user.getId(), pattern, lDto.getLatitude(), lDto.getLongitude());
 
