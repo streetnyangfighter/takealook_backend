@@ -35,10 +35,8 @@ public class CatRecommendationController {
     @PostMapping(value = "/user/{userId}/cat/face-identify", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseDTO.AiImgResponse getImgAndPoints(@RequestPart(value = "image") MultipartFile file) throws IOException {
         String orgImg = s3Uploader.upload(file, "catImg");
-        System.out.println("1 >>>>>>> " + orgImg);
 
         JSONObject response = flaskSendImg(orgImg);
-        System.out.println("2 >>>>>>> " + response.get("url").toString());
 
         return new ResponseDTO.AiImgResponse(response.get("url").toString(),
                                             orgImg,
