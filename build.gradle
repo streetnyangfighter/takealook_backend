@@ -1,3 +1,9 @@
+//buildscript {
+//	ext {
+//		queryDslVersion = "4.4.0"
+//	}
+//}
+
 plugins {
 	id 'org.springframework.boot' version '2.5.7'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -19,7 +25,8 @@ repositories {
 }
 
 dependencies {
-	runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'junit:junit:4.13.1'
+    runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -28,9 +35,22 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+	implementation('org.springframework.boot:spring-boot-starter-mustache')
+
+	implementation 'commons-io:commons-io:2.8.0'
+	implementation 'commons-fileupload:commons-fileupload:1.4'
+
+	implementation 'com.auth0:java-jwt:3.18.2'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
+
 }
 
 test {
 	useJUnitPlatform()
 }
+
+
